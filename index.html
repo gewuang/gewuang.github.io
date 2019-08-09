@@ -262,6 +262,376 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/09/2019-08-03-longest-substring-without-repeating-characters/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ramon">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ramon's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/09/2019-08-03-longest-substring-without-repeating-characters/" itemprop="url">longest-substring-without-repeating-characters</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-09T20:01:58+08:00">
+                2019-08-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/leetcode/" itemprop="url" rel="index">
+                    <span itemprop="name">leetcode</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h3><p>Given a string, find the length of the longest substring without repeating characters.</p>
+<p>Example 1:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: &quot;abcabcbb&quot;</span><br><span class="line">Output: 3 </span><br><span class="line">Explanation: The answer is &quot;abc&quot;, with the length of 3.</span><br></pre></td></tr></table></figure>
+
+<p>Example 2:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: &quot;bbbbb&quot;</span><br><span class="line">Output: 1</span><br><span class="line">Explanation: The answer is &quot;b&quot;, with the length of 1.</span><br></pre></td></tr></table></figure>
+
+<p>Example 3:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: &quot;pwwkew&quot;</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: The answer is &quot;wke&quot;, with the length of 3. </span><br><span class="line">             Note that the answer must be a substring, &quot;pwke&quot; is a subsequence and not a substring.</span><br></pre></td></tr></table></figure>
+
+<h3 id="my-anwser"><a href="#my-anwser" class="headerlink" title="my anwser"></a>my anwser</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">set</span>&lt;<span class="keyword">char</span>&gt; s_str;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> len = s.length();</span><br><span class="line">        <span class="keyword">int</span> ret = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">            s_str.insert(s[i]);</span><br><span class="line">            <span class="keyword">for</span>(j = <span class="number">1</span>; j &lt; len - i; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span>(s_str.count(s[i+j]) == <span class="number">0</span>) &#123;</span><br><span class="line">                    s_str.insert(s[i+j]);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    s_str.clear();</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(ret &lt; j) &#123;</span><br><span class="line">                ret = j;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>实打实的暴力破解法，这次没用c语言是因为考虑到查看新增的字符是不是出现在前面，又要再加个循环，跑到O(n^3)，实在是花费太多时间了，那就用set代替，虽然知道这样做在set内部也要用插入删除的操作，但总归是比for看起来舒服很多的，结果也是相当的不理想，不过因为自己这次在优化过程中一直想着是不是能用动态规划而把自己限制死了，私下在研究下动态规划吧🌚。<br>不过，在看了标准答案后真的是豁然开朗，原来是这么做的，其实自己如果一步步优化很多东西完全是可以想到的，以后要注意尽量不要眼高手低，下面先来欣赏标准答案第一个精彩的解法（直接忽略掉暴力解法）：</p>
+<p><strong>解法一</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s.length();</span><br><span class="line">        Set&lt;Character&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>, i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; n &amp;&amp; j &lt; n) &#123;</span><br><span class="line">            <span class="comment">// try to extend the range [i, j]</span></span><br><span class="line">            <span class="keyword">if</span> (!set.contains(s.charAt(j)))&#123;</span><br><span class="line">                set.add(s.charAt(j++));</span><br><span class="line">                ans = Math.max(ans, j - i);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                set.remove(s.charAt(i++));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>精彩的滑动窗口解法，一次遍历字符串，遇到重复的就移动左边届，直到没有重复内容，其实就是在暴力破解的基础上做了一些巧妙的改动，这个代码比较简单，比较好理解，重点放在后面两个优化后的算法上。</p>
+<p><strong>解法二</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s.length(), ans = <span class="number">0</span>;</span><br><span class="line">        Map&lt;Character, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;(); <span class="comment">// current index of character</span></span><br><span class="line">        <span class="comment">// try to extend the range [i, j]</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>, i = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (map.containsKey(s.charAt(j))) &#123;</span><br><span class="line">                i = Math.max(map.get(s.charAt(j)), i);</span><br><span class="line">            &#125;</span><br><span class="line">            ans = Math.max(ans, j - i + <span class="number">1</span>);</span><br><span class="line">            map.put(s.charAt(j), j + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>非常精彩的解法，让我想到了kmp算法，这里的map就相当于next数组，在之前滑动窗口的基础上进行了改进，之前左边界需要逐步移动，这里通过map获取到当前字符对应的value值直接得到下一步左边届的位置，与next数组有异曲同工之妙，下次我也找个时间细细研究下kmp算法，更新一篇关于kmp算法的文章，这里就不多说了，先介绍上面的算法。</p>
+<p>从上面聊下来，其实这里最难理解的就是i作为左边届(上面i是当前匹配字符串的左边界，j是右边界)，是怎么快速得到的。</p>
+<p>首先，map在这里用的非常巧妙，map对应的值始终是下一跳的位置，我们以<em>abcaa</em>为例，看map中k以及v及i的变化:</p>
+<table>
+<thead>
+<tr>
+<th>j</th>
+<th>0</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>k</td>
+<td>a</td>
+<td>b</td>
+<td>c</td>
+<td>a</td>
+<td>a</td>
+</tr>
+<tr>
+<td>v</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+</tr>
+<tr>
+<td>i</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>4</td>
+</tr>
+</tbody></table>
+<p>从表中可以看出，当遇到相同的k时，递增的v就会改变对应的值为下次下标所在的位置，i此时获得的时之前value的值，也就是对应的左边届的位置是根据上次字符出现时的next位置决定的，因为在这之间的字符我们已经可以判断没有在轮询的必要了（每次都跳到上次出现的后一个位置）。</p>
+<p>下面是针对上面这种解法的又一次优化：</p>
+<p><strong>解法三</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s.length(), ans = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span>[] index = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">128</span>]; <span class="comment">// current index of character</span></span><br><span class="line">        <span class="comment">// try to extend the range [i, j]</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>, i = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            i = Math.max(index[s.charAt(j)], i);</span><br><span class="line">            ans = Math.max(ans, j - i + <span class="number">1</span>);</span><br><span class="line">            index[s.charAt(j)] = j + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里针对ascii码是有限的（而且边界比较小），用数组替换了map，完成了这个精彩的算法，上面我们说的挺多的了，这里就不重复说了。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这次完全是自己眼高手低了，算法应该先用自己能想到的方法实现，然后针对该算饭进行一步步优化，而不是刚开始就想着一口吃个胖子，有个多优秀的算法解决。同时，动态规划也要好好学习，首先，最起码应该知道什么情况下使用动态规划。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    <div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/09/2019-07-21-two_num/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ramon">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ramon's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/09/2019-07-21-two_num/" itemprop="url">TWO NUM</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-09T20:01:38+08:00">
+                2019-08-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/leetcode/" itemprop="url" rel="index">
+                    <span itemprop="name">leetcode</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h3><p>Given an array of integers, return indices of the two numbers such that they add up to a specific target.</p>
+<p>You may assume that each input would have exactly one solution, and you may not use the same element twice.</p>
+<p>Example:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Given nums = [2, 7, 11, 15], target = 9,</span><br><span class="line">Because nums[0] + nums[1] = 2 + 7 = 9,</span><br><span class="line">return [0, 1].</span><br></pre></td></tr></table></figure>
+
+<h3 id="anwser"><a href="#anwser" class="headerlink" title="anwser"></a>anwser</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Note: The returned array must be malloced, assume caller calls free().</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span>* <span class="title">twoSum</span><span class="params">(<span class="keyword">int</span>* nums, <span class="keyword">int</span> numsSize, <span class="keyword">int</span> target, <span class="keyword">int</span>* returnSize)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *ret = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">int</span> row = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> col = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> add = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    ret = (<span class="keyword">int</span> *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">int</span>)*<span class="number">2</span>);</span><br><span class="line">    ret[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    ret[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    *returnSize = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(;row &lt; numsSize<span class="number">-1</span>; row++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(col = row+<span class="number">1</span>; col &lt; numsSize; col++)</span><br><span class="line">        &#123;</span><br><span class="line">            add = nums[row] + nums[col];</span><br><span class="line">            <span class="keyword">if</span>(add == target)</span><br><span class="line">            &#123;</span><br><span class="line">                ret[<span class="number">0</span>] = row;</span><br><span class="line">                ret[<span class="number">1</span>] = col;</span><br><span class="line">                *returnSize = <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>显而易见，最low的解法，因为是刚开始做，尝试进行优化无果后去查看官方的解法，恍然大悟，原来可以用hashmap等容器进行辅助，将时间复杂度由O(n^2)降低到O(n)，先来看代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">    Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">        map.put(nums[i], i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> complement = target - nums[i];</span><br><span class="line">        <span class="keyword">if</span> (map.containsKey(complement) &amp;&amp; map.get(complement) != i) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; i, map.get(complement) &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"No two sum solution"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码是用java写的，主要是通过遍历一遍数组，得到一个map，然后从里面找到target与num[i]的差值，这里简单的应用了hashmap就完成了复杂的操作，也是我们需要灵活运用数据结构的例子。</p>
+<p>这里虽然上面已经做到很快，但是在进行之前还是需要先轮训一遍数组，我们是不是可以省去这一步呢，这时候有了第三种方法，同样的，我们先来看代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">    Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> complement = target - nums[i];</span><br><span class="line">        <span class="keyword">if</span> (map.containsKey(complement)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; map.get(complement), i &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">        map.put(nums[i], i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"No two sum solution"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>通过上述代码我们可以看到巧妙的地方，只是走了一遍轮训，在这个过程中找到hashmap中是否由差值，如果没有就存进去</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这道题很简单，但是让我看到了hashmap在某些算法场景下能带来的巨大改进，同时也看到了巧妙的运用代码可以更高效的完成我们的操作，以后写算法看来不能全都用c语言了，毕竟容器的实现并不是我们刷题的重点。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    <div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/09/2019-07-21-pssh/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -293,7 +663,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-09T12:03:34+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-09T20:01:19+08:00">
                 2019-08-09
               </time>
             
@@ -418,7 +788,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/09/2019-07-21-two_num/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/09/2019-07-28-pstree/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Ramon">
@@ -437,7 +807,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/08/09/2019-07-21-two_num/" itemprop="url">TWO NUM</a></h1>
+                <a class="post-title-link" href="/2019/08/09/2019-07-28-pstree/" itemprop="url">pstree/pstack/strace</a></h1>
         
 
         <div class="post-meta">
@@ -449,7 +819,327 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-09T12:03:34+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-09T20:01:10+08:00">
+                2019-08-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/小技巧/" itemprop="url" rel="index">
+                    <span itemprop="name">小技巧</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>今天介绍的几个命令主要是追踪进程执行状态用的，在平时工作中经常遇到进程卡住的情况，导致后续任务失败，如果当前现场得以保留，我们可以用这三个命令来完成对问题根因的查找以及处理。</p>
+<h3 id="pstree"><a href="#pstree" class="headerlink" title="pstree"></a>pstree</h3><p>pstree命令主要以树状图的形式展现进程间的调用关系，通过ps获取到进程的进程id后传入pstree进行进程查看，官方介绍如下：</p>
+<blockquote>
+<p>pstree shows running processes as a tree. The tree is rooted at either pid or init if pid is omitted.<br>If a user name is specified, all process trees rooted at processes  owned  by that user are shown.</p>
+</blockquote>
+<p>以下为各选项的说明文档：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">pstree: invalid option -- &apos;-&apos;</span><br><span class="line">Usage: pstree [ -a ] [ -c ] [ -h | -H PID ] [ -l ] [ -n ] [ -p ] [ -u ]</span><br><span class="line">              [ -A | -G | -U ] [ PID | USER ]</span><br><span class="line">       pstree -V</span><br><span class="line">Display a tree of processes.</span><br><span class="line"></span><br><span class="line">    -a     show command line arguments</span><br><span class="line">    -A     use ASCII line drawing characters</span><br><span class="line">    -c     don&apos;t compact identical subtrees</span><br><span class="line">    -h     highlight current process and its ancestors</span><br><span class="line">    -H PID highlight this process and its ancestors</span><br><span class="line">    -G     use VT100 line drawing characters</span><br><span class="line">    -l     don&apos;t truncate long lines</span><br><span class="line">    -n     sort output by PID</span><br><span class="line">    -p     show PIDs; implies -c</span><br><span class="line">    -u     show uid transitions</span><br><span class="line">    -U     use UTF-8 (Unicode) line drawing characters</span><br><span class="line">    -V     display version information</span><br><span class="line">    -Z     show SELinux security contexts</span><br><span class="line">    PID    start at this PID; default is 1 (init)</span><br><span class="line">    USER   show only trees rooted at processes of this user</span><br></pre></td></tr></table></figure>
+
+<h3 id="pstack"><a href="#pstack" class="headerlink" title="pstack"></a>pstack</h3><p>pstack跟pstree不太一样，pstree主要看进程间的调用关系，pstack主要是查看进程函数堆栈，核心实现是使用了gdb以及threadapply all bt 命令</p>
+<p>一般用法为直接加pid，如下</p>
+<blockquote>
+<p>pstack <pid></pid></p>
+</blockquote>
+<p>命令结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">pstack 4551</span><br><span class="line">Thread 7 (Thread 1084229984 (LWP 4552)):</span><br><span class="line">#0  0x000000302afc63dc in epoll_wait () from /lib64/tls/libc.so.6</span><br><span class="line">#1  0x00000000006f0730 in ub::EPollEx::poll ()</span><br><span class="line">#2  0x00000000006f172a in ub::NetReactor::callback ()</span><br><span class="line">#3  0x00000000006fbbbb in ub::UBTask::CALLBACK ()</span><br><span class="line">#4  0x000000302b80610a in start_thread () from /lib64/tls/libpthread.so.0</span><br><span class="line">#5  0x000000302afc6003 in clone () from /lib64/tls/libc.so.6</span><br><span class="line">#6  0x0000000000000000 in ?? ()</span><br><span class="line">Thread 6 (Thread 1094719840 (LWP 4553)):</span><br><span class="line">#0  0x000000302afc63dc in epoll_wait () from /lib64/tls/libc.so.6</span><br><span class="line">#1  0x00000000006f0730 in ub::EPollEx::poll ()</span><br><span class="line">#2  0x00000000006f172a in ub::NetReactor::callback ()</span><br><span class="line">#3  0x00000000006fbbbb in ub::UBTask::CALLBACK ()</span><br><span class="line">#4  0x000000302b80610a in start_thread () from /lib64/tls/libpthread.so.0</span><br><span class="line">#5  0x000000302afc6003 in clone () from /lib64/tls/libc.so.6</span><br><span class="line">#6  0x0000000000000000 in ?? ()</span><br><span class="line">Thread 5 (Thread 1105209696 (LWP 4554)):</span><br><span class="line">#0  0x000000302b80baa5 in __nanosleep_nocancel ()</span><br><span class="line">#1  0x000000000079e758 in comcm::ms_sleep ()</span><br><span class="line">#2  0x00000000006c8581 in ub::UbClientManager::healthyCheck ()</span><br><span class="line">#3  0x00000000006c8471 in ub::UbClientManager::start_healthy_check ()</span><br><span class="line">#4  0x000000302b80610a in start_thread () from /lib64/tls/libpthread.so.0</span><br><span class="line">#5  0x000000302afc6003 in clone () from /lib64/tls/libc.so.6</span><br><span class="line">#6  0x0000000000000000 in ?? ()</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
+
+<h3 id="strace"><a href="#strace" class="headerlink" title="strace"></a>strace</h3><p>strace常用来跟踪进程执行时的系统调用和所接收的信号。 在Linux世界，进程不能直接访问硬件设备，当进程需要访问硬件设备(比如读取磁盘文件，接收网络数据等等)时，必须由用户态模式切换至内核态模式，通 过系统调用访问硬件设备。strace可以跟踪到一个进程产生的系统调用,包括参数，返回值，执行消耗的时间</p>
+<p>如下为strace的参数定义</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">strace: invalid option -- &apos;-&apos;</span><br><span class="line">usage: strace [-dDffhiqrtttTvVxx] [-a column] [-e expr] ... [-o file]</span><br><span class="line">              [-p pid] ... [-s strsize] [-u username] [-E var=val] ...</span><br><span class="line">              [command [arg ...]]</span><br><span class="line">   or: strace -c [-D] [-e expr] ... [-O overhead] [-S sortby] [-E var=val] ...</span><br><span class="line">              [command [arg ...]]</span><br><span class="line">-c -- count time, calls, and errors for each syscall and report summary</span><br><span class="line">-f -- follow forks, -ff -- with output into separate files</span><br><span class="line">-F -- attempt to follow vforks, -h -- print help message</span><br><span class="line">-i -- print instruction pointer at time of syscall</span><br><span class="line">-q -- suppress messages about attaching, detaching, etc.</span><br><span class="line">-r -- print relative timestamp, -t -- absolute timestamp, -tt -- with usecs</span><br><span class="line">-T -- print time spent in each syscall, -V -- print version</span><br><span class="line">-v -- verbose mode: print unabbreviated argv, stat, termio[s], etc. args</span><br><span class="line">-x -- print non-ascii strings in hex, -xx -- print all strings in hex</span><br><span class="line">-a column -- alignment COLUMN for printing syscall results (default 40)</span><br><span class="line">-e expr -- a qualifying expression: option=[!]all or option=[!]val1[,val2]...</span><br><span class="line">   options: trace, abbrev, verbose, raw, signal, read, or write</span><br><span class="line">-o file -- send trace output to FILE instead of stderr</span><br><span class="line">-O overhead -- set overhead for tracing syscalls to OVERHEAD usecs</span><br><span class="line">-p pid -- trace process with process id PID, may be repeated</span><br><span class="line">-D -- run tracer process as a detached grandchild, not as parent</span><br><span class="line">-s strsize -- limit length of print strings to STRSIZE chars (default 32)</span><br><span class="line">-S sortby -- sort syscall counts by: time, calls, name, nothing (default time)</span><br><span class="line">-u username -- run command as username handling setuid and/or setgid</span><br><span class="line">-E var=val -- put var=val in the environment for command</span><br><span class="line">-E var -- remove var from the environment for command</span><br></pre></td></tr></table></figure>
+
+<p>已经有很多文章对这个进行了详细的介绍，这里就不重复造轮子了，具体了解可以看如下链接：</p>
+<blockquote>
+<p><a href="https://man.linuxde.net/strace" target="_blank" rel="noopener">https://man.linuxde.net/strace</a></p>
+</blockquote>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天了解到的命令都是进程追踪的命令，当我们遇到进程出现问题需要追踪调试的时候可以使用。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    <div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/09/2019-08-04-getops/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ramon">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ramon's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/09/2019-08-04-getops/" itemprop="url">getopts</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-09T20:01:03+08:00">
+                2019-08-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/小技巧/" itemprop="url" rel="index">
+                    <span itemprop="name">小技巧</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>平时使用命令的时候，我们经常会使用–help查看选项列表进行使用，那么在命令内部是怎么获取到我们的选项以及参数使用的呢？</p>
+<p>今天就来介绍下这个命令<figure class="highlight plain"><figcaption><span>,在shell脚本中可以读取到命令行输入的选项及参数。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 用法</span><br><span class="line"></span><br><span class="line">首先我们先来看个简单的小例子</span><br><span class="line"></span><br><span class="line">```sh</span><br><span class="line">➜ /Users/ramon.zhang/project/shell/test &gt; sh getopts.sh -a hello</span><br><span class="line">getopts test</span><br><span class="line">the -a option is: hello</span><br><span class="line">➜ /Users/ramon.zhang/project/shell/test &gt; cat getopts.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">echo &quot;getopts test&quot;</span><br><span class="line">while getopts a: option</span><br><span class="line">do</span><br><span class="line">    case $option</span><br><span class="line">    in</span><br><span class="line">        a)</span><br><span class="line">            echo &quot;the -a option is: $OPTARG&quot;</span><br><span class="line">            ;;</span><br><span class="line">        \?)</span><br><span class="line">            ;;</span><br><span class="line">    esac</span><br><span class="line">done</span><br></pre></td></tr></table></figure></p>
+<p>从上面我们可以看到，通过使用getopts，我们可以读取到-a以及其参数。一切都很顺利，那么第一个疑问点来了，getopts后面的option_string是<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">```sh</span><br><span class="line">➜ /Users/ramon.zhang/project/shell/test &gt; sh getopts.sh -a hello</span><br><span class="line">getopts test</span><br><span class="line">the -a option is:</span><br><span class="line">➜ /Users/ramon.zhang/project/shell/test &gt; cat getopts.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">echo &quot;getopts test&quot;</span><br><span class="line">while getopts a option</span><br><span class="line">do</span><br><span class="line">    case $option</span><br><span class="line">    in</span><br><span class="line">        a)</span><br><span class="line">            echo &quot;the -a option is: $OPTARG&quot;</span><br><span class="line">            ;;</span><br><span class="line">        \?)</span><br><span class="line">            ;;</span><br><span class="line">    esac</span><br><span class="line">done</span><br></pre></td></tr></table></figure></p>
+<p>去掉<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">那另外一点，如果有```:```的情况下，不传入参数，会发生什么，这里同样看例子：</span><br><span class="line">```sh</span><br><span class="line">➜ /Users/ramon.zhang/project/shell/test &gt; sh getopts.sh -a</span><br><span class="line">getopts test</span><br><span class="line">getopts.sh: option requires an argument -- a</span><br><span class="line">➜ /Users/ramon.zhang/project/shell/test &gt; cat getopts.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">echo &quot;getopts test&quot;</span><br><span class="line">while getopts a: option</span><br><span class="line">do</span><br><span class="line">    case $option</span><br><span class="line">    in</span><br><span class="line">        a)</span><br><span class="line">            echo &quot;the -a option is: $OPTARG&quot;</span><br><span class="line">            ;;</span><br><span class="line">        \?)</span><br><span class="line">            ;;</span><br><span class="line">    esac</span><br><span class="line">done</span><br></pre></td></tr></table></figure></p>
+<p>很明显的报错了，不过需求是多样的，可能有些时候我们确实不用传参数，这时候我们就可以在<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">```sh</span><br><span class="line">➜ /Users/ramon.zhang/project/shell/test &gt; sh getopts.sh -a hello -b hey -c world -d</span><br><span class="line">getopts test</span><br><span class="line">the -a option is: hello</span><br><span class="line">the -b option is: hey</span><br><span class="line">the -c option is: world</span><br><span class="line">the -d option is:</span><br><span class="line">➜ /Users/ramon.zhang/project/shell/test &gt; cat getopts.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">echo &quot;getopts test&quot;</span><br><span class="line"></span><br><span class="line">while getopts :a::b:c:d option</span><br><span class="line">do</span><br><span class="line">    case $option</span><br><span class="line">    in</span><br><span class="line">        a)</span><br><span class="line">            echo &quot;the -a option is: $OPTARG&quot;</span><br><span class="line">            ;;</span><br><span class="line">        b)</span><br><span class="line">            echo &quot;the -b option is: $OPTARG&quot;</span><br><span class="line">            ;;</span><br><span class="line">        c)</span><br><span class="line">            echo &quot;the -c option is: $OPTARG&quot;</span><br><span class="line">            ;;</span><br><span class="line">        d)</span><br><span class="line">            echo &quot;the -d option is: $OPTARG&quot;</span><br><span class="line">            ;;</span><br><span class="line">        \?)</span><br><span class="line">            ;;</span><br><span class="line">    esac</span><br><span class="line">done</span><br></pre></td></tr></table></figure></p>
+<p>上面就是getopts的基础用法了，还有一个相似的但是比较老的命令getopt，他支持长选项，有兴趣的可以去了解，这里就不介绍了。</p>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://blog.csdn.net/xluren/article/details/17489667" target="_blank" rel="noopener">shell getopts用法</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    <div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/09/2019-07-25-Add_two_num/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ramon">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ramon's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/09/2019-07-25-Add_two_num/" itemprop="url">ADD TWO NUM</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-09T19:58:05+08:00">
                 2019-08-09
               </time>
             
@@ -511,22 +1201,23 @@
       
         
           
-            <h3 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h3><p>Given an array of integers, return indices of the two numbers such that they add up to a specific target.</p>
-<p>You may assume that each input would have exactly one solution, and you may not use the same element twice.</p>
+            <h3 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h3><p>You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.</p>
+<p>You may assume the two numbers do not contain any leading zero, except the number 0 itself.</p>
 <p>Example:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Given nums = [2, 7, 11, 15], target = 9,</span><br><span class="line">Because nums[0] + nums[1] = 2 + 7 = 9,</span><br><span class="line">return [0, 1].</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: (2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&gt; 4)</span><br><span class="line">Output: 7 -&gt; 0 -&gt; 8</span><br><span class="line">Explanation: 342 + 465 = 807.</span><br></pre></td></tr></table></figure>
 
-<h3 id="anwser"><a href="#anwser" class="headerlink" title="anwser"></a>anwser</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Note: The returned array must be malloced, assume caller calls free().</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span>* <span class="title">twoSum</span><span class="params">(<span class="keyword">int</span>* nums, <span class="keyword">int</span> numsSize, <span class="keyword">int</span> target, <span class="keyword">int</span>* returnSize)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *ret = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">int</span> row = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> col = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> add = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    ret = (<span class="keyword">int</span> *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">int</span>)*<span class="number">2</span>);</span><br><span class="line">    ret[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    ret[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    *returnSize = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(;row &lt; numsSize<span class="number">-1</span>; row++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(col = row+<span class="number">1</span>; col &lt; numsSize; col++)</span><br><span class="line">        &#123;</span><br><span class="line">            add = nums[row] + nums[col];</span><br><span class="line">            <span class="keyword">if</span>(add == target)</span><br><span class="line">            &#123;</span><br><span class="line">                ret[<span class="number">0</span>] = row;</span><br><span class="line">                ret[<span class="number">1</span>] = col;</span><br><span class="line">                *returnSize = <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="anwser"><a href="#anwser" class="headerlink" title="anwser"></a>anwser</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     struct ListNode *next;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">struct ListNode* <span class="title">addTwoNumbers</span><span class="params">(struct ListNode* l1, struct ListNode* l2)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> up = <span class="number">0</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">list1</span> = <span class="title">l1</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">list2</span> = <span class="title">l2</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">tmp</span> = <span class="title">NULL</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">ret</span> = <span class="title">NULL</span>;</span>    </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> (!(list1 == <span class="literal">NULL</span> &amp;&amp; list2 == <span class="literal">NULL</span> &amp;&amp; up == <span class="number">0</span>)) &#123;</span><br><span class="line">        <span class="keyword">if</span>(tmp != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            tmp-&gt;next = (struct ListNode*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct ListNode));</span><br><span class="line">            tmp = tmp-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            tmp = (struct ListNode*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct ListNode));</span><br><span class="line">            ret = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">        tmp-&gt;val = up;</span><br><span class="line">        tmp-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">if</span> (list1 != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            tmp-&gt;val += list1-&gt;val;</span><br><span class="line">            list1 = list1-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (list2 != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            tmp-&gt;val += list2-&gt;val;</span><br><span class="line">            list2 = list2-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (tmp-&gt;val &gt; <span class="number">9</span>) &#123;</span><br><span class="line">            tmp-&gt;val = tmp-&gt;val%<span class="number">10</span>;</span><br><span class="line">            up = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            up = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>显而易见，最low的解法，因为是刚开始做，尝试进行优化无果后去查看官方的解法，恍然大悟，原来可以用hashmap等容器进行辅助，将时间复杂度由O(n^2)降低到O(n)，先来看代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">    Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">        map.put(nums[i], i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> complement = target - nums[i];</span><br><span class="line">        <span class="keyword">if</span> (map.containsKey(complement) &amp;&amp; map.get(complement) != i) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; i, map.get(complement) &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"No two sum solution"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这次的解题要比上次好了很多，不过前期也错误了几次，因为错误代码没有保留（大家应该也没兴趣）这里就不展示了，下面是这次提交后的成果:</p>
+<blockquote>
+<p>Runtime: 12 ms, faster than 87.29% of C online submissions for Add Two Numbers.<br>Memory Usage: 8.8 MB, less than 89.63% of C online submissions for Add Two Numbers.</p>
+</blockquote>
+<p>哈哈，小小的开心下，来说下思路，本来一开始想着去直接返回l1或者l2，不增添新的空间，但是发现这样做迈不过要检查这两个链表长度的坎，如果要查长度，每个链表轮训一次的话，花费的时间就太长了，于是new了一个新的tmp链表，考虑到要返回这个链表，所以需要把头指针保存下来，所以就在循环的一开始有个判断，找到第一次，既解决了malloc返回对象第一次能正确送达到tmp链表的问题，也解决了ret获取到头节点指针的麻烦。</p>
+<p>另外一个麻烦的地方是进位，如果最后一位有进位按照一般逻辑来说要拿出来判断，然后malloc，既然前面省了这么多，怎么能在这一步失败，所以苦思冥想，通过修改循环内部结构和while的条件解决了多一个进位的情况，同时整理代码看起来也简洁了很多。</p>
+<p>最后放出标准答案:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ListNode <span class="title">addTwoNumbers</span><span class="params">(ListNode l1, ListNode l2)</span> </span>&#123;</span><br><span class="line">    ListNode dummyHead = <span class="keyword">new</span> ListNode(<span class="number">0</span>);</span><br><span class="line">    ListNode p = l1, q = l2, curr = dummyHead;</span><br><span class="line">    <span class="keyword">int</span> carry = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (p != <span class="keyword">null</span> || q != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> x = (p != <span class="keyword">null</span>) ? p.val : <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> y = (q != <span class="keyword">null</span>) ? q.val : <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> sum = carry + x + y;</span><br><span class="line">        carry = sum / <span class="number">10</span>;</span><br><span class="line">        curr.next = <span class="keyword">new</span> ListNode(sum % <span class="number">10</span>);</span><br><span class="line">        curr = curr.next;</span><br><span class="line">        <span class="keyword">if</span> (p != <span class="keyword">null</span>) p = p.next;</span><br><span class="line">        <span class="keyword">if</span> (q != <span class="keyword">null</span>) q = q.next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (carry &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        curr.next = <span class="keyword">new</span> ListNode(carry);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dummyHead.next;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 
-<p>上述代码是用java写的，主要是通过遍历一遍数组，得到一个map，然后从里面找到target与num[i]的差值，这里简单的应用了hashmap就完成了复杂的操作，也是我们需要灵活运用数据结构的例子。</p>
-<p>这里虽然上面已经做到很快，但是在进行之前还是需要先轮训一遍数组，我们是不是可以省去这一步呢，这时候有了第三种方法，同样的，我们先来看代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">    Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> complement = target - nums[i];</span><br><span class="line">        <span class="keyword">if</span> (map.containsKey(complement)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; map.get(complement), i &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">        map.put(nums[i], i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"No two sum solution"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>通过上述代码我们可以看到巧妙的地方，只是走了一遍轮训，在这个过程中找到hashmap中是否由差值，如果没有就存进去</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这道题很简单，但是让我看到了hashmap在某些算法场景下能带来的巨大改进，同时也看到了巧妙的运用代码可以更高效的完成我们的操作，以后写算法看来不能全都用c语言了，毕竟容器的实现并不是我们刷题的重点。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这道题也是一道简单的算法题，但是有了上一道题的经验，这里对他进行了多次优化，用尽量少的代码和尽量省时间的方式来完成算法，通过结果也是对自己算法之路的一点鼓励了。</p>
 
           
         
@@ -680,167 +1371,6 @@
 <p>首先，先解释下数组跟指针有什么关系，既然我们上面说了指针就是数据，那么数组不就是多个数据的集合吗，既然是数据的集合，当然有自己的地址了，这里要知道的是数组中数据的地址是连续的，这个是个比较重要的地方，是我们可以顺序获取数据的关键。另外说下数组并不是指针，或者准确的说数组名不是指针，可以理解为是数组的首地址，是个常数，这里一定要清楚，他是不可变的，我们可以用a[2]取得数据，也可以用<em>(a+2)取得数据，但一定要知道的是a并不是一个指针，也就是int \</em> a和int a[]的区别，知道这个，数组与指针的关系也就可以分得清楚了。</p>
 <h3 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h3><p>链表跟数组最大的区别是数组的内存是顺序的，而链表是动态的，我们通过结点中的一个next指针，指向（即存着下个结点的地址）下个结点的形式形成一串类似链表一样的数据结构。</p>
 <h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>理解了链表，其实栈和队列就很好理解了，只是不同形式的链表，先进先出还是先进后出都是表现形式而已，本质都是链表。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    <div>
-        
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/09/2019-07-25-Add_two_num/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ramon">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ramon's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/09/2019-07-25-Add_two_num/" itemprop="url">ADD TWO NUM</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-09T12:03:34+08:00">
-                2019-08-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode/" itemprop="url" rel="index">
-                    <span itemprop="name">leetcode</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h3><p>You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.</p>
-<p>You may assume the two numbers do not contain any leading zero, except the number 0 itself.</p>
-<p>Example:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: (2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&gt; 4)</span><br><span class="line">Output: 7 -&gt; 0 -&gt; 8</span><br><span class="line">Explanation: 342 + 465 = 807.</span><br></pre></td></tr></table></figure>
-
-<h3 id="anwser"><a href="#anwser" class="headerlink" title="anwser"></a>anwser</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Definition for singly-linked list.</span></span><br><span class="line"><span class="comment"> * struct ListNode &#123;</span></span><br><span class="line"><span class="comment"> *     int val;</span></span><br><span class="line"><span class="comment"> *     struct ListNode *next;</span></span><br><span class="line"><span class="comment"> * &#125;;</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function">struct ListNode* <span class="title">addTwoNumbers</span><span class="params">(struct ListNode* l1, struct ListNode* l2)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> up = <span class="number">0</span>;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">list1</span> = <span class="title">l1</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">list2</span> = <span class="title">l2</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">tmp</span> = <span class="title">NULL</span>;</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">ListNode</span>* <span class="title">ret</span> = <span class="title">NULL</span>;</span>    </span><br><span class="line">    </span><br><span class="line">    <span class="keyword">while</span> (!(list1 == <span class="literal">NULL</span> &amp;&amp; list2 == <span class="literal">NULL</span> &amp;&amp; up == <span class="number">0</span>)) &#123;</span><br><span class="line">        <span class="keyword">if</span>(tmp != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            tmp-&gt;next = (struct ListNode*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct ListNode));</span><br><span class="line">            tmp = tmp-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            tmp = (struct ListNode*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(struct ListNode));</span><br><span class="line">            ret = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">        tmp-&gt;val = up;</span><br><span class="line">        tmp-&gt;next = <span class="literal">NULL</span>;</span><br><span class="line">        <span class="keyword">if</span> (list1 != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            tmp-&gt;val += list1-&gt;val;</span><br><span class="line">            list1 = list1-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (list2 != <span class="literal">NULL</span>) &#123;</span><br><span class="line">            tmp-&gt;val += list2-&gt;val;</span><br><span class="line">            list2 = list2-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (tmp-&gt;val &gt; <span class="number">9</span>) &#123;</span><br><span class="line">            tmp-&gt;val = tmp-&gt;val%<span class="number">10</span>;</span><br><span class="line">            up = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            up = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这次的解题要比上次好了很多，不过前期也错误了几次，因为错误代码没有保留（大家应该也没兴趣）这里就不展示了，下面是这次提交后的成果:</p>
-<blockquote>
-<p>Runtime: 12 ms, faster than 87.29% of C online submissions for Add Two Numbers.<br>Memory Usage: 8.8 MB, less than 89.63% of C online submissions for Add Two Numbers.</p>
-</blockquote>
-<p>哈哈，小小的开心下，来说下思路，本来一开始想着去直接返回l1或者l2，不增添新的空间，但是发现这样做迈不过要检查这两个链表长度的坎，如果要查长度，每个链表轮训一次的话，花费的时间就太长了，于是new了一个新的tmp链表，考虑到要返回这个链表，所以需要把头指针保存下来，所以就在循环的一开始有个判断，找到第一次，既解决了malloc返回对象第一次能正确送达到tmp链表的问题，也解决了ret获取到头节点指针的麻烦。</p>
-<p>另外一个麻烦的地方是进位，如果最后一位有进位按照一般逻辑来说要拿出来判断，然后malloc，既然前面省了这么多，怎么能在这一步失败，所以苦思冥想，通过修改循环内部结构和while的条件解决了多一个进位的情况，同时整理代码看起来也简洁了很多。</p>
-<p>最后放出标准答案:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> ListNode <span class="title">addTwoNumbers</span><span class="params">(ListNode l1, ListNode l2)</span> </span>&#123;</span><br><span class="line">    ListNode dummyHead = <span class="keyword">new</span> ListNode(<span class="number">0</span>);</span><br><span class="line">    ListNode p = l1, q = l2, curr = dummyHead;</span><br><span class="line">    <span class="keyword">int</span> carry = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (p != <span class="keyword">null</span> || q != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">int</span> x = (p != <span class="keyword">null</span>) ? p.val : <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> y = (q != <span class="keyword">null</span>) ? q.val : <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> sum = carry + x + y;</span><br><span class="line">        carry = sum / <span class="number">10</span>;</span><br><span class="line">        curr.next = <span class="keyword">new</span> ListNode(sum % <span class="number">10</span>);</span><br><span class="line">        curr = curr.next;</span><br><span class="line">        <span class="keyword">if</span> (p != <span class="keyword">null</span>) p = p.next;</span><br><span class="line">        <span class="keyword">if</span> (q != <span class="keyword">null</span>) q = q.next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (carry &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        curr.next = <span class="keyword">new</span> ListNode(carry);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> dummyHead.next;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这道题也是一道简单的算法题，但是有了上一道题的经验，这里对他进行了多次优化，用尽量少的代码和尽量省时间的方式来完成算法，通过结果也是对自己算法之路的一点鼓励了。</p>
 
           
         
@@ -1052,536 +1582,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/09/2019-07-28-pstree/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ramon">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ramon's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/09/2019-07-28-pstree/" itemprop="url">pstree/pstack/strace</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-09T12:03:34+08:00">
-                2019-08-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/小技巧/" itemprop="url" rel="index">
-                    <span itemprop="name">小技巧</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>今天介绍的几个命令主要是追踪进程执行状态用的，在平时工作中经常遇到进程卡住的情况，导致后续任务失败，如果当前现场得以保留，我们可以用这三个命令来完成对问题根因的查找以及处理。</p>
-<h3 id="pstree"><a href="#pstree" class="headerlink" title="pstree"></a>pstree</h3><p>pstree命令主要以树状图的形式展现进程间的调用关系，通过ps获取到进程的进程id后传入pstree进行进程查看，官方介绍如下：</p>
-<blockquote>
-<p>pstree shows running processes as a tree. The tree is rooted at either pid or init if pid is omitted.<br>If a user name is specified, all process trees rooted at processes  owned  by that user are shown.</p>
-</blockquote>
-<p>以下为各选项的说明文档：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">pstree: invalid option -- &apos;-&apos;</span><br><span class="line">Usage: pstree [ -a ] [ -c ] [ -h | -H PID ] [ -l ] [ -n ] [ -p ] [ -u ]</span><br><span class="line">              [ -A | -G | -U ] [ PID | USER ]</span><br><span class="line">       pstree -V</span><br><span class="line">Display a tree of processes.</span><br><span class="line"></span><br><span class="line">    -a     show command line arguments</span><br><span class="line">    -A     use ASCII line drawing characters</span><br><span class="line">    -c     don&apos;t compact identical subtrees</span><br><span class="line">    -h     highlight current process and its ancestors</span><br><span class="line">    -H PID highlight this process and its ancestors</span><br><span class="line">    -G     use VT100 line drawing characters</span><br><span class="line">    -l     don&apos;t truncate long lines</span><br><span class="line">    -n     sort output by PID</span><br><span class="line">    -p     show PIDs; implies -c</span><br><span class="line">    -u     show uid transitions</span><br><span class="line">    -U     use UTF-8 (Unicode) line drawing characters</span><br><span class="line">    -V     display version information</span><br><span class="line">    -Z     show SELinux security contexts</span><br><span class="line">    PID    start at this PID; default is 1 (init)</span><br><span class="line">    USER   show only trees rooted at processes of this user</span><br></pre></td></tr></table></figure>
-
-<h3 id="pstack"><a href="#pstack" class="headerlink" title="pstack"></a>pstack</h3><p>pstack跟pstree不太一样，pstree主要看进程间的调用关系，pstack主要是查看进程函数堆栈，核心实现是使用了gdb以及threadapply all bt 命令</p>
-<p>一般用法为直接加pid，如下</p>
-<blockquote>
-<p>pstack <pid></pid></p>
-</blockquote>
-<p>命令结果如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">pstack 4551</span><br><span class="line">Thread 7 (Thread 1084229984 (LWP 4552)):</span><br><span class="line">#0  0x000000302afc63dc in epoll_wait () from /lib64/tls/libc.so.6</span><br><span class="line">#1  0x00000000006f0730 in ub::EPollEx::poll ()</span><br><span class="line">#2  0x00000000006f172a in ub::NetReactor::callback ()</span><br><span class="line">#3  0x00000000006fbbbb in ub::UBTask::CALLBACK ()</span><br><span class="line">#4  0x000000302b80610a in start_thread () from /lib64/tls/libpthread.so.0</span><br><span class="line">#5  0x000000302afc6003 in clone () from /lib64/tls/libc.so.6</span><br><span class="line">#6  0x0000000000000000 in ?? ()</span><br><span class="line">Thread 6 (Thread 1094719840 (LWP 4553)):</span><br><span class="line">#0  0x000000302afc63dc in epoll_wait () from /lib64/tls/libc.so.6</span><br><span class="line">#1  0x00000000006f0730 in ub::EPollEx::poll ()</span><br><span class="line">#2  0x00000000006f172a in ub::NetReactor::callback ()</span><br><span class="line">#3  0x00000000006fbbbb in ub::UBTask::CALLBACK ()</span><br><span class="line">#4  0x000000302b80610a in start_thread () from /lib64/tls/libpthread.so.0</span><br><span class="line">#5  0x000000302afc6003 in clone () from /lib64/tls/libc.so.6</span><br><span class="line">#6  0x0000000000000000 in ?? ()</span><br><span class="line">Thread 5 (Thread 1105209696 (LWP 4554)):</span><br><span class="line">#0  0x000000302b80baa5 in __nanosleep_nocancel ()</span><br><span class="line">#1  0x000000000079e758 in comcm::ms_sleep ()</span><br><span class="line">#2  0x00000000006c8581 in ub::UbClientManager::healthyCheck ()</span><br><span class="line">#3  0x00000000006c8471 in ub::UbClientManager::start_healthy_check ()</span><br><span class="line">#4  0x000000302b80610a in start_thread () from /lib64/tls/libpthread.so.0</span><br><span class="line">#5  0x000000302afc6003 in clone () from /lib64/tls/libc.so.6</span><br><span class="line">#6  0x0000000000000000 in ?? ()</span><br><span class="line">....</span><br></pre></td></tr></table></figure>
-
-<h3 id="strace"><a href="#strace" class="headerlink" title="strace"></a>strace</h3><p>strace常用来跟踪进程执行时的系统调用和所接收的信号。 在Linux世界，进程不能直接访问硬件设备，当进程需要访问硬件设备(比如读取磁盘文件，接收网络数据等等)时，必须由用户态模式切换至内核态模式，通 过系统调用访问硬件设备。strace可以跟踪到一个进程产生的系统调用,包括参数，返回值，执行消耗的时间</p>
-<p>如下为strace的参数定义</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">strace: invalid option -- &apos;-&apos;</span><br><span class="line">usage: strace [-dDffhiqrtttTvVxx] [-a column] [-e expr] ... [-o file]</span><br><span class="line">              [-p pid] ... [-s strsize] [-u username] [-E var=val] ...</span><br><span class="line">              [command [arg ...]]</span><br><span class="line">   or: strace -c [-D] [-e expr] ... [-O overhead] [-S sortby] [-E var=val] ...</span><br><span class="line">              [command [arg ...]]</span><br><span class="line">-c -- count time, calls, and errors for each syscall and report summary</span><br><span class="line">-f -- follow forks, -ff -- with output into separate files</span><br><span class="line">-F -- attempt to follow vforks, -h -- print help message</span><br><span class="line">-i -- print instruction pointer at time of syscall</span><br><span class="line">-q -- suppress messages about attaching, detaching, etc.</span><br><span class="line">-r -- print relative timestamp, -t -- absolute timestamp, -tt -- with usecs</span><br><span class="line">-T -- print time spent in each syscall, -V -- print version</span><br><span class="line">-v -- verbose mode: print unabbreviated argv, stat, termio[s], etc. args</span><br><span class="line">-x -- print non-ascii strings in hex, -xx -- print all strings in hex</span><br><span class="line">-a column -- alignment COLUMN for printing syscall results (default 40)</span><br><span class="line">-e expr -- a qualifying expression: option=[!]all or option=[!]val1[,val2]...</span><br><span class="line">   options: trace, abbrev, verbose, raw, signal, read, or write</span><br><span class="line">-o file -- send trace output to FILE instead of stderr</span><br><span class="line">-O overhead -- set overhead for tracing syscalls to OVERHEAD usecs</span><br><span class="line">-p pid -- trace process with process id PID, may be repeated</span><br><span class="line">-D -- run tracer process as a detached grandchild, not as parent</span><br><span class="line">-s strsize -- limit length of print strings to STRSIZE chars (default 32)</span><br><span class="line">-S sortby -- sort syscall counts by: time, calls, name, nothing (default time)</span><br><span class="line">-u username -- run command as username handling setuid and/or setgid</span><br><span class="line">-E var=val -- put var=val in the environment for command</span><br><span class="line">-E var -- remove var from the environment for command</span><br></pre></td></tr></table></figure>
-
-<p>已经有很多文章对这个进行了详细的介绍，这里就不重复造轮子了，具体了解可以看如下链接：</p>
-<blockquote>
-<p><a href="https://man.linuxde.net/strace" target="_blank" rel="noopener">https://man.linuxde.net/strace</a></p>
-</blockquote>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>今天了解到的命令都是进程追踪的命令，当我们遇到进程出现问题需要追踪调试的时候可以使用。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    <div>
-        
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/09/2019-08-03-longest-substring-without-repeating-characters/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ramon">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ramon's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/09/2019-08-03-longest-substring-without-repeating-characters/" itemprop="url">longest-substring-without-repeating-characters</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-09T12:03:34+08:00">
-                2019-08-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode/" itemprop="url" rel="index">
-                    <span itemprop="name">leetcode</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h3><p>Given a string, find the length of the longest substring without repeating characters.</p>
-<p>Example 1:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: &quot;abcabcbb&quot;</span><br><span class="line">Output: 3 </span><br><span class="line">Explanation: The answer is &quot;abc&quot;, with the length of 3.</span><br></pre></td></tr></table></figure>
-
-<p>Example 2:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: &quot;bbbbb&quot;</span><br><span class="line">Output: 1</span><br><span class="line">Explanation: The answer is &quot;b&quot;, with the length of 1.</span><br></pre></td></tr></table></figure>
-
-<p>Example 3:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Input: &quot;pwwkew&quot;</span><br><span class="line">Output: 3</span><br><span class="line">Explanation: The answer is &quot;wke&quot;, with the length of 3. </span><br><span class="line">             Note that the answer must be a substring, &quot;pwke&quot; is a subsequence and not a substring.</span><br></pre></td></tr></table></figure>
-
-<h3 id="my-anwser"><a href="#my-anwser" class="headerlink" title="my anwser"></a>my anwser</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">set</span>&lt;<span class="keyword">char</span>&gt; s_str;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> len = s.length();</span><br><span class="line">        <span class="keyword">int</span> ret = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">            s_str.insert(s[i]);</span><br><span class="line">            <span class="keyword">for</span>(j = <span class="number">1</span>; j &lt; len - i; j++) &#123;</span><br><span class="line">                <span class="keyword">if</span>(s_str.count(s[i+j]) == <span class="number">0</span>) &#123;</span><br><span class="line">                    s_str.insert(s[i+j]);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    s_str.clear();</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(ret &lt; j) &#123;</span><br><span class="line">                ret = j;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>实打实的暴力破解法，这次没用c语言是因为考虑到查看新增的字符是不是出现在前面，又要再加个循环，跑到O(n^3)，实在是花费太多时间了，那就用set代替，虽然知道这样做在set内部也要用插入删除的操作，但总归是比for看起来舒服很多的，结果也是相当的不理想，不过因为自己这次在优化过程中一直想着是不是能用动态规划而把自己限制死了，私下在研究下动态规划吧🌚。<br>不过，在看了标准答案后真的是豁然开朗，原来是这么做的，其实自己如果一步步优化很多东西完全是可以想到的，以后要注意尽量不要眼高手低，下面先来欣赏标准答案第一个精彩的解法（直接忽略掉暴力解法）：</p>
-<p><strong>解法一</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s.length();</span><br><span class="line">        Set&lt;Character&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>, i = <span class="number">0</span>, j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (i &lt; n &amp;&amp; j &lt; n) &#123;</span><br><span class="line">            <span class="comment">// try to extend the range [i, j]</span></span><br><span class="line">            <span class="keyword">if</span> (!set.contains(s.charAt(j)))&#123;</span><br><span class="line">                set.add(s.charAt(j++));</span><br><span class="line">                ans = Math.max(ans, j - i);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                set.remove(s.charAt(i++));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>精彩的滑动窗口解法，一次遍历字符串，遇到重复的就移动左边届，直到没有重复内容，其实就是在暴力破解的基础上做了一些巧妙的改动，这个代码比较简单，比较好理解，重点放在后面两个优化后的算法上。</p>
-<p><strong>解法二</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s.length(), ans = <span class="number">0</span>;</span><br><span class="line">        Map&lt;Character, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;(); <span class="comment">// current index of character</span></span><br><span class="line">        <span class="comment">// try to extend the range [i, j]</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>, i = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (map.containsKey(s.charAt(j))) &#123;</span><br><span class="line">                i = Math.max(map.get(s.charAt(j)), i);</span><br><span class="line">            &#125;</span><br><span class="line">            ans = Math.max(ans, j - i + <span class="number">1</span>);</span><br><span class="line">            map.put(s.charAt(j), j + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>非常精彩的解法，让我想到了kmp算法，这里的map就相当于next数组，在之前滑动窗口的基础上进行了改进，之前左边界需要逐步移动，这里通过map获取到当前字符对应的value值直接得到下一步左边届的位置，与next数组有异曲同工之妙，下次我也找个时间细细研究下kmp算法，更新一篇关于kmp算法的文章，这里就不多说了，先介绍上面的算法。</p>
-<p>从上面聊下来，其实这里最难理解的就是i作为左边届(上面i是当前匹配字符串的左边界，j是右边界)，是怎么快速得到的。</p>
-<p>首先，map在这里用的非常巧妙，map对应的值始终是下一跳的位置，我们以<em>abcaa</em>为例，看map中k以及v及i的变化:</p>
-<table>
-<thead>
-<tr>
-<th>j</th>
-<th>0</th>
-<th>1</th>
-<th>2</th>
-<th>3</th>
-<th>4</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>k</td>
-<td>a</td>
-<td>b</td>
-<td>c</td>
-<td>a</td>
-<td>a</td>
-</tr>
-<tr>
-<td>v</td>
-<td>1</td>
-<td>2</td>
-<td>3</td>
-<td>4</td>
-<td>5</td>
-</tr>
-<tr>
-<td>i</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-<td>4</td>
-</tr>
-</tbody></table>
-<p>从表中可以看出，当遇到相同的k时，递增的v就会改变对应的值为下次下标所在的位置，i此时获得的时之前value的值，也就是对应的左边届的位置是根据上次字符出现时的next位置决定的，因为在这之间的字符我们已经可以判断没有在轮询的必要了（每次都跳到上次出现的后一个位置）。</p>
-<p>下面是针对上面这种解法的又一次优化：</p>
-<p><strong>解法三</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s.length(), ans = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span>[] index = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">128</span>]; <span class="comment">// current index of character</span></span><br><span class="line">        <span class="comment">// try to extend the range [i, j]</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>, i = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            i = Math.max(index[s.charAt(j)], i);</span><br><span class="line">            ans = Math.max(ans, j - i + <span class="number">1</span>);</span><br><span class="line">            index[s.charAt(j)] = j + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>这里针对ascii码是有限的（而且边界比较小），用数组替换了map，完成了这个精彩的算法，上面我们说的挺多的了，这里就不重复说了。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>这次完全是自己眼高手低了，算法应该先用自己能想到的方法实现，然后针对该算饭进行一步步优化，而不是刚开始就想着一口吃个胖子，有个多优秀的算法解决。同时，动态规划也要好好学习，首先，最起码应该知道什么情况下使用动态规划。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    <div>
-        
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/09/2019-08-04-getops/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ramon">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ramon's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/09/2019-08-04-getops/" itemprop="url">getopts</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-09T12:03:34+08:00">
-                2019-08-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/小技巧/" itemprop="url" rel="index">
-                    <span itemprop="name">小技巧</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>平时使用命令的时候，我们经常会使用–help查看选项列表进行使用，那么在命令内部是怎么获取到我们的选项以及参数使用的呢？</p>
-<p>今天就来介绍下这个命令<figure class="highlight plain"><figcaption><span>,在shell脚本中可以读取到命令行输入的选项及参数。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">### 用法</span><br><span class="line"></span><br><span class="line">首先我们先来看个简单的小例子</span><br><span class="line"></span><br><span class="line">```sh</span><br><span class="line">➜ /Users/ramon.zhang/project/shell/test &gt; sh getopts.sh -a hello</span><br><span class="line">getopts test</span><br><span class="line">the -a option is: hello</span><br><span class="line">➜ /Users/ramon.zhang/project/shell/test &gt; cat getopts.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">echo &quot;getopts test&quot;</span><br><span class="line">while getopts a: option</span><br><span class="line">do</span><br><span class="line">    case $option</span><br><span class="line">    in</span><br><span class="line">        a)</span><br><span class="line">            echo &quot;the -a option is: $OPTARG&quot;</span><br><span class="line">            ;;</span><br><span class="line">        \?)</span><br><span class="line">            ;;</span><br><span class="line">    esac</span><br><span class="line">done</span><br></pre></td></tr></table></figure></p>
-<p>从上面我们可以看到，通过使用getopts，我们可以读取到-a以及其参数。一切都很顺利，那么第一个疑问点来了，getopts后面的option_string是<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">```sh</span><br><span class="line">➜ /Users/ramon.zhang/project/shell/test &gt; sh getopts.sh -a hello</span><br><span class="line">getopts test</span><br><span class="line">the -a option is:</span><br><span class="line">➜ /Users/ramon.zhang/project/shell/test &gt; cat getopts.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">echo &quot;getopts test&quot;</span><br><span class="line">while getopts a option</span><br><span class="line">do</span><br><span class="line">    case $option</span><br><span class="line">    in</span><br><span class="line">        a)</span><br><span class="line">            echo &quot;the -a option is: $OPTARG&quot;</span><br><span class="line">            ;;</span><br><span class="line">        \?)</span><br><span class="line">            ;;</span><br><span class="line">    esac</span><br><span class="line">done</span><br></pre></td></tr></table></figure></p>
-<p>去掉<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">那另外一点，如果有```:```的情况下，不传入参数，会发生什么，这里同样看例子：</span><br><span class="line">```sh</span><br><span class="line">➜ /Users/ramon.zhang/project/shell/test &gt; sh getopts.sh -a</span><br><span class="line">getopts test</span><br><span class="line">getopts.sh: option requires an argument -- a</span><br><span class="line">➜ /Users/ramon.zhang/project/shell/test &gt; cat getopts.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">echo &quot;getopts test&quot;</span><br><span class="line">while getopts a: option</span><br><span class="line">do</span><br><span class="line">    case $option</span><br><span class="line">    in</span><br><span class="line">        a)</span><br><span class="line">            echo &quot;the -a option is: $OPTARG&quot;</span><br><span class="line">            ;;</span><br><span class="line">        \?)</span><br><span class="line">            ;;</span><br><span class="line">    esac</span><br><span class="line">done</span><br></pre></td></tr></table></figure></p>
-<p>很明显的报错了，不过需求是多样的，可能有些时候我们确实不用传参数，这时候我们就可以在<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">```sh</span><br><span class="line">➜ /Users/ramon.zhang/project/shell/test &gt; sh getopts.sh -a hello -b hey -c world -d</span><br><span class="line">getopts test</span><br><span class="line">the -a option is: hello</span><br><span class="line">the -b option is: hey</span><br><span class="line">the -c option is: world</span><br><span class="line">the -d option is:</span><br><span class="line">➜ /Users/ramon.zhang/project/shell/test &gt; cat getopts.sh</span><br><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">echo &quot;getopts test&quot;</span><br><span class="line"></span><br><span class="line">while getopts :a::b:c:d option</span><br><span class="line">do</span><br><span class="line">    case $option</span><br><span class="line">    in</span><br><span class="line">        a)</span><br><span class="line">            echo &quot;the -a option is: $OPTARG&quot;</span><br><span class="line">            ;;</span><br><span class="line">        b)</span><br><span class="line">            echo &quot;the -b option is: $OPTARG&quot;</span><br><span class="line">            ;;</span><br><span class="line">        c)</span><br><span class="line">            echo &quot;the -c option is: $OPTARG&quot;</span><br><span class="line">            ;;</span><br><span class="line">        d)</span><br><span class="line">            echo &quot;the -d option is: $OPTARG&quot;</span><br><span class="line">            ;;</span><br><span class="line">        \?)</span><br><span class="line">            ;;</span><br><span class="line">    esac</span><br><span class="line">done</span><br></pre></td></tr></table></figure></p>
-<p>上面就是getopts的基础用法了，还有一个相似的但是比较老的命令getopt，他支持长选项，有兴趣的可以去了解，这里就不介绍了。</p>
-<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><p><a href="https://blog.csdn.net/xluren/article/details/17489667" target="_blank" rel="noopener">shell getopts用法</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    <div>
-        
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1645,6 +1645,15 @@
               </div>
             
 
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
             
 
           </nav>
