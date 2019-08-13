@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/12/node_introduce/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/14/node_introduce/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Ramon">
@@ -281,7 +281,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/08/12/node_introduce/" itemprop="url">node底层原理</a></h1>
+                <a class="post-title-link" href="/2019/08/14/node_introduce/" itemprop="url">node底层原理</a></h1>
         
 
         <div class="post-meta">
@@ -293,8 +293,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-12T00:16:57+08:00">
-                2019-08-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-14T00:40:52+08:00">
+                2019-08-14
               </time>
             
 
@@ -386,11 +386,167 @@
 </ul>
 <p>底层依赖库介绍如下：<br>    <strong>V8</strong>前面已经说过了，高性能的JavaScript引擎，这里就不赘述了。<br>    <strong>libuv</strong>：C语言开发的一套线程池，主要提供事件循环（event loop）、异步网络I/O、文件系统I/O等能力。<br>    <strong>other</strong>：其他底层依赖库主要提供了对系统底层功能的访问，如<a href="https://c-ares.haxx.se/" target="_blank" rel="noopener">c-ares</a>提供DNS解析能力。<a href="https://www.openssl.org/" target="_blank" rel="noopener">crypto(OpenSSL)</a>提供加密能力，http提供网络服务，<a href="http://zlib.net/" target="_blank" rel="noopener">zlib</a>提供解压能力等等。</p>
 <p>介绍完这些，我们好像并不能了解Node.js那些特性如单线程、异步IO，事件驱动等，既然是一个平台，了解了架构，再去理解运行原理就一目了然了，下面我们来详细介绍下运行原理</p>
-<h2 id="运行原理"><a href="#运行原理" class="headerlink" title="运行原理"></a>运行原理</h2><p>接到上面的介绍，首先来说<strong>单线程</strong>，我们都知道现在的程序都讲究多线程，同时处理任务，因为cpu执行速度很快，而IO相对来说要慢很多，如果是一个线程跑，其他任务等待，会导致cpu有大量的空闲时间，不仅是资源的浪费，我们的程序执行速度也会变得非常慢。那node.js为什么还要使用单线程呢，这不是在倒退吗？<br>这里就引出了异步IO，nodejs的单线程是相对而言的，我们可以理解为一个主线程，多个从线程。主线程主要执行代码逻辑，完成程序的运行，而较为缓慢的IO操作则交给从线程完成，这里的操作是异步的，也就是主线程注册了任务继续处理后面的任务，等到注册的这个任务完成后主线程才开始执行，具体结构请看下图：<br><img src="http://git.cn-hangzhou.oss.aliyun-inc.com/uploads/beidou/beidou/c55b2e27cbf21eb8e61e0cfe068b33c2/QRePV.jpg" alt="node原理图"><br><br><br>一个 Node.js 应用启动时，V8 引擎会执行你写的应用代码，保持一份观察者（注册在事件上的回调函数）列表。当事件发生时，它的回调函数会被加进一个事件队列。只要这个队列还有等待执行的回调函数，事件循环就会持续把回调函数从队列中拿出并执行。</p>
-<p>在回调函数执行过程中，所有的 I/O 请求都会转发给工作线程处理。libuv 维持着一个线程池，包含四个工作线程（默认值，可配置）。文件系统 I/O 请求和 DNS 相关请求都会放进这个线程池处理；其他的请求，如网络、平台特性相关的请求会分发给相应的系统处理单元进行处理。</p>
-<p>安排给线程池的这些 I/O 操作由 Node.js 的底层库执行，完成之后触发相应事件，对应的事件回调函数会被放入事件队列，等待执行后续操作。这就是一个事件在 Node.js 中执行的整个生命周期。</p>
+<h2 id="运行原理"><a href="#运行原理" class="headerlink" title="运行原理"></a>运行原理</h2><p>接到上面的介绍，首先来说<strong>单线程</strong>，我们都知道现在的程序都讲究多线程，同时处理任务，因为cpu执行速度很快，而IO相对来说要慢很多，如果是一个线程跑，其他任务等待，会导致cpu有大量的空闲时间，不仅是资源的浪费，我们的程序执行速度也会变得非常慢。那node.js为什么还要使用单线程呢，这不是在倒退吗？<br>这里就引出了异步IO，nodejs的单线程是相对而言的，我们可以理解为一个主线程，多个从线程。主线程主要执行代码逻辑，完成程序的运行，而较为缓慢的IO操作则交给从线程完成，这里的操作是异步的，也就是主线程注册了任务继续处理后面的任务，等到注册的这个任务完成后主线程才开始执行，具体结构请看下图：<br><img src="http://git.cn-hangzhou.oss.aliyun-inc.com/uploads/beidou/beidou/c55b2e27cbf21eb8e61e0cfe068b33c2/QRePV.jpg" alt="node原理图"> </p>
+<p>一个 Node.js 应用启动时，V8 引擎会执行你写的应用代码，保持一份观察者（注册在事件上的回调函数）列表。当事件发生时，它的回调函数会被加进一个事件队列。只要这个队列还有等待执行的回调函数，事件循环就会持续把回调函数从队列中拿出并执行。<br>在回调函数执行过程中，所有的 I/O 请求都会转发给工作线程处理。libuv 维持着一个线程池，包含四个工作线程（默认值，可配置）。文件系统 I/O 请求和 DNS 相关请求都会放进这个线程池处理；其他的请求，如网络、平台特性相关的请求会分发给相应的系统处理单元进行处理。<br>安排给线程池的这些 I/O 操作由 Node.js 的底层库执行，完成之后触发相应事件，对应的事件回调函数会被放入事件队列，等待执行后续操作。这就是一个事件在 Node.js 中执行的整个生命周期。</p>
 <h1 id="Node-js跟JavaScript有什么区别"><a href="#Node-js跟JavaScript有什么区别" class="headerlink" title="Node.js跟JavaScript有什么区别"></a>Node.js跟JavaScript有什么区别</h1><p>最后一个问题，其实前面介绍完了，我们已经有了一个了解了，JavaScript是一门语言，而node.js更像是是一个使用js这门异步IO的语言通过封装大量的后台库完成对高IO请求任务处理的服务器平台。</p>
 <h3 id="引用文献"><a href="#引用文献" class="headerlink" title="引用文献"></a>引用文献</h3><p><a href="https://www.cnblogs.com/peiyu1988/p/8032982.html" target="_blank" rel="noopener">Node.js的运行原理-科普篇</a><br><a href="https://www.cnblogs.com/bingooo/p/6720540.html" target="_blank" rel="noopener">Node.js原理解析</a><br><a href="http://blog.csdn.net/xiangzhihong8/article/details/74996757" target="_blank" rel="noopener">Google V8引擎</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    <div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/14/submissions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ramon">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ramon's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/14/submissions/" itemprop="url">寻找两个有序数组的中位数</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-14T00:40:30+08:00">
+                2019-08-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/leetcode/" itemprop="url" rel="index">
+                    <span itemprop="name">leetcode</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><p>给定两个大小为 m 和 n 的有序数组 nums1 和 nums2。</p>
+<p>请你找出这两个有序数组的中位数，并且要求算法的时间复杂度为 O(log(m + n))。</p>
+<p>你可以假设 nums1 和 nums2 不会同时为空。</p>
+<p>示例1:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nums1 = [1, 3]</span><br><span class="line">nums2 = [2]</span><br><span class="line"></span><br><span class="line">则中位数是 2.0</span><br></pre></td></tr></table></figure>
+
+<p>示例2:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nums1 = [1, 2]</span><br><span class="line">nums2 = [3, 4]</span><br><span class="line"></span><br><span class="line">则中位数是 (2 + 3)/2 = 2.5</span><br></pre></td></tr></table></figure>
+
+<h3 id="anwser"><a href="#anwser" class="headerlink" title="anwser"></a>anwser</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">findMedianSortedArrays</span><span class="params">(<span class="keyword">int</span>* nums1, <span class="keyword">int</span> nums1Size, <span class="keyword">int</span>* nums2, <span class="keyword">int</span> nums2Size)</span></span>&#123;</span><br><span class="line">    <span class="keyword">double</span> ret = <span class="number">0</span>; <span class="comment">// 返回值</span></span><br><span class="line">    <span class="keyword">int</span> x = <span class="number">-1</span>;     <span class="comment">// 已去掉x下标</span></span><br><span class="line">    <span class="keyword">int</span> y = <span class="number">-1</span>;     <span class="comment">// 已去掉y下标</span></span><br><span class="line">    <span class="keyword">int</span> m = nums1Size + nums2Size;     <span class="comment">// 还需要去掉的数</span></span><br><span class="line">    <span class="keyword">int</span> kx = <span class="number">0</span>;     <span class="comment">// x移动后的位置</span></span><br><span class="line">    <span class="keyword">int</span> ky = <span class="number">0</span>;     <span class="comment">// y移动后的位置</span></span><br><span class="line">    <span class="keyword">int</span> km = <span class="number">0</span>;      <span class="comment">// 需要移动的位数</span></span><br><span class="line">    <span class="keyword">int</span> a = <span class="number">19999999</span>;</span><br><span class="line">    <span class="keyword">int</span> b = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(m != <span class="number">1</span>) &#123;</span><br><span class="line">        m /= <span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    km = m;</span><br><span class="line">    <span class="keyword">while</span>(km != <span class="number">0</span> &amp;&amp; x != nums1Size<span class="number">-1</span> &amp;&amp; y != nums2Size<span class="number">-1</span>) &#123;</span><br><span class="line">        km = (km == <span class="number">1</span>) ? <span class="number">1</span>:(km/<span class="number">2</span>);</span><br><span class="line">        kx = (x+km)&gt;(nums1Size<span class="number">-1</span>) ? (nums1Size<span class="number">-1</span>):(x+km);</span><br><span class="line">        ky = (y+km)&gt;(nums2Size<span class="number">-1</span>) ? (nums2Size<span class="number">-1</span>):(y+km);</span><br><span class="line">        <span class="keyword">if</span>(nums1[kx] &gt; nums2[ky]) &#123;</span><br><span class="line">            m = m - ky + y;</span><br><span class="line">            km = m;</span><br><span class="line">            y = ky;</span><br><span class="line">            a = nums2[y];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            m = m - kx + x;</span><br><span class="line">            km = m;</span><br><span class="line">            x = kx;</span><br><span class="line">            a = nums1[x];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(x != nums1Size<span class="number">-1</span>) &#123;</span><br><span class="line">        kx = (x+<span class="number">1</span>+m)&gt;(nums1Size<span class="number">-1</span>) ? (nums1Size<span class="number">-1</span>):(x+<span class="number">1</span>+m);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(y != nums2Size<span class="number">-1</span>) &#123;</span><br><span class="line">        ky = (y+<span class="number">1</span>+m)&gt;(nums2Size<span class="number">-1</span>) ? (nums2Size<span class="number">-1</span>):(y+<span class="number">1</span>+m);</span><br><span class="line">    &#125;</span><br><span class="line">    b = (nums1Size + nums2Size) % <span class="number">2</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span>(x == nums1Size<span class="number">-1</span>) &#123;</span><br><span class="line">        <span class="comment">//x已经走到头了，只有y了</span></span><br><span class="line">        <span class="keyword">if</span>(b) &#123;</span><br><span class="line">            ret = nums2[ky];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (a == <span class="number">19999999</span> || m &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                a = nums2[ky<span class="number">-1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">            ret = (<span class="keyword">double</span>)(nums2[ky]+a)/<span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(y == nums2Size<span class="number">-1</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span>(b) &#123;</span><br><span class="line">            ret = nums1[kx];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (a == <span class="number">19999999</span> || m &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                a = nums1[kx<span class="number">-1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">            ret = (<span class="keyword">double</span>)(nums1[kx]+a)/<span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 两者都有</span></span><br><span class="line">        ret = nums1[kx] &gt; nums2[ky] ? nums2[ky] : nums1[kx];</span><br><span class="line">        <span class="comment">// 为偶数时，取x/y中较大的和kx/ky中较小的相加/2</span></span><br><span class="line">        <span class="keyword">if</span>(b == <span class="number">0</span>)&#123;</span><br><span class="line">           ret = (<span class="keyword">double</span>)(ret+a)/<span class="number">2</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>没有力气解读了，到现在最难的一个算法了，处理各种边界问题到心态爆炸，而且还是在没有解决所以去参考了解法自己实现的情况下，具体解法采用的是最小k值法，详细算法请参考下列链接，我就不赘述了:<a href="https://leetcode-cn.com/problems/median-of-two-sorted-arrays/solution/xiang-xi-tong-su-de-si-lu-fen-xi-duo-jie-fa-by-w-2/" target="_blank" rel="noopener">median-of-two-sorted-arrays</a></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>即使知道了这么巧妙的解法，实现起来也花了好久好久，错了很多遍，不过自己最终挺了过来，坚持完成了，超过了88%的c语言提交者，虽然是因为算法优秀，但是毕竟是自己实现的，也希望自己后面遇到困难坚持下去，不放弃，总会成功的。</p>
 
           
         
@@ -1808,7 +1964,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

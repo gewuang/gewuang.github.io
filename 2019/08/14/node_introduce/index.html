@@ -82,13 +82,13 @@
 <meta name="description" content="介绍JavaScript我们都知道，作为前端必备的知识为大家所熟知，那node.js大家又了解多少呢？ 首先来看下node.js官网对他的介绍  Node.js® is a JavaScript runtime built on Chrome’s V8 JavaScript engine.  直译过来就是Node.js是构建在谷歌的V8 JS引擎上运行的JavaScript. 看完并不能理解Nod">
 <meta property="og:type" content="article">
 <meta property="og:title" content="node底层原理">
-<meta property="og:url" content="http://yoursite.com/2019/08/12/node_introduce/index.html">
+<meta property="og:url" content="http://yoursite.com/2019/08/14/node_introduce/index.html">
 <meta property="og:site_name" content="Ramon&#39;s Blog">
 <meta property="og:description" content="介绍JavaScript我们都知道，作为前端必备的知识为大家所熟知，那node.js大家又了解多少呢？ 首先来看下node.js官网对他的介绍  Node.js® is a JavaScript runtime built on Chrome’s V8 JavaScript engine.  直译过来就是Node.js是构建在谷歌的V8 JS引擎上运行的JavaScript. 看完并不能理解Nod">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://git.cn-hangzhou.oss.aliyun-inc.com/uploads/beidou/beidou/053df3b1fa045a3d5f6218095d108dff/image.png">
 <meta property="og:image" content="http://git.cn-hangzhou.oss.aliyun-inc.com/uploads/beidou/beidou/c55b2e27cbf21eb8e61e0cfe068b33c2/QRePV.jpg">
-<meta property="og:updated_time" content="2019-08-11T16:16:57.974Z">
+<meta property="og:updated_time" content="2019-08-13T16:40:52.944Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="node底层原理">
 <meta name="twitter:description" content="介绍JavaScript我们都知道，作为前端必备的知识为大家所熟知，那node.js大家又了解多少呢？ 首先来看下node.js官网对他的介绍  Node.js® is a JavaScript runtime built on Chrome’s V8 JavaScript engine.  直译过来就是Node.js是构建在谷歌的V8 JS引擎上运行的JavaScript. 看完并不能理解Nod">
@@ -122,7 +122,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/08/12/node_introduce/">
+  <link rel="canonical" href="http://yoursite.com/2019/08/14/node_introduce/">
 
 
 
@@ -265,7 +265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/12/node_introduce/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/14/node_introduce/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Ramon">
@@ -294,8 +294,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-12T00:16:57+08:00">
-                2019-08-12
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-14T00:40:52+08:00">
+                2019-08-14
               </time>
             
 
@@ -385,9 +385,8 @@
 </ul>
 <p>底层依赖库介绍如下：<br>    <strong>V8</strong>前面已经说过了，高性能的JavaScript引擎，这里就不赘述了。<br>    <strong>libuv</strong>：C语言开发的一套线程池，主要提供事件循环（event loop）、异步网络I/O、文件系统I/O等能力。<br>    <strong>other</strong>：其他底层依赖库主要提供了对系统底层功能的访问，如<a href="https://c-ares.haxx.se/" target="_blank" rel="noopener">c-ares</a>提供DNS解析能力。<a href="https://www.openssl.org/" target="_blank" rel="noopener">crypto(OpenSSL)</a>提供加密能力，http提供网络服务，<a href="http://zlib.net/" target="_blank" rel="noopener">zlib</a>提供解压能力等等。</p>
 <p>介绍完这些，我们好像并不能了解Node.js那些特性如单线程、异步IO，事件驱动等，既然是一个平台，了解了架构，再去理解运行原理就一目了然了，下面我们来详细介绍下运行原理</p>
-<h2 id="运行原理"><a href="#运行原理" class="headerlink" title="运行原理"></a>运行原理</h2><p>接到上面的介绍，首先来说<strong>单线程</strong>，我们都知道现在的程序都讲究多线程，同时处理任务，因为cpu执行速度很快，而IO相对来说要慢很多，如果是一个线程跑，其他任务等待，会导致cpu有大量的空闲时间，不仅是资源的浪费，我们的程序执行速度也会变得非常慢。那node.js为什么还要使用单线程呢，这不是在倒退吗？<br>这里就引出了异步IO，nodejs的单线程是相对而言的，我们可以理解为一个主线程，多个从线程。主线程主要执行代码逻辑，完成程序的运行，而较为缓慢的IO操作则交给从线程完成，这里的操作是异步的，也就是主线程注册了任务继续处理后面的任务，等到注册的这个任务完成后主线程才开始执行，具体结构请看下图：<br><img src="http://git.cn-hangzhou.oss.aliyun-inc.com/uploads/beidou/beidou/c55b2e27cbf21eb8e61e0cfe068b33c2/QRePV.jpg" alt="node原理图"><br><br><br>一个 Node.js 应用启动时，V8 引擎会执行你写的应用代码，保持一份观察者（注册在事件上的回调函数）列表。当事件发生时，它的回调函数会被加进一个事件队列。只要这个队列还有等待执行的回调函数，事件循环就会持续把回调函数从队列中拿出并执行。</p>
-<p>在回调函数执行过程中，所有的 I/O 请求都会转发给工作线程处理。libuv 维持着一个线程池，包含四个工作线程（默认值，可配置）。文件系统 I/O 请求和 DNS 相关请求都会放进这个线程池处理；其他的请求，如网络、平台特性相关的请求会分发给相应的系统处理单元进行处理。</p>
-<p>安排给线程池的这些 I/O 操作由 Node.js 的底层库执行，完成之后触发相应事件，对应的事件回调函数会被放入事件队列，等待执行后续操作。这就是一个事件在 Node.js 中执行的整个生命周期。</p>
+<h2 id="运行原理"><a href="#运行原理" class="headerlink" title="运行原理"></a>运行原理</h2><p>接到上面的介绍，首先来说<strong>单线程</strong>，我们都知道现在的程序都讲究多线程，同时处理任务，因为cpu执行速度很快，而IO相对来说要慢很多，如果是一个线程跑，其他任务等待，会导致cpu有大量的空闲时间，不仅是资源的浪费，我们的程序执行速度也会变得非常慢。那node.js为什么还要使用单线程呢，这不是在倒退吗？<br>这里就引出了异步IO，nodejs的单线程是相对而言的，我们可以理解为一个主线程，多个从线程。主线程主要执行代码逻辑，完成程序的运行，而较为缓慢的IO操作则交给从线程完成，这里的操作是异步的，也就是主线程注册了任务继续处理后面的任务，等到注册的这个任务完成后主线程才开始执行，具体结构请看下图：<br><img src="http://git.cn-hangzhou.oss.aliyun-inc.com/uploads/beidou/beidou/c55b2e27cbf21eb8e61e0cfe068b33c2/QRePV.jpg" alt="node原理图"> </p>
+<p>一个 Node.js 应用启动时，V8 引擎会执行你写的应用代码，保持一份观察者（注册在事件上的回调函数）列表。当事件发生时，它的回调函数会被加进一个事件队列。只要这个队列还有等待执行的回调函数，事件循环就会持续把回调函数从队列中拿出并执行。<br>在回调函数执行过程中，所有的 I/O 请求都会转发给工作线程处理。libuv 维持着一个线程池，包含四个工作线程（默认值，可配置）。文件系统 I/O 请求和 DNS 相关请求都会放进这个线程池处理；其他的请求，如网络、平台特性相关的请求会分发给相应的系统处理单元进行处理。<br>安排给线程池的这些 I/O 操作由 Node.js 的底层库执行，完成之后触发相应事件，对应的事件回调函数会被放入事件队列，等待执行后续操作。这就是一个事件在 Node.js 中执行的整个生命周期。</p>
 <h1 id="Node-js跟JavaScript有什么区别"><a href="#Node-js跟JavaScript有什么区别" class="headerlink" title="Node.js跟JavaScript有什么区别"></a>Node.js跟JavaScript有什么区别</h1><p>最后一个问题，其实前面介绍完了，我们已经有了一个了解了，JavaScript是一门语言，而node.js更像是是一个使用js这门异步IO的语言通过封装大量的后台库完成对高IO请求任务处理的服务器平台。</p>
 <h3 id="引用文献"><a href="#引用文献" class="headerlink" title="引用文献"></a>引用文献</h3><p><a href="https://www.cnblogs.com/peiyu1988/p/8032982.html" target="_blank" rel="noopener">Node.js的运行原理-科普篇</a><br><a href="https://www.cnblogs.com/bingooo/p/6720540.html" target="_blank" rel="noopener">Node.js原理解析</a><br><a href="http://blog.csdn.net/xiangzhihong8/article/details/74996757" target="_blank" rel="noopener">Google V8引擎</a></p>
 
@@ -424,8 +423,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/08/09/2019-08-03-longest-substring-without-repeating-characters/" rel="next" title="longest-substring-without-repeating-characters">
-                <i class="fa fa-chevron-left"></i> longest-substring-without-repeating-characters
+              <a href="/2019/08/14/submissions/" rel="next" title="寻找两个有序数组的中位数">
+                <i class="fa fa-chevron-left"></i> 寻找两个有序数组的中位数
               </a>
             
           </div>
@@ -514,7 +513,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
