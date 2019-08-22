@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="command,">
+  <meta name="keywords" content="language,">
 
 
 
@@ -79,18 +79,21 @@
 
 
 
-<meta name="description" content="介绍学习到这个批量处理工具是在工作中有一次写了个对现网环境中脏链接/进程/文件等脏数据进行检测分析的脚本，但是需要将这个脚本放到对应宿主机中，于是了解到了这两个批量处理的脚本，下面我们来介绍下脚本的使用。 pscpscp是我们经常会用到的命令，是secure copy的简写，用于在Linux下进行远程拷贝文件的命令，如下为说明文档： 12345678910111213141516171819202">
-<meta name="keywords" content="command">
+<meta name="description" content="介绍JavaScript我们都知道，作为前端必备的知识为大家所熟知，那node.js大家又了解多少呢？ 首先来看下node.js官网对他的介绍  Node.js® is a JavaScript runtime built on Chrome’s V8 JavaScript engine.  直译过来就是Node.js是构建在谷歌的V8 JS引擎上运行的JavaScript. 看完并不能理解Nod">
+<meta name="keywords" content="language">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pssh&#x2F;pscp">
-<meta property="og:url" content="http://yoursite.com/2019/08/09/2019-07-21-pssh/index.html">
+<meta property="og:title" content="node底层原理">
+<meta property="og:url" content="http://yoursite.com/2019/08/22/node_introduce/index.html">
 <meta property="og:site_name" content="Ramon&#39;s Blog">
-<meta property="og:description" content="介绍学习到这个批量处理工具是在工作中有一次写了个对现网环境中脏链接/进程/文件等脏数据进行检测分析的脚本，但是需要将这个脚本放到对应宿主机中，于是了解到了这两个批量处理的脚本，下面我们来介绍下脚本的使用。 pscpscp是我们经常会用到的命令，是secure copy的简写，用于在Linux下进行远程拷贝文件的命令，如下为说明文档： 12345678910111213141516171819202">
+<meta property="og:description" content="介绍JavaScript我们都知道，作为前端必备的知识为大家所熟知，那node.js大家又了解多少呢？ 首先来看下node.js官网对他的介绍  Node.js® is a JavaScript runtime built on Chrome’s V8 JavaScript engine.  直译过来就是Node.js是构建在谷歌的V8 JS引擎上运行的JavaScript. 看完并不能理解Nod">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-09T12:01:19.589Z">
+<meta property="og:image" content="http://git.cn-hangzhou.oss.aliyun-inc.com/uploads/beidou/beidou/053df3b1fa045a3d5f6218095d108dff/image.png">
+<meta property="og:image" content="http://git.cn-hangzhou.oss.aliyun-inc.com/uploads/beidou/beidou/c55b2e27cbf21eb8e61e0cfe068b33c2/QRePV.jpg">
+<meta property="og:updated_time" content="2019-08-22T02:10:05.491Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="pssh&#x2F;pscp">
-<meta name="twitter:description" content="介绍学习到这个批量处理工具是在工作中有一次写了个对现网环境中脏链接/进程/文件等脏数据进行检测分析的脚本，但是需要将这个脚本放到对应宿主机中，于是了解到了这两个批量处理的脚本，下面我们来介绍下脚本的使用。 pscpscp是我们经常会用到的命令，是secure copy的简写，用于在Linux下进行远程拷贝文件的命令，如下为说明文档： 12345678910111213141516171819202">
+<meta name="twitter:title" content="node底层原理">
+<meta name="twitter:description" content="介绍JavaScript我们都知道，作为前端必备的知识为大家所熟知，那node.js大家又了解多少呢？ 首先来看下node.js官网对他的介绍  Node.js® is a JavaScript runtime built on Chrome’s V8 JavaScript engine.  直译过来就是Node.js是构建在谷歌的V8 JS引擎上运行的JavaScript. 看完并不能理解Nod">
+<meta name="twitter:image" content="http://git.cn-hangzhou.oss.aliyun-inc.com/uploads/beidou/beidou/053df3b1fa045a3d5f6218095d108dff/image.png">
 
 
 
@@ -120,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/08/09/2019-07-21-pssh/">
+  <link rel="canonical" href="http://yoursite.com/2019/08/22/node_introduce/">
 
 
 
 
 
-  <title>pssh/pscp | Ramon's Blog</title>
+  <title>node底层原理 | Ramon's Blog</title>
   
 
 
@@ -263,7 +266,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/09/2019-07-21-pssh/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/22/node_introduce/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Ramon">
@@ -280,7 +283,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">pssh/pscp</h1>
+          <h1 class="post-title" itemprop="name headline">node底层原理</h1>
         
 
         <div class="post-meta">
@@ -292,8 +295,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-09T20:01:19+08:00">
-                2019-08-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-22T10:10:05+08:00">
+                2019-08-22
               </time>
             
 
@@ -315,8 +318,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/小技巧/" itemprop="url" rel="index">
-                    <span itemprop="name">小技巧</span>
+                  <a href="/categories/Node-js/" itemprop="url" rel="index">
+                    <span itemprop="name">Node.js</span>
                   </a>
                 </span>
 
@@ -352,18 +355,41 @@
       
 
       
-        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>学习到这个批量处理工具是在工作中有一次写了个对现网环境中脏链接/进程/文件等脏数据进行检测分析的脚本，但是需要将这个脚本放到对应宿主机中，于是了解到了这两个批量处理的脚本，下面我们来介绍下脚本的使用。</p>
-<h3 id="pscp"><a href="#pscp" class="headerlink" title="pscp"></a>pscp</h3><p>scp是我们经常会用到的命令，是secure copy的简写，用于在Linux下进行远程拷贝文件的命令，如下为说明文档：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">Usage: pscp [OPTIONS] local remote</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">  --version             show program&apos;s version number and exit</span><br><span class="line">  --help                show this help message and exit</span><br><span class="line">  -h HOST_FILE, --hosts=HOST_FILE</span><br><span class="line">                        hosts file (each line &quot;[user@]host[:port]&quot;)</span><br><span class="line">  -H HOST_STRING, --host=HOST_STRING</span><br><span class="line">                        additional host entries (&quot;[user@]host[:port]&quot;)</span><br><span class="line">  -l USER, --user=USER  username (OPTIONAL)</span><br><span class="line">  -p PAR, --par=PAR     max number of parallel threads (OPTIONAL)</span><br><span class="line">  -o OUTDIR, --outdir=OUTDIR</span><br><span class="line">                        output directory for stdout files (OPTIONAL)</span><br><span class="line">  -e ERRDIR, --errdir=ERRDIR</span><br><span class="line">                        output directory for stderr files (OPTIONAL)</span><br><span class="line">  -t TIMEOUT, --timeout=TIMEOUT</span><br><span class="line">                        timeout (secs) (0 = no timeout) per host (OPTIONAL)</span><br><span class="line">  -O OPTION, --option=OPTION</span><br><span class="line">                        SSH option (OPTIONAL)</span><br><span class="line">  -v, --verbose         turn on warning and diagnostic messages (OPTIONAL)</span><br><span class="line">  -A, --askpass         Ask for a password (OPTIONAL)</span><br><span class="line">  -x ARGS, --extra-args=ARGS</span><br><span class="line">                        Extra command-line arguments, with processing for</span><br><span class="line">                        spaces, quotes, and backslashes</span><br><span class="line">  -X ARG, --extra-arg=ARG</span><br><span class="line">                        Extra command-line argument</span><br><span class="line">  -r, --recursive       recusively copy directories (OPTIONAL)</span><br><span class="line"></span><br><span class="line">Example: pscp -h hosts.txt -l irb2 foo.txt /home/irb2/foo.txt</span><br></pre></td></tr></table></figure>
+        <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>JavaScript我们都知道，作为前端必备的知识为大家所熟知，那node.js大家又了解多少呢？</p>
+<p>首先来看下<a href="https://nodejs.org/en/" target="_blank" rel="noopener">node.js官网</a>对他的介绍</p>
+<blockquote>
+<p>Node.js® is a JavaScript runtime built on Chrome’s V8 JavaScript engine.</p>
+</blockquote>
+<p>直译过来就是Node.js是构建在谷歌的V8 JS引擎上运行的JavaScript.</p>
+<p>看完并不能理解Node.js是什么，那我们先从这里拿出我们的问题</p>
+<ul>
+<li>首先V8引擎是什么?</li>
+<li>node是什么?</li>
+<li>Node.js跟javascript有什么区别<br>
+下面来一一解释：
 
-<p>当我们需要批量传输文件时可以使用如下命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pscp -h $ip_file -lroot $file $dest_path</span><br></pre></td></tr></table></figure>
-
-<p>这里的ipfile的文件中可以放置我们的ips</p>
-<h3 id="pssh"><a href="#pssh" class="headerlink" title="pssh"></a>pssh</h3><p>同pscp一样，pssh为ssh的批处理版，说明文档如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">Usage: pssh [OPTIONS] command [...]</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">  --version             show program&apos;s version number and exit</span><br><span class="line">  --help                show this help message and exit</span><br><span class="line">  -h HOST_FILE, --hosts=HOST_FILE</span><br><span class="line">                        hosts file (each line &quot;[user@]host[:port]&quot;)</span><br><span class="line">  -H HOST_STRING, --host=HOST_STRING</span><br><span class="line">                        additional host entries (&quot;[user@]host[:port]&quot;)</span><br><span class="line">  -l USER, --user=USER  username (OPTIONAL)</span><br><span class="line">  -p PAR, --par=PAR     max number of parallel threads (OPTIONAL)</span><br><span class="line">  -o OUTDIR, --outdir=OUTDIR</span><br><span class="line">                        output directory for stdout files (OPTIONAL)</span><br><span class="line">  -e ERRDIR, --errdir=ERRDIR</span><br><span class="line">                        output directory for stderr files (OPTIONAL)</span><br><span class="line">  -t TIMEOUT, --timeout=TIMEOUT</span><br><span class="line">                        timeout (secs) (0 = no timeout) per host (OPTIONAL)</span><br><span class="line">  -O OPTION, --option=OPTION</span><br><span class="line">                        SSH option (OPTIONAL)</span><br><span class="line">  -v, --verbose         turn on warning and diagnostic messages (OPTIONAL)</span><br><span class="line">  -A, --askpass         Ask for a password (OPTIONAL)</span><br><span class="line">  -x ARGS, --extra-args=ARGS</span><br><span class="line">                        Extra command-line arguments, with processing for</span><br><span class="line">                        spaces, quotes, and backslashes</span><br><span class="line">  -X ARG, --extra-arg=ARG</span><br><span class="line">                        Extra command-line argument</span><br><span class="line">  -i, --inline          inline aggregated output and error for each server</span><br><span class="line">  --inline-stdout       inline standard output for each server</span><br><span class="line">  -I, --send-input      read from standard input and send as input to ssh</span><br><span class="line">  -P, --print           print output as we get it</span><br><span class="line"></span><br><span class="line">Example: pssh -h hosts.txt -l irb2 -o /tmp/foo uptime</span><br></pre></td></tr></table></figure>
-
-<p>这里我们更常用来对集群进行批处理，执行命令或者文件</p>
+</li>
+</ul>
+<h1 id="V8引擎是什么"><a href="#V8引擎是什么" class="headerlink" title="V8引擎是什么"></a>V8引擎是什么</h1><p>V8是随着chrome发布的JavaScript渲染引擎，其功能就是对JavaScript代码进行解释执行。但是相比于其他JS引擎转换为字节码或者解释执行相比，V8引擎直接将代码编译成原生机器码（IA-32、X86-64、ARM、MIPS CPUs），并且使用了如内联缓存（inline cache）等技术来提高性能。同时，V8可以独立运行或者嵌入到C++应用程序中运行（本身是由C++实现的）。</p>
+<p>如果需要对V8引擎有更详细的了解可以查看此文章： <a href="http://blog.csdn.net/xiangzhihong8/article/details/74996757" target="_blank" rel="noopener">Google V8引擎</a>，这里就不详细解释了。</p>
+<h1 id="nodejs是什么"><a href="#nodejs是什么" class="headerlink" title="nodejs是什么"></a>nodejs是什么</h1><p>介绍完了V8引擎，我们回到第二个问题，node.js是什么呢？以下为我的理解:</p>
+<blockquote>
+<p>Node.js就是在V8引擎的基础上进行封装扩展，使用c/c++等语言开发了大量的服务器端（如文件操作、网络通信、操作系统API等）操作，用于方便搭建快速响应、易于拓展的网络应用。</p>
+</blockquote>
+<h2 id="基础架构"><a href="#基础架构" class="headerlink" title="基础架构"></a>基础架构</h2><p>了解Node.js的原理就要从整个架构图开始，如下为Node.js的基础架构图。</p>
+<p><img src="http://git.cn-hangzhou.oss.aliyun-inc.com/uploads/beidou/beidou/053df3b1fa045a3d5f6218095d108dff/image.png" alt="node基础架构图"></p>
+<p>上面这个图为简单概括了下node.js的架构，主要分为三层，下面来一一介绍</p>
+<ul>
+<li>Node.js/APP：这部分是所有的js代码，包括Node.js的核心代码，npm install装载的模块以及你的code等。</li>
+<li>桥接层：这一层的功能主要是用来将底层c/c++的代码接口提供给上层js代码使用（胶水代码）。主要有两个模块，Node.js Bindings、c/c++ Addons。其中Binding主要是桥接Node.js核心库的依赖（如zlib、OpenSSL、c-ares、http-parser 等），而Addons是提供给我们自己实现代码用来桥接自己或者第三方库的模块。</li>
+<li>Node.js的依赖库：这部分为核心依赖底层库，主要包括V8、libuv以及其他底层依赖库，我们下面再详解这些模块。</li>
+</ul>
+<p>底层依赖库介绍如下：<br>    <strong>V8</strong>前面已经说过了，高性能的JavaScript引擎，这里就不赘述了。<br>    <strong>libuv</strong>：C语言开发的一套线程池，主要提供事件循环（event loop）、异步网络I/O、文件系统I/O等能力。<br>    <strong>other</strong>：其他底层依赖库主要提供了对系统底层功能的访问，如<a href="https://c-ares.haxx.se/" target="_blank" rel="noopener">c-ares</a>提供DNS解析能力。<a href="https://www.openssl.org/" target="_blank" rel="noopener">crypto(OpenSSL)</a>提供加密能力，http提供网络服务，<a href="http://zlib.net/" target="_blank" rel="noopener">zlib</a>提供解压能力等等。</p>
+<p>介绍完这些，我们好像并不能了解Node.js那些特性如单线程、异步IO，事件驱动等，既然是一个平台，了解了架构，再去理解运行原理就一目了然了，下面我们来详细介绍下运行原理</p>
+<h2 id="运行原理"><a href="#运行原理" class="headerlink" title="运行原理"></a>运行原理</h2><p>接到上面的介绍，首先来说<strong>单线程</strong>，我们都知道现在的程序都讲究多线程，同时处理任务，因为cpu执行速度很快，而IO相对来说要慢很多，如果是一个线程跑，其他任务等待，会导致cpu有大量的空闲时间，不仅是资源的浪费，我们的程序执行速度也会变得非常慢。那node.js为什么还要使用单线程呢，这不是在倒退吗？<br>这里就引出了异步IO，nodejs的单线程是相对而言的，我们可以理解为一个主线程，多个从线程。主线程主要执行代码逻辑，完成程序的运行，而较为缓慢的IO操作则交给从线程完成，这里的操作是异步的，也就是主线程注册了任务继续处理后面的任务，等到注册的这个任务完成后主线程才开始执行，具体结构请看下图：<br><img src="http://git.cn-hangzhou.oss.aliyun-inc.com/uploads/beidou/beidou/c55b2e27cbf21eb8e61e0cfe068b33c2/QRePV.jpg" alt="node原理图"> </p>
+<p>一个 Node.js 应用启动时，V8 引擎会执行你写的应用代码，保持一份观察者（注册在事件上的回调函数）列表。当事件发生时，它的回调函数会被加进一个事件队列。只要这个队列还有等待执行的回调函数，事件循环就会持续把回调函数从队列中拿出并执行。<br>在回调函数执行过程中，所有的 I/O 请求都会转发给工作线程处理。libuv 维持着一个线程池，包含四个工作线程（默认值，可配置）。文件系统 I/O 请求和 DNS 相关请求都会放进这个线程池处理；其他的请求，如网络、平台特性相关的请求会分发给相应的系统处理单元进行处理。<br>安排给线程池的这些 I/O 操作由 Node.js 的底层库执行，完成之后触发相应事件，对应的事件回调函数会被放入事件队列，等待执行后续操作。这就是一个事件在 Node.js 中执行的整个生命周期。</p>
+<h1 id="Node-js跟JavaScript有什么区别"><a href="#Node-js跟JavaScript有什么区别" class="headerlink" title="Node.js跟JavaScript有什么区别"></a>Node.js跟JavaScript有什么区别</h1><p>最后一个问题，其实前面介绍完了，我们已经有了一个了解了，JavaScript是一门语言，而node.js更像是是一个使用js这门异步IO的语言通过封装大量的后台库完成对高IO请求任务处理的服务器平台。</p>
+<h3 id="引用文献"><a href="#引用文献" class="headerlink" title="引用文献"></a>引用文献</h3><p><a href="https://www.cnblogs.com/peiyu1988/p/8032982.html" target="_blank" rel="noopener">Node.js的运行原理-科普篇</a><br><a href="https://www.cnblogs.com/bingooo/p/6720540.html" target="_blank" rel="noopener">Node.js原理解析</a><br><a href="http://blog.csdn.net/xiangzhihong8/article/details/74996757" target="_blank" rel="noopener">Google V8引擎</a></p>
 
       
     </div>
@@ -391,7 +417,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/command/" rel="tag"><i class="fa fa-tag"></i> command</a>
+            <a href="/tags/language/" rel="tag"><i class="fa fa-tag"></i> language</a>
           
         </div>
       
@@ -404,8 +430,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/08/09/2019-07-28-pstree/" rel="next" title="pstree/pstack/strace">
-                <i class="fa fa-chevron-left"></i> pstree/pstack/strace
+              <a href="/2019/08/22/2019-07-21-链表/" rel="next" title="浅析指针及其应用">
+                <i class="fa fa-chevron-left"></i> 浅析指针及其应用
               </a>
             
           </div>
@@ -414,8 +440,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/08/09/2019-07-21-two_num/" rel="prev" title="TWO NUM">
-                TWO NUM <i class="fa fa-chevron-right"></i>
+              <a href="/2019/08/22/private/" rel="prev" title="个人技术栈">
+                个人技术栈 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -553,7 +579,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pscp"><span class="nav-number">2.</span> <span class="nav-text">pscp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pssh"><span class="nav-number">3.</span> <span class="nav-text">pssh</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#V8引擎是什么"><span class="nav-number">2.</span> <span class="nav-text">V8引擎是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#nodejs是什么"><span class="nav-number">3.</span> <span class="nav-text">nodejs是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础架构"><span class="nav-number">3.1.</span> <span class="nav-text">基础架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#运行原理"><span class="nav-number">3.2.</span> <span class="nav-text">运行原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Node-js跟JavaScript有什么区别"><span class="nav-number">4.</span> <span class="nav-text">Node.js跟JavaScript有什么区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#引用文献"><span class="nav-number">4.0.1.</span> <span class="nav-text">引用文献</span></a></li></ol></li></ol></div>
             
 
           </div>
