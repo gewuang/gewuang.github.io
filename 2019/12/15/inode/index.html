@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="command,">
+  <meta name="keywords" content="linux,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="介绍学习到这个批量处理工具是在工作中有一次写了个对现网环境中脏链接/进程/文件等脏数据进行检测分析的脚本，但是需要将这个脚本放到对应宿主机中，于是了解到了这两个批量处理的脚本，下面我们来介绍下脚本的使用。 pscpscp是我们经常会用到的命令，是secure copy的简写，用于在Linux下进行远程拷贝文件的命令，如下为说明文档： 12345678910111213141516171819202">
-<meta name="keywords" content="command">
+<meta name="description" content="介绍">
+<meta name="keywords" content="linux">
 <meta property="og:type" content="article">
-<meta property="og:title" content="pssh&#x2F;pscp">
-<meta property="og:url" content="http://yoursite.com/2019/08/09/2019-07-21-pssh/index.html">
+<meta property="og:title" content="linux文件系统-inode学习整理">
+<meta property="og:url" content="http://yoursite.com/2019/12/15/inode/index.html">
 <meta property="og:site_name" content="Ramon&#39;s Blog">
-<meta property="og:description" content="介绍学习到这个批量处理工具是在工作中有一次写了个对现网环境中脏链接/进程/文件等脏数据进行检测分析的脚本，但是需要将这个脚本放到对应宿主机中，于是了解到了这两个批量处理的脚本，下面我们来介绍下脚本的使用。 pscpscp是我们经常会用到的命令，是secure copy的简写，用于在Linux下进行远程拷贝文件的命令，如下为说明文档： 12345678910111213141516171819202">
+<meta property="og:description" content="介绍">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-09T12:01:19.589Z">
+<meta property="og:updated_time" content="2019-12-15T06:37:41.824Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="pssh&#x2F;pscp">
-<meta name="twitter:description" content="介绍学习到这个批量处理工具是在工作中有一次写了个对现网环境中脏链接/进程/文件等脏数据进行检测分析的脚本，但是需要将这个脚本放到对应宿主机中，于是了解到了这两个批量处理的脚本，下面我们来介绍下脚本的使用。 pscpscp是我们经常会用到的命令，是secure copy的简写，用于在Linux下进行远程拷贝文件的命令，如下为说明文档： 12345678910111213141516171819202">
+<meta name="twitter:title" content="linux文件系统-inode学习整理">
+<meta name="twitter:description" content="介绍">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/08/09/2019-07-21-pssh/">
+  <link rel="canonical" href="http://yoursite.com/2019/12/15/inode/">
 
 
 
 
 
-  <title>pssh/pscp | Ramon's Blog</title>
+  <title>linux文件系统-inode学习整理 | Ramon's Blog</title>
   
 
 
@@ -263,7 +263,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/09/2019-07-21-pssh/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/15/inode/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Ramon">
@@ -280,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">pssh/pscp</h1>
+          <h1 class="post-title" itemprop="name headline">linux文件系统-inode学习整理</h1>
         
 
         <div class="post-meta">
@@ -292,8 +292,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-09T20:01:19+08:00">
-                2019-08-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-15T14:37:41+08:00">
+                2019-12-15
               </time>
             
 
@@ -315,8 +315,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/小技巧/" itemprop="url" rel="index">
-                    <span itemprop="name">小技巧</span>
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
                   </a>
                 </span>
 
@@ -352,19 +352,7 @@
       
 
       
-        <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>学习到这个批量处理工具是在工作中有一次写了个对现网环境中脏链接/进程/文件等脏数据进行检测分析的脚本，但是需要将这个脚本放到对应宿主机中，于是了解到了这两个批量处理的脚本，下面我们来介绍下脚本的使用。</p>
-<h3 id="pscp"><a href="#pscp" class="headerlink" title="pscp"></a>pscp</h3><p>scp是我们经常会用到的命令，是secure copy的简写，用于在Linux下进行远程拷贝文件的命令，如下为说明文档：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">Usage: pscp [OPTIONS] local remote</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">  --version             show program&apos;s version number and exit</span><br><span class="line">  --help                show this help message and exit</span><br><span class="line">  -h HOST_FILE, --hosts=HOST_FILE</span><br><span class="line">                        hosts file (each line &quot;[user@]host[:port]&quot;)</span><br><span class="line">  -H HOST_STRING, --host=HOST_STRING</span><br><span class="line">                        additional host entries (&quot;[user@]host[:port]&quot;)</span><br><span class="line">  -l USER, --user=USER  username (OPTIONAL)</span><br><span class="line">  -p PAR, --par=PAR     max number of parallel threads (OPTIONAL)</span><br><span class="line">  -o OUTDIR, --outdir=OUTDIR</span><br><span class="line">                        output directory for stdout files (OPTIONAL)</span><br><span class="line">  -e ERRDIR, --errdir=ERRDIR</span><br><span class="line">                        output directory for stderr files (OPTIONAL)</span><br><span class="line">  -t TIMEOUT, --timeout=TIMEOUT</span><br><span class="line">                        timeout (secs) (0 = no timeout) per host (OPTIONAL)</span><br><span class="line">  -O OPTION, --option=OPTION</span><br><span class="line">                        SSH option (OPTIONAL)</span><br><span class="line">  -v, --verbose         turn on warning and diagnostic messages (OPTIONAL)</span><br><span class="line">  -A, --askpass         Ask for a password (OPTIONAL)</span><br><span class="line">  -x ARGS, --extra-args=ARGS</span><br><span class="line">                        Extra command-line arguments, with processing for</span><br><span class="line">                        spaces, quotes, and backslashes</span><br><span class="line">  -X ARG, --extra-arg=ARG</span><br><span class="line">                        Extra command-line argument</span><br><span class="line">  -r, --recursive       recusively copy directories (OPTIONAL)</span><br><span class="line"></span><br><span class="line">Example: pscp -h hosts.txt -l irb2 foo.txt /home/irb2/foo.txt</span><br></pre></td></tr></table></figure>
-
-<p>当我们需要批量传输文件时可以使用如下命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pscp -h $ip_file -lroot $file $dest_path</span><br></pre></td></tr></table></figure>
-
-<p>这里的ipfile的文件中可以放置我们的ips</p>
-<h3 id="pssh"><a href="#pssh" class="headerlink" title="pssh"></a>pssh</h3><p>同pscp一样，pssh为ssh的批处理版，说明文档如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">Usage: pssh [OPTIONS] command [...]</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">  --version             show program&apos;s version number and exit</span><br><span class="line">  --help                show this help message and exit</span><br><span class="line">  -h HOST_FILE, --hosts=HOST_FILE</span><br><span class="line">                        hosts file (each line &quot;[user@]host[:port]&quot;)</span><br><span class="line">  -H HOST_STRING, --host=HOST_STRING</span><br><span class="line">                        additional host entries (&quot;[user@]host[:port]&quot;)</span><br><span class="line">  -l USER, --user=USER  username (OPTIONAL)</span><br><span class="line">  -p PAR, --par=PAR     max number of parallel threads (OPTIONAL)</span><br><span class="line">  -o OUTDIR, --outdir=OUTDIR</span><br><span class="line">                        output directory for stdout files (OPTIONAL)</span><br><span class="line">  -e ERRDIR, --errdir=ERRDIR</span><br><span class="line">                        output directory for stderr files (OPTIONAL)</span><br><span class="line">  -t TIMEOUT, --timeout=TIMEOUT</span><br><span class="line">                        timeout (secs) (0 = no timeout) per host (OPTIONAL)</span><br><span class="line">  -O OPTION, --option=OPTION</span><br><span class="line">                        SSH option (OPTIONAL)</span><br><span class="line">  -v, --verbose         turn on warning and diagnostic messages (OPTIONAL)</span><br><span class="line">  -A, --askpass         Ask for a password (OPTIONAL)</span><br><span class="line">  -x ARGS, --extra-args=ARGS</span><br><span class="line">                        Extra command-line arguments, with processing for</span><br><span class="line">                        spaces, quotes, and backslashes</span><br><span class="line">  -X ARG, --extra-arg=ARG</span><br><span class="line">                        Extra command-line argument</span><br><span class="line">  -i, --inline          inline aggregated output and error for each server</span><br><span class="line">  --inline-stdout       inline standard output for each server</span><br><span class="line">  -I, --send-input      read from standard input and send as input to ssh</span><br><span class="line">  -P, --print           print output as we get it</span><br><span class="line"></span><br><span class="line">Example: pssh -h hosts.txt -l irb2 -o /tmp/foo uptime</span><br></pre></td></tr></table></figure>
-
-<p>这里我们更常用来对集群进行批处理，执行命令或者文件</p>
-
+        <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1>
       
     </div>
     
@@ -391,7 +379,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/command/" rel="tag"><i class="fa fa-tag"></i> command</a>
+            <a href="/tags/linux/" rel="tag"><i class="fa fa-tag"></i> linux</a>
           
         </div>
       
@@ -404,8 +392,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/08/09/2019-07-28-pstree/" rel="next" title="pstree/pstack/strace">
-                <i class="fa fa-chevron-left"></i> pstree/pstack/strace
+              <a href="/2019/08/25/libuv/" rel="next" title="libuv介绍">
+                <i class="fa fa-chevron-left"></i> libuv介绍
               </a>
             
           </div>
@@ -413,10 +401,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/08/09/2019-07-21-two_num/" rel="prev" title="TWO NUM">
-                TWO NUM <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -553,7 +537,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pscp"><span class="nav-number">2.</span> <span class="nav-text">pscp</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pssh"><span class="nav-number">3.</span> <span class="nav-text">pssh</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li></ol></div>
             
 
           </div>
