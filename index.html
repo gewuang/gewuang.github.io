@@ -613,7 +613,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-12-25T10:56:44+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2019-12-25T13:04:24+08:00">
                 2019-12-25
               </time>
             
@@ -724,7 +724,7 @@
 <p>创建硬链接的命令为<code>ln 源文件目标文件</code>，硬链接与正常的文件相同，只是与其他文件共享同一个inode节点，前面介绍的inode节点信息中Links数就是文件名指向的数量，当对其进行删除的时候只会对inode节点中的links数减少1，当为0的时候文件才会真正被删除。</p>
 <p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/20191215224505.png" alt="硬链接"></p>
 <p>这里说明下，目录项中的<code>.</code>和<code>..</code>也是一种硬链接。</p>
-<h3 id="软链接"><a href="#软链接" class="headerlink" title="软链接"></a>软链接</h3><p>介绍完硬链接，在介绍一种我们平常使用比较多的一种方式：软链接。</p>
+<h3 id="软链接"><a href="#软链接" class="headerlink" title="软链接"></a>软链接</h3><p>介绍完硬链接，再介绍一种我们平常使用比较多的一种方式：软链接。</p>
 <p><code>ln -s 源文件 目标文件</code>是软链接的创建方式，虽然看起来只是多了个选项s，当时内部原理完全不同。</p>
 <p>软链接是单独生成一个链接文件，有自己的inode号，是一个单独的文件，这个文件中的信息是链接的文件的信息。</p>
 <p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/20191215224252.png" alt="软链接文件"></p>
