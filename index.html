@@ -264,7 +264,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/15/inode/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/25/inode/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Ramon">
@@ -283,7 +283,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/12/15/inode/" itemprop="url">linux文件系统-inode学习整理</a></h1>
+                <a class="post-title-link" href="/2019/12/25/inode/" itemprop="url">linux文件系统-inode学习整理</a></h1>
         
 
         <div class="post-meta">
@@ -295,13 +295,25 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-15T22:54:12+08:00">
-                2019-12-15
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-25T10:41:12+08:00">
+                2019-12-25
               </time>
             
 
             
+              <span class="post-meta-divider">|</span>
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-12-25T10:41:12+08:00">
+                2019-12-25
+              </time>
             
           </span>
 
@@ -377,7 +389,7 @@
 <p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/20191215214312.png" alt="inode节点信息"></p>
 <p>基本除了文件内容外的信息都存储在inode节点中。</p>
 <p>inode节点的大小一般来说为128或者256个字节，inode节点的总数，在格式化时就给定，一般是每1KB或每2KB就设置一个inode。假定在一块1GB的硬盘中，每个inode节点的大小为128字节，每1KB就设置一个inode，那么inode table的大小就会达到128MB，占整块硬盘的12.8%。</p>
-<p>如果想要查看inode大小，可以使用<code>dump2fs -h /dev/sda1 | grep &quot;Inode size&quot;</code>查看</p>
+<p>如果想要查看inode大小，可以使用<code>dump2fs -h /dev/sda1 | grep &quot;Inode size&quot;</code>查看:</p>
 <p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/20191215215212.png" alt="inode大小"></p>
 <p>如果要查看每个磁盘的inode使用情况，可以使用<code>df -i</code>命令查看：</p>
 <p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/20191215215108.png" alt="inode使用情况"></p>
@@ -505,7 +517,19 @@
             
 
             
+              <span class="post-meta-divider">|</span>
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-08-25T18:49:10+08:00">
+                2019-08-25
+              </time>
             
           </span>
 
@@ -649,7 +673,19 @@
             
 
             
+              <span class="post-meta-divider">|</span>
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-08-25T18:46:19+08:00">
+                2019-08-25
+              </time>
             
           </span>
 
@@ -808,7 +844,19 @@
             
 
             
+              <span class="post-meta-divider">|</span>
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-08-22T10:10:05+08:00">
+                2019-08-22
+              </time>
             
           </span>
 
@@ -987,7 +1035,19 @@
             
 
             
+              <span class="post-meta-divider">|</span>
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-08-22T10:09:27+08:00">
+                2019-08-22
+              </time>
             
           </span>
 
@@ -1140,7 +1200,19 @@
             
 
             
+              <span class="post-meta-divider">|</span>
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-08-14T00:40:30+08:00">
+                2019-08-14
+              </time>
             
           </span>
 
@@ -1297,7 +1369,19 @@
             
 
             
+              <span class="post-meta-divider">|</span>
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-08-09T20:01:58+08:00">
+                2019-08-09
+              </time>
             
           </span>
 
@@ -1507,7 +1591,19 @@
             
 
             
+              <span class="post-meta-divider">|</span>
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-08-09T20:01:38+08:00">
+                2019-08-09
+              </time>
             
           </span>
 
@@ -1667,7 +1763,19 @@
             
 
             
+              <span class="post-meta-divider">|</span>
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-08-09T20:01:19+08:00">
+                2019-08-09
+              </time>
             
           </span>
 
@@ -1823,7 +1931,19 @@
             
 
             
+              <span class="post-meta-divider">|</span>
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-08-09T20:01:10+08:00">
+                2019-08-09
+              </time>
             
           </span>
 
