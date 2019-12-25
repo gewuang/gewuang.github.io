@@ -264,6 +264,382 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/25/Java基础知识/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ramon">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ramon's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/25/Java基础知识/" itemprop="url">JAVA基础知识(持续更新)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-25T14:06:07+08:00">
+                2019-12-25
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-12-25T14:06:18+08:00">
+                2019-12-25
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="语法基础"><a href="#语法基础" class="headerlink" title="语法基础"></a>语法基础</h1><h1 id="编程思想"><a href="#编程思想" class="headerlink" title="编程思想"></a>编程思想</h1><h2 id="类与对象"><a href="#类与对象" class="headerlink" title="类与对象"></a>类与对象</h2><p>###Object</p>
+<p>概念</p>
+<blockquote>
+<p>超父类，所有类的源头，如果不写继承则默认继承Object</p>
+</blockquote>
+<p>方法</p>
+<blockquote>
+<p>registNatives(): native修饰，</p>
+<p>getClass():</p>
+<p>hashCode():</p>
+<p>equals():</p>
+<p>clone():</p>
+<p>toString():</p>
+<p>notify():</p>
+<p>notifyAll():</p>
+<p>wait(…):</p>
+<p>finalize():</p>
+</blockquote>
+<h3 id="this"><a href="#this" class="headerlink" title="this"></a>this</h3><p>概念</p>
+<blockquote>
+<p>当前类的指针（是个对象吧？）</p>
+</blockquote>
+<p>原理</p>
+<blockquote>
+<p>?</p>
+</blockquote>
+<h3 id="super"><a href="#super" class="headerlink" title="super"></a>super</h3><p>概念</p>
+<blockquote>
+<p>表示父类的引用</p>
+</blockquote>
+<p>原理</p>
+<blockquote>
+<p>?</p>
+</blockquote>
+<h3 id="抽象"><a href="#抽象" class="headerlink" title="抽象"></a>抽象</h3><p>概念</p>
+<blockquote>
+<p>类为抽象的概念</p>
+</blockquote>
+<p>分类</p>
+<blockquote>
+<p><strong>抽象类：</strong>由abstract修饰的类，不能被实例化</p>
+<p><strong>抽象方法：</strong>用abstract修饰的方法，只能由子类进行实现</p>
+</blockquote>
+<h3 id="native"><a href="#native" class="headerlink" title="native"></a>native</h3><p>概念</p>
+<blockquote>
+<p>A native method is a Java method whose implementation is provided by non-java code.</p>
+<p>一般为c/c++实现，使用JNI(java native interface)进行通信</p>
+</blockquote>
+<p>使用规则</p>
+<blockquote>
+<ol>
+<li>native标识符除不能与abstract联用外，可以与其它标识符联用；</li>
+<li>native method方法可以返回任何java类型，包括非基本类型，也可以进行异常控制；</li>
+<li>如果含有native method方法的类被继承，子类会继承这个native method方法，也可以使用java语言重写 这个方法；</li>
+<li>如果一个native method方法被fianl标识，它被继承后不能被重写。</li>
+</ol>
+</blockquote>
+<p>实现步骤</p>
+<blockquote>
+<ol>
+<li><p>在Java中声明<code>native()</code>方法,然后编译；</p>
+</li>
+<li><p>使用javah命令生成.h文件；</p>
+</li>
+<li><p>编写.cpp文件实现native导出方法，其中需要包含第二步产生的.h文件（注意其中需包含JDK带的jni.h文件）；</p>
+</li>
+<li><p>将本地代码编译成动态库（Windows：<em>.dll，linux/unix：</em>.so，mac os x：*.jnilib）；</p>
+</li>
+<li><p>Java中使用System.loadLibrary()方法加载第四步产生的动态链接库文件，至此，整个过程结束。</p>
+</li>
+</ol>
+</blockquote>
+<h2 id="封装"><a href="#封装" class="headerlink" title="封装"></a>封装</h2><p>概念</p>
+<blockquote>
+<p>隐藏细节，开放给用户安全的接口</p>
+</blockquote>
+<p>权限访问控制</p>
+<blockquote>
+<p><strong>权限关键字：</strong>public、protected、default（不填一样）、private</p>
+<p>权限依次降低</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>作用域</th>
+<th>当前类</th>
+<th>同一package普通类</th>
+<th>其他package普通类</th>
+<th>同一package子孙类</th>
+<th>其他package子孙类</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>public</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>protected</td>
+<td>√</td>
+<td>√</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>默认</td>
+<td>√</td>
+<td>√</td>
+<td>×</td>
+<td>√</td>
+<td>×</td>
+</tr>
+<tr>
+<td>private</td>
+<td>√</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+</tr>
+</tbody></table>
+<p>原理</p>
+<blockquote>
+<p>?</p>
+</blockquote>
+<h2 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h2><p>概念</p>
+<blockquote>
+<p>子类继承父类的属性和方法、减少了重复代码、增加了类结构关系</p>
+</blockquote>
+<p>注意点</p>
+<blockquote>
+<ol>
+<li>继承的抽象方法必须实现</li>
+<li>只能继承父类非private权限的，具体看上面的权限表格</li>
+</ol>
+</blockquote>
+<p><strong>原理</strong></p>
+<blockquote>
+<p>?</p>
+</blockquote>
+<h2 id="多态"><a href="#多态" class="headerlink" title="多态"></a>多态</h2><p>概念</p>
+<blockquote>
+<p>子类对父类方法的不同实现</p>
+</blockquote>
+<p>条件</p>
+<blockquote>
+<ol>
+<li>父类抽象方法</li>
+<li>多个子类不同实现</li>
+<li>使用父类类型接收子类对象，并进行调用</li>
+</ol>
+</blockquote>
+<p>原理</p>
+<blockquote>
+<p>？</p>
+<p>函数指针指向不同的方法实现</p>
+</blockquote>
+<h2 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h2><p>概念</p>
+<blockquote>
+<p>规范使用，规定一套标准的用法</p>
+</blockquote>
+<p>详解</p>
+<blockquote>
+<ol>
+<li>接口所有方法为抽象类</li>
+<li>接口中的属性为public final类型的（不写也是）</li>
+<li>接口是制定适用规范，如对虚拟文件系统对外的增删改查标准接口</li>
+</ol>
+</blockquote>
+<h1 id="Java容器"><a href="#Java容器" class="headerlink" title="Java容器"></a>Java容器</h1><ul>
+<li><input disabled type="checkbox"> Collection<ul>
+<li><input disabled type="checkbox"> List<ul>
+<li><input disabled type="checkbox"> LinkedList</li>
+<li><input disabled type="checkbox"> ArrayList</li>
+<li><input disabled type="checkbox"> Vector</li>
+</ul>
+</li>
+<li><input disabled type="checkbox"> Stack</li>
+<li><input disabled type="checkbox"> Set<ul>
+<li><input disabled type="checkbox"> HashSet</li>
+</ul>
+</li>
+<li><input disabled type="checkbox"> LinkedHashSet<ul>
+<li><input disabled type="checkbox"> TreeSet</li>
+</ul>
+</li>
+<li><input disabled type="checkbox"> Queue<ul>
+<li><input disabled type="checkbox"> PriorityQueue</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><input disabled type="checkbox"> Map<ul>
+<li><input disabled type="checkbox"> TreeMap</li>
+<li><input disabled type="checkbox"> </li>
+<li><input disabled type="checkbox"> HashMap<ul>
+<li><input disabled type="checkbox"> LinkedHashMap</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>如下为java容器分类图（粗体为重点容器）</p>
+<p><img src="https://images0.cnblogs.com/i/617995/201404/161353012916056.png" alt="java容器分类图"></p>
+<h1 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h1><h1 id="泛型"><a href="#泛型" class="headerlink" title="泛型"></a>泛型</h1><h1 id="I-O"><a href="#I-O" class="headerlink" title="I/O"></a>I/O</h1><ul>
+<li><input disabled type="checkbox"> <p>文件操作</p>
+</li>
+<li><input disabled type="checkbox"> <p>标准输入输出</p>
+</li>
+<li><input disabled type="checkbox"> <p>linux IO模式</p>
+<blockquote>
+<p><a href="https://segmentfault.com/a/1190000003063859" target="_blank" rel="noopener">linux IO模式</a></p>
+</blockquote>
+</li>
+</ul>
+<h1 id="注解与反射"><a href="#注解与反射" class="headerlink" title="注解与反射"></a>注解与反射</h1><h1 id="图形化界面"><a href="#图形化界面" class="headerlink" title="图形化界面"></a>图形化界面</h1>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    <div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/25/JAVA学习路线整理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -311,7 +687,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-12-25T11:36:57+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2019-12-25T14:06:58+08:00">
                 2019-12-25
               </time>
             
@@ -432,7 +808,10 @@
 </li>
 </ul>
 <h1 id="一、基础知识篇"><a href="#一、基础知识篇" class="headerlink" title="一、基础知识篇"></a>一、基础知识篇</h1><h2 id="JAVA基础语法"><a href="#JAVA基础语法" class="headerlink" title="JAVA基础语法"></a>JAVA基础语法</h2><ul>
-<li>语法基础</li>
+<li>语法基础<blockquote>
+<p>{ % post_link Java基础知识.md Java基础知识 % }<br>  { % post_link Java基础知识.md Java基础知识 % }</p>
+</blockquote>
+</li>
 <li>编程思想：类、对象、封装、继承、多态、接口</li>
 <li>容器</li>
 <li>异常</li>
@@ -2015,174 +2394,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/09/2019-07-21-pssh/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ramon">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ramon's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/09/2019-07-21-pssh/" itemprop="url">pssh/pscp</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-09T20:01:19+08:00">
-                2019-08-09
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">更新于&#58;</span>
-              
-              <time title="更新于" itemprop="dateModified" datetime="2019-08-09T20:01:19+08:00">
-                2019-08-09
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/小技巧/" itemprop="url" rel="index">
-                    <span itemprop="name">小技巧</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>学习到这个批量处理工具是在工作中有一次写了个对现网环境中脏链接/进程/文件等脏数据进行检测分析的脚本，但是需要将这个脚本放到对应宿主机中，于是了解到了这两个批量处理的脚本，下面我们来介绍下脚本的使用。</p>
-<h3 id="pscp"><a href="#pscp" class="headerlink" title="pscp"></a>pscp</h3><p>scp是我们经常会用到的命令，是secure copy的简写，用于在Linux下进行远程拷贝文件的命令，如下为说明文档：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">Usage: pscp [OPTIONS] local remote</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">  --version             show program&apos;s version number and exit</span><br><span class="line">  --help                show this help message and exit</span><br><span class="line">  -h HOST_FILE, --hosts=HOST_FILE</span><br><span class="line">                        hosts file (each line &quot;[user@]host[:port]&quot;)</span><br><span class="line">  -H HOST_STRING, --host=HOST_STRING</span><br><span class="line">                        additional host entries (&quot;[user@]host[:port]&quot;)</span><br><span class="line">  -l USER, --user=USER  username (OPTIONAL)</span><br><span class="line">  -p PAR, --par=PAR     max number of parallel threads (OPTIONAL)</span><br><span class="line">  -o OUTDIR, --outdir=OUTDIR</span><br><span class="line">                        output directory for stdout files (OPTIONAL)</span><br><span class="line">  -e ERRDIR, --errdir=ERRDIR</span><br><span class="line">                        output directory for stderr files (OPTIONAL)</span><br><span class="line">  -t TIMEOUT, --timeout=TIMEOUT</span><br><span class="line">                        timeout (secs) (0 = no timeout) per host (OPTIONAL)</span><br><span class="line">  -O OPTION, --option=OPTION</span><br><span class="line">                        SSH option (OPTIONAL)</span><br><span class="line">  -v, --verbose         turn on warning and diagnostic messages (OPTIONAL)</span><br><span class="line">  -A, --askpass         Ask for a password (OPTIONAL)</span><br><span class="line">  -x ARGS, --extra-args=ARGS</span><br><span class="line">                        Extra command-line arguments, with processing for</span><br><span class="line">                        spaces, quotes, and backslashes</span><br><span class="line">  -X ARG, --extra-arg=ARG</span><br><span class="line">                        Extra command-line argument</span><br><span class="line">  -r, --recursive       recusively copy directories (OPTIONAL)</span><br><span class="line"></span><br><span class="line">Example: pscp -h hosts.txt -l irb2 foo.txt /home/irb2/foo.txt</span><br></pre></td></tr></table></figure>
-
-<p>当我们需要批量传输文件时可以使用如下命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pscp -h $ip_file -lroot $file $dest_path</span><br></pre></td></tr></table></figure>
-
-<p>这里的ipfile的文件中可以放置我们的ips</p>
-<h3 id="pssh"><a href="#pssh" class="headerlink" title="pssh"></a>pssh</h3><p>同pscp一样，pssh为ssh的批处理版，说明文档如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">Usage: pssh [OPTIONS] command [...]</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line">  --version             show program&apos;s version number and exit</span><br><span class="line">  --help                show this help message and exit</span><br><span class="line">  -h HOST_FILE, --hosts=HOST_FILE</span><br><span class="line">                        hosts file (each line &quot;[user@]host[:port]&quot;)</span><br><span class="line">  -H HOST_STRING, --host=HOST_STRING</span><br><span class="line">                        additional host entries (&quot;[user@]host[:port]&quot;)</span><br><span class="line">  -l USER, --user=USER  username (OPTIONAL)</span><br><span class="line">  -p PAR, --par=PAR     max number of parallel threads (OPTIONAL)</span><br><span class="line">  -o OUTDIR, --outdir=OUTDIR</span><br><span class="line">                        output directory for stdout files (OPTIONAL)</span><br><span class="line">  -e ERRDIR, --errdir=ERRDIR</span><br><span class="line">                        output directory for stderr files (OPTIONAL)</span><br><span class="line">  -t TIMEOUT, --timeout=TIMEOUT</span><br><span class="line">                        timeout (secs) (0 = no timeout) per host (OPTIONAL)</span><br><span class="line">  -O OPTION, --option=OPTION</span><br><span class="line">                        SSH option (OPTIONAL)</span><br><span class="line">  -v, --verbose         turn on warning and diagnostic messages (OPTIONAL)</span><br><span class="line">  -A, --askpass         Ask for a password (OPTIONAL)</span><br><span class="line">  -x ARGS, --extra-args=ARGS</span><br><span class="line">                        Extra command-line arguments, with processing for</span><br><span class="line">                        spaces, quotes, and backslashes</span><br><span class="line">  -X ARG, --extra-arg=ARG</span><br><span class="line">                        Extra command-line argument</span><br><span class="line">  -i, --inline          inline aggregated output and error for each server</span><br><span class="line">  --inline-stdout       inline standard output for each server</span><br><span class="line">  -I, --send-input      read from standard input and send as input to ssh</span><br><span class="line">  -P, --print           print output as we get it</span><br><span class="line"></span><br><span class="line">Example: pssh -h hosts.txt -l irb2 -o /tmp/foo uptime</span><br></pre></td></tr></table></figure>
-
-<p>这里我们更常用来对集群进行批处理，执行命令或者文件</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    <div>
-        
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2233,7 +2444,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
