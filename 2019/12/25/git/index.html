@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="Ramon&#39;s Blog">
 <meta property="og:description" content="前言本文主要是介绍Git内部原理，包含底层命令与文件系统两部分，旨在让我们从了解Git底层原理的运作，从而更好的使用。本文适用于有一定Git基础，并且对Git实现原理比较好奇的同学。 Git 文件系统简介首先，先说个概念：  Git文件系统是内容寻址文件系统。  内容寻址文件系统是什么？ 简单来说就是一个键值对数据库，你可以向数据库中插入任意类型的内容，它会返回一个键值，你可以通过这个键值再次检索">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20191226103645.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/Git%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F-1.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/git_file.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/%E5%BA%95%E5%B1%82%E5%91%BD%E4%BB%A4-1.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/commit_command.png">
@@ -100,11 +100,11 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/git_refs.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/git_packet.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/git_fs.png">
-<meta property="og:updated_time" content="2019-12-26T02:47:04.194Z">
+<meta property="og:updated_time" content="2019-12-26T02:51:26.841Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git内部原理介绍">
 <meta name="twitter:description" content="前言本文主要是介绍Git内部原理，包含底层命令与文件系统两部分，旨在让我们从了解Git底层原理的运作，从而更好的使用。本文适用于有一定Git基础，并且对Git实现原理比较好奇的同学。 Git 文件系统简介首先，先说个概念：  Git文件系统是内容寻址文件系统。  内容寻址文件系统是什么？ 简单来说就是一个键值对数据库，你可以向数据库中插入任意类型的内容，它会返回一个键值，你可以通过这个键值再次检索">
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20191226103645.png">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/Git%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F-1.png">
 
 
 
@@ -322,7 +322,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-12-26T10:47:04+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2019-12-26T10:51:26+08:00">
                 2019-12-26
               </time>
             
@@ -388,7 +388,7 @@
 <p>有没有点感觉了，没有也没关系，我们先来分析研究Git文件系统的内容，找到我们想要的答案。</p>
 <p>如何得到Git文件系统？</p>
 <p>首先，新建个文件夹，如<code>mkdir mygit</code>，进入文件夹后使用<code>git init</code>命令，初始化Git后得到<code>.git</code>文件夹，这个就是我们的文件系统实体，具体操作如下图：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20191226103645.png" alt="git文件系统"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/Git%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F-1.png" alt="git文件系统"></p>
 <p>可以看到.git文件夹下已经有很多内容，相关介绍如下图所示：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/git_file.png" alt="git_file"></p>
 <p>可以看到每个文件或者目录对应的介绍，这里面我们重点关注的主要有<strong>HEAD、objects以及refs</strong>等三个内容，在介绍他们前，我们先了解<strong>底层命令</strong>，用它来打开我们走进Git内部的大门。</p>
