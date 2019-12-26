@@ -640,6 +640,231 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/25/git/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ramon">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ramon's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/12/25/git/" itemprop="url">Git内部原理介绍</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-25T11:56:21+08:00">
+                2019-12-25
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-12-26T10:10:27+08:00">
+                2019-12-26
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>本文主要是介绍Git内部原理，包含底层命令与文件系统两部分，旨在让我们从了解Git底层原理的运作，从而更好的使用。本文适用于有一定Git基础，并且对Git实现原理比较好奇的同学。</p>
+<h1 id="Git-文件系统简介"><a href="#Git-文件系统简介" class="headerlink" title="Git 文件系统简介"></a>Git 文件系统简介</h1><p>首先，先说个概念：</p>
+<blockquote>
+<p>Git文件系统是<strong>内容寻址文件系统</strong>。</p>
+</blockquote>
+<p>内容寻址文件系统是什么？</p>
+<p>简单来说就是一个<strong>键值对数据库</strong>，你可以向数据库中插入任意类型的内容，它会返回一个键值，你可以通过这个键值再次检索插入的内容。</p>
+<p>有没有点感觉了，没有也没关系，我们先来分析研究Git文件系统的内容，找到我们想要的答案。</p>
+<p>如何得到Git文件系统？</p>
+<p>首先，新建个文件夹，如<code>mkdir mygit</code>，进入文件夹后使用<code>git init</code>命令，初始化Git后得到<code>.git</code>文件夹，这个就是我们的文件系统实体，具体操作如下图：</p>
+<p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/Git%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F.jpg" alt></p>
+<p>可以看到.git文件夹下已经有很多内容，相关介绍如下图所示：</p>
+<p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/20191223002923.png" alt></p>
+<p>可以看到每个文件或者目录对应的介绍，这里面我们重点关注的主要有<strong>HEAD、objects以及refs</strong>等三个内容，在介绍他们前，我们先了解<strong>底层命令</strong>，用它来打开我们走进Git内部的大门。</p>
+<h1 id="Git底层命令"><a href="#Git底层命令" class="headerlink" title="Git底层命令"></a>Git底层命令</h1><p>通过<code>git help</code>可以查看高级命令及相关介绍，而如果我们想看底层命令，可以通过命令<code>git help -g</code>，下面是一些常用底层命令：</p>
+<p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/%E5%BA%95%E5%B1%82%E5%91%BD%E4%BB%A4.png" alt="git底层命令"></p>
+<p>了解底层命令可以让我们更直观的理解git的工作原理，比如我们平时操作的<code>git add &amp; git commit</code>其实可以用底层命令实现，如下：</p>
+<p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/git_commit.png" alt="git commit"></p>
+<p>上图为一个新建的git仓库，通过使用内部命令<code>hash-object、update-index、write-tree、commit-tree</code>等实现了我们的添加和提交的功能，这几部的作用依次是：</p>
+<ol>
+<li>hash-object 得到test1文件对象的键值</li>
+<li>updata-index将test1添加到暂存区（实现了add操作）</li>
+<li>write-tree命令将暂存区内容写入到一个树对象中（这里提到了对象，下面来介绍对象）</li>
+<li>最后通过commit-tree命令将树对象提交得到一个提交对象（实现了commit操作）</li>
+</ol>
+<p>用底层命令需要四部才能完成我们的工作（其实还有第五步，后面讲文件系统在介绍），而我们平时用的高级命令<code>add、commit</code>只需要两步，这么一比确实高级了很多，但通过这四步，我们可以理解下之前我说的Git就是个键值对数据库这个概念是不是理解了很多，Git所有的文件都可以由生成的键值取出，如下图：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">➜ /home/gewuang/profile/mygit git:(master) ✗ &gt; git cat-file -p \</span><br><span class="line">										ce013625030ba8dba906f756967f9e9ca394464a</span><br><span class="line">hello</span><br><span class="line">➜ /home/gewuang/profile/mygit git:(master) ✗ &gt;</span><br></pre></td></tr></table></figure>
+
+<p>这个键值<code>ce013625030ba8dba906f756967f9e9ca394464a</code>就是我们上面由<code>hash-object</code>生成的。</p>
+<h1 id="Git对象"><a href="#Git对象" class="headerlink" title="Git对象"></a>Git对象</h1><p>对象是Git文件系统的基础，可分为<strong>树对象、数据对象、提交对象、标签对象</strong>等四种，如下图所示：</p>
+<p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/git%E5%AF%B9%E8%B1%A1.jpg" alt></p>
+<p><strong>数据对象</strong>就是linux系统中的inode节点（详情看上篇<a href="/2019/12/21/inode/">inode介绍</a>），只存储文件中的内容，数据对象的名字就是它的”inode节点”，也就是索引节点，而文件名等信息则存放在<strong>树对象</strong>中，对比linux系统就是目录文件，<strong>提交对象</strong>当然就是我们的commit_id了，这也是我们平时接触最多的，下图为对象中的内容：</p>
+<p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/20191225225234.png" alt="git object"></p>
+<p>上图主要使用底层命令<code>cat-file</code>获取��象信息，首先用<code>-p</code>选项打印对象中文件的内容，然后用<code>-t</code>打印对象类型。可以看到首先打印的是blob类型，也就是数据对象的内容，然后是树对象内容，最后是提交对象的内容，这里可以看到tree就是我们当时提交时使用的树对象的键值。下面为具体格式介绍：</p>
+<p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/20191225230148.png" alt="git object2"></p>
+<p>这里为什么没有tag对象，因为tag对象就是我们使用<code>git tag *</code>时标签的commit id，如下图：</p>
+<p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/20191225230643.png" alt="git tag"></p>
+<h1 id="Git文件系统原理"><a href="#Git文件系统原理" class="headerlink" title="Git文件系统原理"></a>Git文件系统原理</h1><p>介绍完了git底层命令和git对象，我们可以回头再来看Git文件系统原理了。</p>
+<p>首先填前面的第一个坑，.git目录下我们关注的三个内容：<strong>HEAD、objects/以及refs/</strong>。</p>
+<h2 id="HEAD"><a href="#HEAD" class="headerlink" title="HEAD"></a>HEAD</h2><p><strong>HEAD</strong>存放的是我们当前的分支信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">➜ /home/gewuang/profile/mygit git:(master) &gt; ls</span><br><span class="line">➜ /home/gewuang/profile/mygit git:(master) &gt; cat .git/HEAD</span><br><span class="line">ref: refs/heads/master</span><br></pre></td></tr></table></figure>
+
+<p>当我们新建一个分支后，切换当前分支可以发现HEAD内容已经被改变</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ /home/gewuang/profile/mygit git:(master) &gt; git branch branch1</span><br><span class="line">➜ /home/gewuang/profile/mygit git:(master) &gt; git co branch1</span><br><span class="line">Switched to branch &apos;branch1&apos;</span><br><span class="line">➜ /home/gewuang/profile/mygit git:(branch1) &gt; cat .git/HEAD</span><br><span class="line">ref: refs/heads/branch1</span><br></pre></td></tr></table></figure>
+
+<p>当然我们可以直接修改HEAD文件来更改分支，不过这样是不推荐的，你可以骚一点，用底层命令<code>symbolic-ref</code>来进行修改，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ /home/gewuang/profile/mygit git:(branch1) &gt; cat .git/HEAD</span><br><span class="line">ref: refs/heads/branch1</span><br><span class="line">➜ /home/gewuang/profile/mygit git:(branch1) &gt; git symbolic-ref HEAD refs/heads/master</span><br><span class="line">➜ /home/gewuang/profile/mygit git:(master) &gt; cat .git/HEAD</span><br><span class="line">ref: refs/heads/master</span><br></pre></td></tr></table></figure>
+
+<h2 id="objects"><a href="#objects" class="headerlink" title="objects/"></a>objects/</h2><p><strong>objects/</strong>目录下存放着我们的数据对象、树对象以及提交对象等等</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ /home/gewuang/profile/mygit git:(master) &gt; find .git/objects -type f</span><br><span class="line">.git/objects/2e/4f59e4b1040fca028e89fe687909373463607a</span><br><span class="line">.git/objects/74/9b9d6b710c728b0296098c2f4c3d883566af08</span><br><span class="line">.git/objects/ce/013625030ba8dba906f756967f9e9ca394464a</span><br><span class="line">➜ /home/gewuang/profile/mygit git:(master) &gt;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，我们之前操作的对象，都在这里存着，存放的格式为前两位作为目录名，后续内容作为文件名，这个文件是由zlib压缩过的，我们一般通过<code>cat-file</code>命令进行查看。</p>
+<h2 id="refs"><a href="#refs" class="headerlink" title="refs/"></a>refs/</h2><p><strong>refs/</strong>目录放置的是引用文件，先收下我对引用的理解：存储指向数据（提交）对象的<strong>指针</strong>。</p>
+<p>对，我理解的引用文件就是指针，里面存放的内容就是键值，可以直接找到对应的对象文件，拿到想要的内容，引用的分类和介绍如下图：</p>
+<p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/20191226000400.png" alt="refs"></p>
+<p>HEAD我认为也是一种引用，不过它比较特殊，是<strong>符号引用</strong>，因为它存放的内容为就是文件路径，如master的<code>refs/heads/master</code>，像极了软链接的样子。</p>
+<p>这里的<strong>refs/head/master</strong>的内容就是我们当前分支的键值了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">➜ /home/gewuang/profile/mygit git:(master) &gt; cat .git/refs/heads/master</span><br><span class="line">749b9d6b710c728b0296098c2f4c3d883566af08</span><br><span class="line">➜ /home/gewuang/profile/mygit git:(master) &gt; git gl</span><br><span class="line">749b9d6 [2019-12-25 22:16:45 +0800]  &lt;gewuang&gt; (HEAD -&gt; master, branch1) first commit</span><br><span class="line">➜ /home/gewuang/profile/mygit git:(master) &gt;</span><br></pre></td></tr></table></figure>
+
+<p><code>remote/</code>主要是远程引用相关的，这里不多介绍。</p>
+<h2 id="包文件"><a href="#包文件" class="headerlink" title="包文件"></a>包文件</h2><p>git存放数据对象的时候会把整个文件都存到数据对象中，即使有zlib压缩，你可能也会疑惑，我项目这么大，这么多提交，.git目录不是早就爆掉了么，你能想到的设计的人肯定也想到的，所以就有了包文件，他存在的意义就是将对象进行打包，节省空间。</p>
+<p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/20191226000525.png" alt="packet"></p>
+<p>上图介绍的很清楚了（请自动把引用两个字替换成packet，笔误），不过还有一点注意的是相同的文件修改后的数据对象打包后，前一个对象保存的是差异，而文件的全部内容存放在包中此文件最新的数据对象中，因为git认为最新的是人们访问几率最大的，这个设计是为了节省计算的时间，提高效率。</p>
+<h2 id="Git组织结构"><a href="#Git组织结构" class="headerlink" title="Git组织结构"></a>Git组织结构</h2><p>讲了这么多，那么git组织结构是什么样的呢？看下图：</p>
+<p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/20191225234142.png" alt="git_fs"></p>
+<p>文章很长了，不详细介绍了，看不懂就去翻上面，动动脑子去理解才能吸收。</p>
+<p>看到这里的都是好孩子，给你个奖励，我自己的一套git别名，用起来会方便很多，如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[alias]</span><br><span class="line">    glf  = log -n 10 --name-only  --format=\"%Cgreen%h %Cred[%ci] %Creset&lt;%an&gt; %Creset %Cgreen%s %Creset</span><br><span class="line">    gl  = log -n 30 --date-order  --format=\"%Cgreen%h %Cred[%ci] %Creset &lt;%an&gt;%C(yellow)%d%Creset %Creseset \"</span><br><span class="line">    gll  = log -n 30  --format=\"%Cgreen%H %Cred[%ci] %Creset&lt;%an&gt; %Creset %Cgreen%s %Creset \"</span><br><span class="line">    gl3 = log -n 20  --format=\"%Cgreen%h %Cred[%ci] %Creset&lt;%an&gt; %Creset %Cgreen%s %Creset \" --graph</span><br><span class="line">    gl2 = log --format=\"%Cgreen%h %Cred[%ci] %Creset&lt;%an&gt; %Creset %Cgreen%s %Creset \"</span><br><span class="line">    glc = log --format=\"%Cgreen%h %Cred[%cd] %Creset&lt;committer:%cn&gt; : %Cred[%ad] %Creset&lt;author:%cn&gt; %C</span><br><span class="line">    glc2 = log --format=\"%Cgreen%h %Cred[%ci] %Creset&lt;committer:%cn&gt; : %Cred[%ai] %Creset&lt;author:%cn&gt; %</span><br><span class="line">    glc3 = log --format=\"%Cgreen%h %Cred[%ci] %Creset&lt;committer:%cn&gt; : %Cred[%ai] %Creset&lt;author:%cn&gt; %</span><br><span class="line">            glw = log  -n 20  --format=\"%Cgreen%h %Cred[%ci] %Creset&lt;%an&gt; %Creset %n%Cgreen%s%Creset%n%b  \"</span><br><span class="line">    #| grep \"+0800]\"</span><br><span class="line">    gldetail = log --format=\"%h `[%cd] `&lt;committer:%cn&gt; `[%ad] `&lt;author:%an&gt; ` %s \"</span><br><span class="line">    hist = log --pretty=format:\"%C(yellow)%h %C(red)%d %C(reset)%s %C(green)[%an] %C(blue)%ad\" --topo-order --graph latest = for-each-ref --sort=-committerdate --format=\"%(committername)@%(refname:short) [%(committerdate:short)] %(contents)\"</span><br><span class="line">        #gldetail = log --format=\"%h [%cd] &lt;committer:%cn&gt; :[%ad] &lt;author:%an&gt;  %s \"</span><br><span class="line"></span><br><span class="line">    st = status -uno -s</span><br><span class="line">    st2 = status -s</span><br><span class="line">    co = checkout</span><br><span class="line">    bl = blame --date=short</span><br><span class="line">    #gll = log --format=\"%Cgreen%h %Cred[%ad] %Creset&lt;%an&gt; %Creset %Cgreen%s %Creset \"</span><br><span class="line">    ci = commit</span><br><span class="line">    dt = difftool</span><br><span class="line">    dif = diff --word-diff</span><br><span class="line">        #di = diff --color-words</span><br><span class="line">    di = diff --no-ext-diff</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    <div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/Java_technology_stack/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -989,8 +1214,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-12-25T13:04:24+08:00">
-                2019-12-25
+              <time title="更新于" itemprop="dateModified" datetime="2019-12-26T10:06:23+08:00">
+                2019-12-26
               </time>
             
           </span>
@@ -2219,178 +2444,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/09/2019-07-21-two_num/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ramon">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ramon's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/09/2019-07-21-two_num/" itemprop="url">TWO NUM</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-09T20:01:38+08:00">
-                2019-08-09
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">更新于&#58;</span>
-              
-              <time title="更新于" itemprop="dateModified" datetime="2019-08-09T20:01:38+08:00">
-                2019-08-09
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode/" itemprop="url" rel="index">
-                    <span itemprop="name">leetcode</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h3><p>Given an array of integers, return indices of the two numbers such that they add up to a specific target.</p>
-<p>You may assume that each input would have exactly one solution, and you may not use the same element twice.</p>
-<p>Example:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Given nums = [2, 7, 11, 15], target = 9,</span><br><span class="line">Because nums[0] + nums[1] = 2 + 7 = 9,</span><br><span class="line">return [0, 1].</span><br></pre></td></tr></table></figure>
-
-<h3 id="anwser"><a href="#anwser" class="headerlink" title="anwser"></a>anwser</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Note: The returned array must be malloced, assume caller calls free().</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">int</span>* <span class="title">twoSum</span><span class="params">(<span class="keyword">int</span>* nums, <span class="keyword">int</span> numsSize, <span class="keyword">int</span> target, <span class="keyword">int</span>* returnSize)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> *ret = <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">int</span> row = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> col = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> add = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    ret = (<span class="keyword">int</span> *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">int</span>)*<span class="number">2</span>);</span><br><span class="line">    ret[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    ret[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    *returnSize = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(;row &lt; numsSize<span class="number">-1</span>; row++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(col = row+<span class="number">1</span>; col &lt; numsSize; col++)</span><br><span class="line">        &#123;</span><br><span class="line">            add = nums[row] + nums[col];</span><br><span class="line">            <span class="keyword">if</span>(add == target)</span><br><span class="line">            &#123;</span><br><span class="line">                ret[<span class="number">0</span>] = row;</span><br><span class="line">                ret[<span class="number">1</span>] = col;</span><br><span class="line">                *returnSize = <span class="number">2</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> ret;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>显而易见，最low的解法，因为是刚开始做，尝试进行优化无果后去查看官方的解法，恍然大悟，原来可以用hashmap等容器进行辅助，将时间复杂度由O(n^2)降低到O(n)，先来看代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">    Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">        map.put(nums[i], i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> complement = target - nums[i];</span><br><span class="line">        <span class="keyword">if</span> (map.containsKey(complement) &amp;&amp; map.get(complement) != i) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; i, map.get(complement) &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"No two sum solution"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>上述代码是用java写的，主要是通过遍历一遍数组，得到一个map，然后从里面找到target与num[i]的差值，这里简单的应用了hashmap就完成了复杂的操作，也是我们需要灵活运用数据结构的例子。</p>
-<p>这里虽然上面已经做到很快，但是在进行之前还是需要先轮训一遍数组，我们是不是可以省去这一步呢，这时候有了第三种方法，同样的，我们先来看代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">int</span>[] twoSum(<span class="keyword">int</span>[] nums, <span class="keyword">int</span> target) &#123;</span><br><span class="line">    Map&lt;Integer, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</span><br><span class="line">        <span class="keyword">int</span> complement = target - nums[i];</span><br><span class="line">        <span class="keyword">if</span> (map.containsKey(complement)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="keyword">int</span>[] &#123; map.get(complement), i &#125;;</span><br><span class="line">        &#125;</span><br><span class="line">        map.put(nums[i], i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"No two sum solution"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>通过上述代码我们可以看到巧妙的地方，只是走了一遍轮训，在这个过程中找到hashmap中是否由差值，如果没有就存进去</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这道题很简单，但是让我看到了hashmap在某些算法场景下能带来的巨大改进，同时也看到了巧妙的运用代码可以更高效的完成我们的操作，以后写算法看来不能全都用c语言了，毕竟容器的实现并不是我们刷题的重点。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    <div>
-        
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2441,7 +2494,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2452,7 +2505,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -2463,7 +2516,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
