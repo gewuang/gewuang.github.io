@@ -687,7 +687,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-12-26T10:10:27+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2019-12-26T10:27:16+08:00">
                 2019-12-26
               </time>
             
@@ -760,7 +760,7 @@
 <p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/20191223002923.png" alt></p>
 <p>可以看到每个文件或者目录对应的介绍，这里面我们重点关注的主要有<strong>HEAD、objects以及refs</strong>等三个内容，在介绍他们前，我们先了解<strong>底层命令</strong>，用它来打开我们走进Git内部的大门。</p>
 <h1 id="Git底层命令"><a href="#Git底层命令" class="headerlink" title="Git底层命令"></a>Git底层命令</h1><p>通过<code>git help</code>可以查看高级命令及相关介绍，而如果我们想看底层命令，可以通过命令<code>git help -g</code>，下面是一些常用底层命令：</p>
-<p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/%E5%BA%95%E5%B1%82%E5%91%BD%E4%BB%A4.png" alt="git底层命令"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/%E5%BA%95%E5%B1%82%E5%91%BD%E4%BB%A4-1.png" alt="git底层命令"></p>
 <p>了解底层命令可以让我们更直观的理解git的工作原理，比如我们平时操作的<code>git add &amp; git commit</code>其实可以用底层命令实现，如下：</p>
 <p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/git_commit.png" alt="git commit"></p>
 <p>上图为一个新建的git仓库，通过使用内部命令<code>hash-object、update-index、write-tree、commit-tree</code>等实现了我们的添加和提交的功能，这几部的作用依次是：</p>
