@@ -100,7 +100,7 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/git_refs.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/git_packet.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/git_fs.png">
-<meta property="og:updated_time" content="2019-12-26T02:51:26.841Z">
+<meta property="og:updated_time" content="2019-12-26T03:57:35.081Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git内部原理介绍">
 <meta name="twitter:description" content="前言本文主要是介绍Git内部原理，包含底层命令与文件系统两部分，旨在让我们从了解Git底层原理的运作，从而更好的使用。本文适用于有一定Git基础，并且对Git实现原理比较好奇的同学。 Git 文件系统简介首先，先说个概念：  Git文件系统是内容寻址文件系统。  内容寻址文件系统是什么？ 简单来说就是一个键值对数据库，你可以向数据库中插入任意类型的内容，它会返回一个键值，你可以通过这个键值再次检索">
@@ -322,7 +322,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-12-26T10:51:26+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2019-12-26T11:57:35+08:00">
                 2019-12-26
               </time>
             
@@ -447,7 +447,7 @@
 <p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/git%E5%AF%B9%E8%B1%A1-1.jpg" alt="git对象"></p>
 <p><strong>数据对象</strong>就是linux系统中的inode节点（详情看上篇<a href="/2019/12/21/inode/">inode介绍</a>），只存储文件中的内容，数据对象的名字就是它的”inode节点”，也就是索引节点，而文件名等信息则存放在<strong>树对象</strong>中，对比linux系统就是目录文件，<strong>提交对象</strong>当然就是我们的commit_id了，这也是我们平时接触最多的，下图为对象中的内容：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/git_object.png" alt="git object"></p>
-<p>上图主要使用底层命令<code>cat-file</code>获取��象信息，首先用<code>-p</code>选项打印对象中文件的内容，然后用<code>-t</code>打印对象类型。可以看到首先打印的是blob类型，也就是数据对象的内容，然后是树对象内容，最后是提交对象的内容，这里可以看到tree就是我们当时提交时使用的树对象的键值。下面为具体格式介绍：</p>
+<p>上图主要使用底层命令<code>cat-file</code>获取对象信息，首先用<code>-p</code>选项打印对象中文件的内容，然后用<code>-t</code>打印对象类型。可以看到首先打印的是blob类型，也就是数据对象的内容，然后是树对象内容，最后是提交对象的内容，这里可以看到tree就是我们当时提交时使用的树对象的键值。下面为具体格式介绍：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/git_object2.png" alt="git object2"></p>
 <p>这里为什么没有tag对象，因为tag对象内容就是我们使用<code>git tag *</code>时标签的commit id，如下图：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/git_tag.png" alt="git tag"></p>
