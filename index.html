@@ -1759,8 +1759,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-08-25T18:49:10+08:00">
-                2019-08-25
+              <time title="更新于" itemprop="dateModified" datetime="2020-01-10T13:16:47+08:00">
+                2020-01-10
               </time>
             
           </span>
@@ -1809,7 +1809,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2 字
+                  12 字
                 </span>
               
 
@@ -1848,7 +1848,7 @@
       
         
           
-            <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1>
+            <h1 id="是什么"><a href="#是什么" class="headerlink" title="是什么"></a>是什么</h1><h1 id="为什么用它"><a href="#为什么用它" class="headerlink" title="为什么用它"></a>为什么用它</h1><h1 id="底层原理"><a href="#底层原理" class="headerlink" title="底层原理"></a>底层原理</h1>
           
         
       
@@ -2120,7 +2120,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/08/22/node_introduce/" itemprop="url">node底层原理</a></h1>
+                <a class="post-title-link" href="/2019/08/22/node_introduce/" itemprop="url">Node底层原理</a></h1>
         
 
         <div class="post-meta">
@@ -2148,8 +2148,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-08-22T10:10:05+08:00">
-                2019-08-22
+              <time title="更新于" itemprop="dateModified" datetime="2020-01-10T13:16:38+08:00">
+                2020-01-10
               </time>
             
           </span>
@@ -2237,40 +2237,43 @@
       
         
           
-            <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>JavaScript我们都知道，作为前端必备的知识为大家所熟知，那node.js大家又了解多少呢？</p>
-<p>首先来看下<a href="https://nodejs.org/en/" target="_blank" rel="noopener">node.js官网</a>对他的介绍</p>
+            <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>JavaScript我们都知道，作为前端必备的知识为大家所熟知，那Node.js大家又了解多少呢？</p>
+<p>首先来看下<a href="https://Nodejs.org/en/" target="_blank" rel="noopener">Node.js官网</a>对他的介绍</p>
 <blockquote>
 <p>Node.js® is a JavaScript runtime built on Chrome’s V8 JavaScript engine.</p>
 </blockquote>
-<p>直译过来就是Node.js是构建在谷歌的V8 JS引擎上运行的JavaScript.</p>
-<p>看完并不能理解Node.js是什么，那我们先从这里拿出我们的问题</p>
-<ul>
-<li>首先V8引擎是什么?</li>
-<li>node是什么?</li>
-<li>Node.js跟javascript有什么区别<br>
-下面来一一解释：
-
-</li>
+<p>直译过来就是Node.js是构建在谷歌的V8 JS引擎上运行的JavaScript。</p>
+<p>看完并不能理解Node.js是什么，首先抛出几个问题</p>
+<ol>
+<li>V8引擎是什么?</li>
+<li>Node.js是什么?</li>
+<li>Node.js跟javascript有什么区别<br>下面来一一解释。</li>
+</ol>
+<h1 id="V8引擎是什么"><a href="#V8引擎是什么" class="headerlink" title="V8引擎是什么"></a>V8引擎是什么</h1><ul>
+<li>是什么：随着chrome发布的<strong>JavaScript渲染引擎</strong>。</li>
+<li>做什么：对JavaScript代码进行解释执行。</li>
+<li>优势：更快。原因如下：<br><br>相比于其他JS引擎转换为字节码或者解释执行相比，V8引擎直接将代码编译成原生机器码（IA-32、X86-64、ARM、MIPS CPUs），并且使用了如内联缓存（inline cache）等技术来提高性能。同时，V8可以独立运行或者嵌入到C++应用程序中运行（本身是由C++实现的）。</li>
 </ul>
-<h1 id="V8引擎是什么"><a href="#V8引擎是什么" class="headerlink" title="V8引擎是什么"></a>V8引擎是什么</h1><p>V8是随着chrome发布的JavaScript渲染引擎，其功能就是对JavaScript代码进行解释执行。但是相比于其他JS引擎转换为字节码或者解释执行相比，V8引擎直接将代码编译成原生机器码（IA-32、X86-64、ARM、MIPS CPUs），并且使用了如内联缓存（inline cache）等技术来提高性能。同时，V8可以独立运行或者嵌入到C++应用程序中运行（本身是由C++实现的）。</p>
 <p>如果需要对V8引擎有更详细的了解可以查看此文章： <a href="http://blog.csdn.net/xiangzhihong8/article/details/74996757" target="_blank" rel="noopener">Google V8引擎</a>，这里就不详细解释了。</p>
-<h1 id="nodejs是什么"><a href="#nodejs是什么" class="headerlink" title="nodejs是什么"></a>nodejs是什么</h1><p>介绍完了V8引擎，我们回到第二个问题，node.js是什么呢？以下为我的理解:</p>
+<h1 id="Nodejs是什么"><a href="#Nodejs是什么" class="headerlink" title="Nodejs是什么"></a>Nodejs是什么</h1><p>介绍完了V8引擎，Node.js是什么呢？</p>
 <blockquote>
-<p>Node.js就是在V8引擎的基础上进行封装扩展，使用c/c++等语言开发了大量的服务器端（如文件操作、网络通信、操作系统API等）操作，用于方便搭建快速响应、易于拓展的网络应用。</p>
+<p>Node.js就是运行在服务端的javaScript。</p>
 </blockquote>
+<p><strong>原因：</strong>Node.js在V8引擎的基础上进行封装扩展，使用c/c++等语言开发了大量的服务器端操作（如文件操作、网络通信、操作系统API等），用于方便搭建快速响应、易于拓展的网络应用。</p>
 <h2 id="基础架构"><a href="#基础架构" class="headerlink" title="基础架构"></a>基础架构</h2><p>了解Node.js的原理就要从整个架构图开始，如下为Node.js的基础架构图。</p>
-<p><img src="http://git.cn-hangzhou.oss.aliyun-inc.com/uploads/beidou/beidou/053df3b1fa045a3d5f6218095d108dff/image.png" alt="node基础架构图"></p>
-<p>上面这个图为简单概括了下node.js的架构，主要分为三层，下面来一一介绍</p>
+<p><img src="http://git.cn-hangzhou.oss.aliyun-inc.com/uploads/beidou/beidou/053df3b1fa045a3d5f6218095d108dff/image.png" alt="Node基础架构图"></p>
+<p>上面这个图为简单概括了下Node.js的架构，主要分为三层，下面来一一介绍：</p>
 <ul>
 <li>Node.js/APP：这部分是所有的js代码，包括Node.js的核心代码，npm install装载的模块以及你的code等。</li>
-<li>桥接层：这一层的功能主要是用来将底层c/c++的代码接口提供给上层js代码使用（胶水代码）。主要有两个模块，Node.js Bindings、c/c++ Addons。其中Binding主要是桥接Node.js核心库的依赖（如zlib、OpenSSL、c-ares、http-parser 等），而Addons是提供给我们自己实现代码用来桥接自己或者第三方库的模块。</li>
-<li>Node.js的依赖库：这部分为核心依赖底层库，主要包括V8、libuv以及其他底层依赖库，我们下面再详解这些模块。</li>
+<li>桥接层：这一层的功能是用来将底层c/c++的代码接口提供给上层js代码使用（胶水代码）。主要有两个模块，Node.js Bindings、c/c++ Addons。其中Binding是用来桥接Node.js核心库的依赖（如zlib、OpenSSL、c-ares、http-parser 等），而Addons则是用来桥接我们自己实现的代码或者第三方库的模块。</li>
+<li>Node.js的依赖库：这部分为核心依赖底层库，主要包括V8、libuv以及其他底层依赖库，我们下面来详解这些模块。</li>
 </ul>
-<p>底层依赖库介绍如下：<br>    <strong>V8</strong>前面已经说过了，高性能的JavaScript引擎，这里就不赘述了。<br>    <strong>libuv</strong>：C语言开发的一套线程池，主要提供事件循环（event loop）、异步网络I/O、文件系统I/O等能力。<br>    <strong>other</strong>：其他底层依赖库主要提供了对系统底层功能的访问，如<a href="https://c-ares.haxx.se/" target="_blank" rel="noopener">c-ares</a>提供DNS解析能力。<a href="https://www.openssl.org/" target="_blank" rel="noopener">crypto(OpenSSL)</a>提供加密能力，http提供网络服务，<a href="http://zlib.net/" target="_blank" rel="noopener">zlib</a>提供解压能力等等。</p>
-<p>介绍完这些，我们好像并不能了解Node.js那些特性如单线程、异步IO，事件驱动等，既然是一个平台，了解了架构，再去理解运行原理就一目了然了，下面我们来详细介绍下运行原理</p>
-<h2 id="运行原理"><a href="#运行原理" class="headerlink" title="运行原理"></a>运行原理</h2><p>接到上面的介绍，首先来说<strong>单线程</strong>，我们都知道现在的程序都讲究多线程，同时处理任务，因为cpu执行速度很快，而IO相对来说要慢很多，如果是一个线程跑，其他任务等待，会导致cpu有大量的空闲时间，不仅是资源的浪费，我们的程序执行速度也会变得非常慢。那node.js为什么还要使用单线程呢，这不是在倒退吗？<br>这里就引出了异步IO，nodejs的单线程是相对而言的，我们可以理解为一个主线程，多个从线程。主线程主要执行代码逻辑，完成程序的运行，而较为缓慢的IO操作则交给从线程完成，这里的操作是异步的，也就是主线程注册了任务继续处理后面的任务，等到注册的这个任务完成后主线程才开始执行，具体结构请看下图：<br><img src="http://git.cn-hangzhou.oss.aliyun-inc.com/uploads/beidou/beidou/c55b2e27cbf21eb8e61e0cfe068b33c2/QRePV.jpg" alt="node原理图"> </p>
-<p>一个 Node.js 应用启动时，V8 引擎会执行你写的应用代码，保持一份观察者（注册在事件上的回调函数）列表。当事件发生时，它的回调函数会被加进一个事件队列。只要这个队列还有等待执行的回调函数，事件循环就会持续把回调函数从队列中拿出并执行。<br>在回调函数执行过程中，所有的 I/O 请求都会转发给工作线程处理。libuv 维持着一个线程池，包含四个工作线程（默认值，可配置）。文件系统 I/O 请求和 DNS 相关请求都会放进这个线程池处理；其他的请求，如网络、平台特性相关的请求会分发给相应的系统处理单元进行处理。<br>安排给线程池的这些 I/O 操作由 Node.js 的底层库执行，完成之后触发相应事件，对应的事件回调函数会被放入事件队列，等待执行后续操作。这就是一个事件在 Node.js 中执行的整个生命周期。</p>
-<h1 id="Node-js跟JavaScript有什么区别"><a href="#Node-js跟JavaScript有什么区别" class="headerlink" title="Node.js跟JavaScript有什么区别"></a>Node.js跟JavaScript有什么区别</h1><p>最后一个问题，其实前面介绍完了，我们已经有了一个了解了，JavaScript是一门语言，而node.js更像是是一个使用js这门异步IO的语言通过封装大量的后台库完成对高IO请求任务处理的服务器平台。</p>
+<p>底层依赖库介绍如下：<br>    <strong>V8</strong>前面已经说过了，高性能的JavaScript引擎，这里就不赘述了。<br>    <strong>libuv</strong>：C语言开发，主要提供事件循环（event loop）、异步网络I/O、文件系统I/O等能力。<br>    <strong>other</strong>：其他底层依赖库主要提供了对系统底层功能的访问，如<a href="https://c-ares.haxx.se/" target="_blank" rel="noopener">c-ares</a>提供DNS解析能力。<a href="https://www.openssl.org/" target="_blank" rel="noopener">crypto(OpenSSL)</a>提供加密能力，http提供网络服务，<a href="http://zlib.net/" target="_blank" rel="noopener">zlib</a>提供解压能力等等。</p>
+<p>介绍完这些，我们好像并不能理解Node.js那些特性如单线程、异步IO，事件驱动等，下面我们通过运行原理的介绍带大家去理解这些内容。</p>
+<h2 id="运行原理"><a href="#运行原理" class="headerlink" title="运行原理"></a>运行原理</h2><p>接到上面的介绍，首先来说<strong>单线程</strong>，我们都知道现在的程序都讲究多线程，同时处理任务，因为cpu执行速度很快，而IO相对来说要慢很多，如果是一个线程跑，其他任务等待，会导致cpu有大量的空闲时间，不仅是资源的浪费，我们的程序执行速度也会变得非常慢。那Node.js为什么还要使用单线程呢，这不是在倒退吗？<br>这里就引出了<strong>异步IO</strong>，Nodejs的单线程是相对而言的，我们可以理解为一个主线程，多个从线程。主线程主要执行代码逻辑，完成程序的运行，而较为缓慢的IO操作则交给从线程完成，这里的操作是异步的，也就是主线程注册了任务继续处理后面的任务，等到注册的这个任务完成后主线程才开始执行，具体结构请看下图：</p>
+<p><img src="http://git.cn-hangzhou.oss.aliyun-inc.com/uploads/beidou/beidou/c55b2e27cbf21eb8e61e0cfe068b33c2/QRePV.jpg" alt="Node原理图"> </p>
+<p>一个 Node.js 应用启动时，V8 引擎会执行你写的应用代码，保持一份观察者列表（注册在事件上的回调函数）。当事件发生时，它的回调函数会被加进一个事件队列。只要这个队列还有等待执行的回调函数，事件循环就会持续把回调函数从队列中拿出并执行。<br>在回调函数执行过程中，所有的 I/O 请求都会转发给工作线程处理。libuv 维持着一个线程池，包含四个工作线程（默认值，可配置）。文件系统 I/O 请求和 DNS 相关请求都会放进这个线程池处理；其他的请求，如网络、平台特性相关的请求会分发给相应的系统处理单元进行处理。<br>安排给线程池的这些 I/O 操作由 Node.js 的底层库执行，完成之后触发相应事件，对应的事件回调函数会被放入事件队列，等待执行后续操作。这就是一个事件在 Node.js 中执行的整个生命周期。</p>
+<h1 id="Node-js跟JavaScript有什么区别"><a href="#Node-js跟JavaScript有什么区别" class="headerlink" title="Node.js跟JavaScript有什么区别"></a>Node.js跟JavaScript有什么区别</h1><p>最后一个问题，其实前面介绍完了，我们已经有了一个了解了，JavaScript是一门语言，而Node.js更像是是一个使用js这门异步IO的语言通过封装大量的后台库完成对高IO请求任务处理的<strong>服务端平台</strong>，一句话概括<strong>Node.js就是运行在服务端的javaScript</strong>。</p>
 <h3 id="引用文献"><a href="#引用文献" class="headerlink" title="引用文献"></a>引用文献</h3><p><a href="https://www.cnblogs.com/peiyu1988/p/8032982.html" target="_blank" rel="noopener">Node.js的运行原理-科普篇</a><br><a href="https://www.cnblogs.com/bingooo/p/6720540.html" target="_blank" rel="noopener">Node.js原理解析</a><br><a href="http://blog.csdn.net/xiangzhihong8/article/details/74996757" target="_blank" rel="noopener">Google V8引擎</a></p>
 
           
@@ -2815,7 +2818,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
