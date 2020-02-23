@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+  
+
+<link href="https://cdnjs.cat.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="language,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="[toc] 介绍工作原因接触了NodeJS，开始学习它，不过以前对这门语言不了解，学习了基本语法可以工作后就没有加深学习了。时间长了后发现这门语言比我想象中强大了很多，于是开始准备全面了解，深入学习，本文是学习了七天学会NodeJS之后的一个整理总结，入门向的一篇文章，旨在让我们可以全面了解这门语言，有兴趣的可以参考。 NodeJS基础学习NodeJS，首先了解它是什么。 JS我们都知道–Java">
+<meta name="keywords" content="language">
+<meta property="og:type" content="article">
+<meta property="og:title" content="七天学会nodejs整理">
+<meta property="og:url" content="http://yoursite.com/2020/02/23/7-days-nodejs/index.html">
+<meta property="og:site_name" content="Ramon&#39;s Blog">
+<meta property="og:description" content="[toc] 介绍工作原因接触了NodeJS，开始学习它，不过以前对这门语言不了解，学习了基本语法可以工作后就没有加深学习了。时间长了后发现这门语言比我想象中强大了很多，于是开始准备全面了解，深入学习，本文是学习了七天学会NodeJS之后的一个整理总结，入门向的一篇文章，旨在让我们可以全面了解这门语言，有兴趣的可以参考。 NodeJS基础学习NodeJS，首先了解它是什么。 JS我们都知道–Java">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/Nodejs%E5%9F%BA%E7%A1%801.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223163617.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223165040.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223171800.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223173140.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223193715.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223232838.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200224002411.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200224003147.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223232927.png">
+<meta property="og:updated_time" content="2020-02-23T16:53:27.622Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="七天学会nodejs整理">
+<meta name="twitter:description" content="[toc] 介绍工作原因接触了NodeJS，开始学习它，不过以前对这门语言不了解，学习了基本语法可以工作后就没有加深学习了。时间长了后发现这门语言比我想象中强大了很多，于是开始准备全面了解，深入学习，本文是学习了七天学会NodeJS之后的一个整理总结，入门向的一篇文章，旨在让我们可以全面了解这门语言，有兴趣的可以参考。 NodeJS基础学习NodeJS，首先了解它是什么。 JS我们都知道–Java">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/Nodejs%E5%9F%BA%E7%A1%801.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/02/23/7-days-nodejs/">
+
+
+
+
+
+  <title>七天学会nodejs整理 | Ramon's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Ramon's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">记录平时工作学习中的知识</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/23/7-days-nodejs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ramon">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ramon's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">七天学会nodejs整理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-23T14:40:39+08:00">
+                2020-02-23
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2020-02-24T00:53:27+08:00">
+                2020-02-24
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Node-js/" itemprop="url" rel="index">
+                    <span itemprop="name">Node.js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 浏览
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  5.4k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  20 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[toc]</p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>工作原因接触了NodeJS，开始学习它，不过以前对这门语言不了解，学习了基本语法可以工作后就没有加深学习了。时间长了后发现这门语言比我想象中强大了很多，于是开始准备全面了解，深入学习，本文是学习了<a href="http://nqdeng.github.io/7-days-nodejs/" target="_blank" rel="noopener">七天学会NodeJS</a>之后的一个整理总结，入门向的一篇文章，旨在让我们可以全面了解这门语言，有兴趣的可以参考。</p>
+<h1 id="NodeJS基础"><a href="#NodeJS基础" class="headerlink" title="NodeJS基础"></a>NodeJS基础</h1><p>学习NodeJS，首先了解它是什么。</p>
+<p>JS我们都知道–JavaScript，一门前端都在使用的脚本语言，而NodeJS就是运行在后端的js语言。换句话说，前端使用的JS是由浏览器进行解析运行的，而NodeJS就是一个独立的<strong>js解析器</strong>，随时随地，有node环境就可以解析运行。</p>
+<p>NodeJS诞生的目的就是为了实现高性能的Web服务器（作者自己说的），至于为什么使用JS这门语言，主要有如下几点：</p>
+<ol>
+<li>JS这门语言自带的事件机制和异步IO模型（契合作者的需求）</li>
+<li>同时JS没有自带的IO功能，不会有历史包袱（我理解是作者可以随意发挥）</li>
+<li>有一大批前端程序员的拥护（用户众多）</li>
+<li>chrome浏览器的v8高性能JS引擎的出现（可移植，有大哥维护）</li>
+</ol>
+<p>在这么多的优势的加护下，NodeJS也如作者期望的那样发展的欣欣向荣。</p>
+<p>入门向的文章，安装运行少不了，不过原文已经很详细了，这里就不赘述了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/Nodejs%E5%9F%BA%E7%A1%801.png" alt></p>
+<p>（为什么思维导图放在中间了，因为以下就开始将知识点了=-=）</p>
+<p><strong>模块</strong>是nodejs中很重要的一个概念，简单来说<strong>一个文件就是一个模块</strong>，文件名就是模块名。</p>
+<p>模块中有三个预先定义好的变量：</p>
+<ul>
+<li>require: 加载其他模块</li>
+<li>exports: 当前模块的导出对象</li>
+<li>module: 当前模块的信息</li>
+</ul>
+<p>关于模块的内容后面会专门写一篇文章详细介绍，此处略过。</p>
+<p>最后注意一下，Node有个<strong>缓存机制</strong>，会将require的模块中编译执行后的对象进行缓存，二次加载时使用缓存的对象。</p>
+<h1 id="代码的组织和部署"><a href="#代码的组织和部署" class="headerlink" title="代码的组织和部署"></a>代码的组织和部署</h1><p>搭建房子首先要规划好房子结构，而稍微大一点的项目免不了要准备好代码的目录结构和部署方式，这一章主要是组织结构的介绍。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223163617.png" alt="代码的组织和部署"></p>
+<h2 id="模块解析规则"><a href="#模块解析规则" class="headerlink" title="模块解析规则"></a>模块解析规则</h2><p><strong>模块解析规则</strong>也就是模块导入的规则，主要分为三种</p>
+<ul>
+<li>内置模块</li>
+<li>node_moudle模块</li>
+<li>NODE_PATH环境变量</li>
+</ul>
+<p>原文说的很清楚了，这里补充的一点是查看当前的node_module目录可以参考如下方法：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223165040.png" alt></p>
+<h2 id="包"><a href="#包" class="headerlink" title="包"></a>包</h2><p><strong>包（PACKAGE）</strong>可以理解是多个模块的组合。复杂的模块往往由多个子模块组成，包就是多个子模块的集合。包中有两个重点：</p>
+<ul>
+<li>入口模块</li>
+<li>package.json</li>
+</ul>
+<p>入口模块的导出对象是包的导出对象，因此我们可以直接导入入口对象就算是导入了整个包。</p>
+<p>不过这样做并不够灵活，如果入口模块名字改了，所有导入它的代码都要跟着修改，因为我们引入了<strong>package.json</strong>。</p>
+<p>最简单的package.json文件我们可以这样写:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"cat"</span>,</span><br><span class="line">    <span class="attr">"main"</span>: <span class="string">"./lib/main.js"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样，加再模块时，只需要使用<code>require(&#39;/home/user/lib/cat&#39;)</code>的方式就可以了，Node会自己根据package.json的配置找到入口模块。</p>
+<p>package.json还有其他的成员，一个完整的package.json可以如下内容：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">"name"</span>: <span class="string">"Hello World"</span>,</span><br><span class="line">	<span class="attr">"version"</span>: <span class="string">"0.0.1"</span>,</span><br><span class="line">	<span class="attr">"author"</span>: <span class="string">"张三"</span>,</span><br><span class="line">	<span class="attr">"description"</span>: <span class="string">"第一个node.js程序"</span>,</span><br><span class="line">	<span class="attr">"keywords"</span>:[<span class="string">"node.js"</span>,<span class="string">"javascript"</span>],</span><br><span class="line">	<span class="attr">"repository"</span>: &#123;</span><br><span class="line">		<span class="attr">"type"</span>: <span class="string">"git"</span>,</span><br><span class="line">		<span class="attr">"url"</span>: <span class="string">"https://path/to/url"</span></span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="attr">"license"</span>:<span class="string">"MIT"</span>,</span><br><span class="line">	<span class="attr">"engines"</span>: &#123;<span class="attr">"node"</span>: <span class="string">"0.10.x"</span>&#125;,</span><br><span class="line">	<span class="attr">"bugs"</span>:&#123;<span class="attr">"url"</span>:<span class="string">"http://path/to/bug"</span>,<span class="attr">"email"</span>:<span class="string">"bug@example.com"</span>&#125;,</span><br><span class="line">	<span class="attr">"contributors"</span>:[&#123;<span class="attr">"name"</span>:<span class="string">"李四"</span>,<span class="attr">"email"</span>:<span class="string">"lisi@example.com"</span>&#125;],</span><br><span class="line">	<span class="attr">"scripts"</span>: &#123;</span><br><span class="line">		<span class="attr">"start"</span>: <span class="string">"node index.js"</span></span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="attr">"dependencies"</span>: &#123;</span><br><span class="line">		<span class="attr">"express"</span>: <span class="string">"latest"</span>,</span><br><span class="line">		<span class="attr">"mongoose"</span>: <span class="string">"~3.8.3"</span>,</span><br><span class="line">		<span class="attr">"handlebars-runtime"</span>: <span class="string">"~1.0.12"</span>,</span><br><span class="line">		<span class="attr">"express3-handlebars"</span>: <span class="string">"~0.5.0"</span>,</span><br><span class="line">		<span class="attr">"MD5"</span>: <span class="string">"~1.2.0"</span></span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="attr">"devDependencies"</span>: &#123;</span><br><span class="line">		<span class="attr">"bower"</span>: <span class="string">"~1.2.8"</span>,</span><br><span class="line">		<span class="attr">"grunt"</span>: <span class="string">"~0.4.1"</span>,</span><br><span class="line">		<span class="attr">"grunt-contrib-concat"</span>: <span class="string">"~0.3.0"</span>,</span><br><span class="line">		<span class="attr">"grunt-contrib-jshint"</span>: <span class="string">"~0.7.2"</span>,</span><br><span class="line">		<span class="attr">"grunt-contrib-uglify"</span>: <span class="string">"~0.2.7"</span>,</span><br><span class="line">		<span class="attr">"grunt-contrib-clean"</span>: <span class="string">"~0.5.0"</span>,</span><br><span class="line">		<span class="attr">"browserify"</span>: <span class="string">"2.36.1"</span>,</span><br><span class="line">		<span class="attr">"grunt-browserify"</span>: <span class="string">"~1.3.0"</span>,</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>具体每个字段介绍可以参考<a href="https://javascript.ruanyifeng.com/nodejs/packagejson.html" target="_blank" rel="noopener">JavaScript标准参考教程</a>。</p>
+<h2 id="命令行程序"><a href="#命令行程序" class="headerlink" title="命令行程序"></a>命令行程序</h2><p>NodeJS可以编写命令行程序，只需要在程序前面加下如下内容</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#! /usr/bin/env node</span></span><br></pre></td></tr></table></figure>
+
+<p>然后在<code>/usr/local/bin/</code>下添加一个软链接就可以实现了，下面是一个很简单的实例：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223171800.png" alt="node-hello"></p>
+<p>Windows会有些不一样，我没用windows测试，这里也不介绍了，感兴趣自己看原文。</p>
+<h2 id="工程目录"><a href="#工程目录" class="headerlink" title="工程目录"></a>工程目录</h2><p>代码的组织，可以参考如下布局：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">- /home/user/workspace/node-echo/   # 工程目录</span><br><span class="line">    - bin/                          # 存放命令行相关代码</span><br><span class="line">        node-echo</span><br><span class="line">    + doc/                          # 存放文档</span><br><span class="line">    - lib/                          # 存放API相关代码</span><br><span class="line">        echo.js</span><br><span class="line">    - node_modules/                 # 存放三方包</span><br><span class="line">        + argv/</span><br><span class="line">    + tests/                        # 存放测试用例</span><br><span class="line">    package.json                    # 元数据文件</span><br><span class="line">    README.md                       # 说明文件</span><br></pre></td></tr></table></figure>
+
+<p>没什么好聊的，只是个参考。</p>
+<h2 id="NPM"><a href="#NPM" class="headerlink" title="NPM"></a>NPM</h2><p>NPM是NodeJS的包管理工具，常见的使用场景如下：</p>
+<ul>
+<li>允许用户从NPM服务器下载别人编写的三方包到本地使用。</li>
+<li>允许用户从NPM服务器下载并安装别人编写的命令行程序到本地使用。</li>
+<li>允许用户将自己编写的包或命令行程序上传到NPM服务器供别人使用。</li>
+</ul>
+<p>NPM搭建了NodeJS的生态圈。</p>
+<p>这里有一点注意的，我们可以在之前的<code>package.json</code>文件中描述依赖的第三方包，直接通过<code>npm install</code>进行安装，避免了环境搭建的烦恼（很棒的功能）。</p>
+<p><code>npm -l</code>可以看到都有哪些命令，想看命令的详细介绍也可以使用<code>npm help &lt;command&gt;</code>，文档非常全，这里就不赘述了。</p>
+<h1 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h1><p>一个后端程序怎么能少得了文件操作。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223173140.png" alt="文件操作"></p>
+<p>文章有个copy文件的小程序很不错，可以引出一个知识点，程序如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">copy</span>(<span class="params">src, dst</span>) </span>&#123;</span><br><span class="line">    fs.createReadStream(src).pipe(fs.createWriteStream(dst));</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">main</span>(<span class="params">argv</span>) </span>&#123;</span><br><span class="line">    copy(argv[<span class="number">0</span>], argv[<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br><span class="line">main(process.argv.slice(<span class="number">2</span>));</span><br></pre></td></tr></table></figure>
+
+<p>程序很简单，这里说他主要是下面这个小知识点：</p>
+<blockquote>
+<p><code>process</code>是一个全局变量，可通过<code>process.argv</code>获得命令行参数。由于<code>argv[0]</code>固定等于NodeJS执行程序的绝对路径，<code>argv[1]</code>固定等于主模块的绝对路径，因此第一个命令行参数从<code>argv[2]</code>这个位置开始。</p>
+</blockquote>
+<h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><p>和文件相关的API有很多，这里拿出几个来对比</p>
+<ul>
+<li>Buffer</li>
+<li>Stream</li>
+<li>File System</li>
+</ul>
+<h3 id="Buffer"><a href="#Buffer" class="headerlink" title="Buffer"></a>Buffer</h3><p>Buffer类的官方解释:</p>
+<blockquote>
+<p><code>Buffer</code> 类的实例类似于从 <code>0</code> 到 <code>255</code> 之间的整数数组（其他整数会通过 <code>＆ 255</code> 操作强制转换到此范围），但对应于 V8 堆外部的固定大小的原始内存分配。 <code>Buffer</code> 的大小在创建时确定，且无法更改。</p>
+</blockquote>
+<p>在我看来，Buffer底层就是一个<code>unsigned char</code>类型的数组，申请所需的堆空间并存储二进制数据。</p>
+<p>使用场景；</p>
+<blockquote>
+<p>多用于在 TCP 流、文件系统操作、以及其他上下文中与八位字节流进行交互。</p>
+</blockquote>
+<p>相关api使用去<a href="http://nodejs.cn/api/buffer.html" target="_blank" rel="noopener">官网</a>查看文档。</p>
+<h3 id="Stream"><a href="#Stream" class="headerlink" title="Stream"></a>Stream</h3><p>照例来段官方解释：</p>
+<blockquote>
+<p>流（stream）是 Node.js 中处理流式数据的抽象接口。</p>
+</blockquote>
+<p>当内存中无法一次装下需要处理的数据时，或者一边读取一边处理更加高效时，我们就需要用到数据流。</p>
+<p>流主要分为以下几种</p>
+<ul>
+<li>可读流</li>
+<li>可写流</li>
+<li>读写流</li>
+<li>转换流 <a href="http://nodejs.cn/api/stream.html#stream_class_stream_transform" target="_blank" rel="noopener">Transform</a></li>
+</ul>
+<p>在node中，这四种流都是EventEmitter的实例，它们都有close、error事件，可读流具有监听数据到来的data事件等，可写流则具有监听数据已传给低层系统的finish事件等，<a href="http://nodejs.cn/api/stream.html#stream_class_stream_duplex" target="_blank" rel="noopener">Duplex</a> 和 <a href="http://nodejs.cn/api/stream.html#stream_class_stream_transform" target="_blank" rel="noopener">Transform</a> 都同时实现了 <a href="http://nodejs.cn/api/stream.html#stream_class_stream_readable" target="_blank" rel="noopener">Readable</a> 和 <a href="http://nodejs.cn/api/stream.html#stream_class_stream_writable" target="_blank" rel="noopener">Writable</a> 的事件和接口 。</p>
+<p>当然，流也不是完美的，虽然消耗很少的内存，但那是比较理想的情况，如果读方没有尽快处理，会导致大量的数据被积压，而如何处理积压问题可以观看此文章<a href="https://nodejs.org/zh-cn/docs/guides/backpressuring-in-streams/" target="_blank" rel="noopener">数据流中的积压问题</a>，官方文档，童叟无欺。</p>
+<h3 id="File-System"><a href="#File-System" class="headerlink" title="File System"></a>File System</h3><p>正经的文件操作模块。</p>
+<p>fs模块提供的API基本操作分为三类：</p>
+<ul>
+<li>文件属性读写</li>
+<li>文件内容读写</li>
+<li>底层文件操作</li>
+</ul>
+<p>如下为一个简单而又典型的异步IO模型读取文件的示例代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fs.readFile(pathname, <span class="function"><span class="keyword">function</span> (<span class="params">err, data</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (err) &#123;</span><br><span class="line">        <span class="comment">// Deal with error.</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// Deal with data.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h1 id="网络操作"><a href="#网络操作" class="headerlink" title="网络操作"></a>网络操作</h1><p>千呼万唤始出来，终于到了网络模块。</p>
+<p>先来个官方文档的例子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"></span><br><span class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>) </span>&#123;</span><br><span class="line">    response.writeHead(<span class="number">200</span>, &#123; <span class="string">'Content-Type'</span>: <span class="string">'text-plain'</span> &#125;);</span><br><span class="line">    response.end(<span class="string">'Hello World\n'</span>);</span><br><span class="line">&#125;).listen(<span class="number">8124</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这个是一个简单的HTTP服务器，打开浏览器访问该端口<code>http://127.0.0.1:8124/</code>就能够看到效果。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223193715.png" alt="网络操作"></p>
+<h2 id="API-1"><a href="#API-1" class="headerlink" title="API"></a>API</h2><p>与网络操作相关的API主要有如下几个：</p>
+<ul>
+<li>HTTP：网络服务核心模块</li>
+<li>HTTP/2：h2版本</li>
+<li>HTTPS：加密版本</li>
+<li>URL：url解析</li>
+<li>Zlib：提供了数据压缩和解压的功能</li>
+<li>net：用于创建Socket服务器或Socket客户端</li>
+</ul>
+<p>下面介绍重点api：</p>
+<h3 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h3><p>http模块是NodeJS中的核心模块，主要提供两种使用：</p>
+<ul>
+<li>作为服务端使用时，创建一个HTTP服务器，监听HTTP客户端请求并返回响应。</li>
+<li>作为客户端使用时，发起一个HTTP客户端请求，获取服务端响应。</li>
+</ul>
+<h4 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h4><p>本章刚开始的小例子就是一个服务端的实现，使用<code>.createServer</code>方法创建一个服务器，然后调用<code>.listen</code>方法监听端口，当有客户端请求过来时，就会有<code>request</code>事件被触发，调用回调函数进行返回。</p>
+<p>HTTP请求本质是一个数据流，由请求头和请求体组成，默认大家都了解，这里不再赘述。</p>
+<p>服务端也是继承自EventEmitter的，而它所提供的事件如下：</p>
+<ul>
+<li><p>request：当客户端请求到来时，该事件被触发，提供两个参数req和res，表示请求和响应信息。</p>
+</li>
+<li><p>connection：当TCP连接建立时，该事件被触发，提供一个参数socket，是net.Socket的实例。</p>
+</li>
+<li><p>close：当服务器关闭时，触发事件（注意不是在用户断开连接时）。</p>
+</li>
+</ul>
+<p><em>注意</em>：request事件的参数req和res分别是<code>http.IncomingMessage</code>和<code>http.ServerResponse</code>的实例。</p>
+<p><strong>http.IncomingMessage</strong>是HTTP请求的信，其提供了三个事件</p>
+<ul>
+<li>data：当请求体数据到来时，该事件被触发，该事件提供一个参数chunk，表示接受的数据，如果该事件没有被监听，则请求体会被抛弃，该事件可能会被调用多次（这与nodejs是异步的有关系）</li>
+<li>end：当请求体数据传输完毕时，该事件会被触发，此后不会再有数据</li>
+<li>close：用户当前请求结束时，该事件被触发，不同于end，如果用户强制终止了传输，也是用close</li>
+</ul>
+<p>而<strong>http.ServerResponse</strong>是返回给客户端的信息，决定了用户最终看到的内容，类似于上面，他有三个重要成员函数，用于返回响应头、内容以及结束请求：</p>
+<ul>
+<li><p>res.writeHead()：向请求的客户端发送响应头，该函数在一个请求中最多调用一次，如果不调用，则会自动生成一个响应头</p>
+</li>
+<li><p>res.write()：向请求的客户端发送相应内容，data是一个buffer或者字符串，如果data是字符串，则需要制定编码方式，默认为utf-8，在res.end调用之前可以多次调用</p>
+</li>
+<li><p>res.end())：结束响应，告知客户端所有发送已经结束，当所有要返回的内容发送完毕时，该函数必需被调用一次，两个可选参数与res.write()相同。如果不调用这个函数，客户端将用于处于等待状态。</p>
+</li>
+</ul>
+<h4 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h4><p>作为客户端就要简单很多了，先来个小栗子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> options = &#123;</span><br><span class="line">        hostname: <span class="string">'www.example.com'</span>,</span><br><span class="line">        port: <span class="number">80</span>,</span><br><span class="line">        path: <span class="string">'/upload'</span>,</span><br><span class="line">        method: <span class="string">'POST'</span>,</span><br><span class="line">        headers: &#123;</span><br><span class="line">            <span class="string">'Content-Type'</span>: <span class="string">'application/x-www-form-urlencoded'</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> request = http.request(options, <span class="function"><span class="keyword">function</span> (<span class="params">response</span>) </span>&#123;&#125;);</span><br><span class="line"></span><br><span class="line">request.write(<span class="string">'Hello World'</span>);</span><br><span class="line">request.end();</span><br></pre></td></tr></table></figure>
+
+<p>这里用到了<code>http.request</code>，另一个函数为<code>http.get</code>，功能是作为客户端向http服务器发起请求。</p>
+<p>因为<code>GET</code>请求不需要请求体，所以请求不太一样，再来个小栗子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http.get(&apos;http://www.example.com/&apos;, function (response) &#123;&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>也没什么好介绍的了，详细介绍看官方文档吧。</p>
+<h3 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h3><p><code>https</code>模块与<code>http</code>模块极为类似，区别在于<code>https</code>模块需要额外处理SSL证书。</p>
+<p>在服务端模式下，创建一个HTTPS服务器的示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var options = &#123;</span><br><span class="line">        key: fs.readFileSync(&apos;./ssl/default.key&apos;),</span><br><span class="line">        cert: fs.readFileSync(&apos;./ssl/default.cer&apos;)</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">var server = https.createServer(options, function (request, response) &#123;</span><br><span class="line">        // ...</span><br><span class="line">    &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，与创建HTTP服务器相比，多了一个<code>options</code>对象，通过<code>key</code>和<code>cert</code>字段指定了HTTPS服务器使用的私钥和公钥。</p>
+<p>HTTPS与HTTP的区别这里就不介绍了，后面会专门出一篇文章，感兴趣的小伙伴也可以自己去查，网上有很多相关文章。</p>
+<h1 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h1><p>NodeJS可以感知和控制自身进程的运行环境和状态，也可以创建子进程并与其协同工作，这使得NodeJS可以把多个程序组合在一起共同完成某项工作，并在其中充当胶水和调度器的作用。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223232838.png" alt="进程管理"></p>
+<h2 id="API-2"><a href="#API-2" class="headerlink" title="API"></a>API</h2><p>进程管理有关的API如下：</p>
+<ul>
+<li>process: 当前进程管理</li>
+<li>child_process: 创建和控制子进程</li>
+<li>cluster: 对<code>child_process</code>模块的封装，充分利用多核CPU</li>
+</ul>
+<h3 id="process"><a href="#process" class="headerlink" title="process"></a>process</h3><p>process是一个全局对象，提供了当前NodeJS进程的信息并可以对其进行控制，以下为process所提供的一系列属性：</p>
+<ul>
+<li><code>process.argv</code>：返回一个数组，成员是当前进程的所有命令行参数。</li>
+<li><code>process.env</code>：返回一个对象，成员为当前Shell的环境变量，比如<code>process.env.HOME</code>。</li>
+<li><code>process.installPrefix</code>：返回一个字符串，表示 Node 安装路径的前缀，比如<code>/usr/local</code>。相应地，Node 的执行文件目录为<code>/usr/local/bin/node</code>。</li>
+<li><code>process.pid</code>：返回一个数字，表示当前进程的进程号。</li>
+<li><code>process.platform</code>：返回一个字符串，表示当前的操作系统，比如<code>Linux</code>。</li>
+<li><code>process.title</code>：返回一个字符串，默认值为<code>node</code>，可以自定义该值。</li>
+<li><code>process.version</code>：返回一个字符串，表示当前使用的 Node 版本，比如<code>v7.10.0</code>。</li>
+</ul>
+<p>当然，还有各种事件以及成员方法，方法简要说下吧，事件自己去看。</p>
+<ul>
+<li><code>process.chdir()</code>：切换工作目录到指定目录。</li>
+<li><code>process.cwd()</code>：返回运行当前脚本的工作目录的路径。</li>
+<li><code>process.exit()</code>：退出当前进程。</li>
+<li><code>process.getgid()</code>：返回当前进程的组ID（数值）。</li>
+<li><code>process.getuid()</code>：返回当前进程的用户ID（数值）。</li>
+<li><code>process.nextTick()</code>：指定回调函数在当前执行栈的尾部、下一次Event Loop之前执行。</li>
+<li><code>process.on()</code>：监听事件。</li>
+<li><code>process.setgid()</code>：指定当前进程的组，可以使用数字ID，也可以使用字符串ID。</li>
+<li><code>process.setuid()</code>：指定当前进程的用户，可以使用数字ID，也可以使用字符串ID。</li>
+</ul>
+<h3 id="child-process"><a href="#child-process" class="headerlink" title="child_process"></a>child_process</h3><p>child_process模块用来创建和控制子进程，其核心方法为<code>child_process.spawn()</code>，常用的四个方法如下：</p>
+<ul>
+<li>exec：用于执行bash命令，它的参数是一个命令字符串。</li>
+<li>execFile：直接执行特定的程序，参数作为数组传入，不会被bash解释</li>
+<li>fork：创建一个子进程，执行Node脚本</li>
+<li>spawn：创建一个子进程来执行特定命令，没有回调函数</li>
+</ul>
+<p>每个都有自己的用途，一个简单的实例如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> exec = <span class="built_in">require</span>(<span class="string">'child_process'</span>).exec;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> ls = exec(<span class="string">'ls -l'</span>, <span class="function"><span class="keyword">function</span> (<span class="params">error, stdout, stderr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (error) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(error.stack);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Error code: '</span> + error.code);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'Child Process STDOUT: '</span> + stdout);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>具体介绍和使用官方写的很详细了，不过有一段话这里可以介绍下</p>
+<blockquote>
+<p><a href="http://nodejs.cn/s/N6uK8q" target="_blank" rel="noopener"><code>child_process.execFile()</code></a>: 类似于 <a href="http://nodejs.cn/s/pkpJMy" target="_blank" rel="noopener"><code>child_process.exec()</code></a>，但是默认情况下它会直接衍生命令而不先衍生 shell。</p>
+</blockquote>
+<p>这是一段对execFile的介绍，看到这里后对这段话很不理解，于是去查看了源码，如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">normalizeExecArgs</span>(<span class="params">command, options, callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> options === <span class="string">'function'</span>) &#123;</span><br><span class="line">    callback = options;</span><br><span class="line">    options = <span class="literal">undefined</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Make a shallow copy so we don't clobber the user's options object.</span></span><br><span class="line">  options = &#123; ...options &#125;;</span><br><span class="line">  options.shell = <span class="keyword">typeof</span> options.shell === <span class="string">'string'</span> ? options.shell : <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    file: command,</span><br><span class="line">    options: options,</span><br><span class="line">    callback: callback</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">exec</span>(<span class="params">command, options, callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> opts = normalizeExecArgs(command, options, callback);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">module</span>.exports.execFile(opts.file,</span><br><span class="line">                                 opts.options,</span><br><span class="line">                                 opts.callback);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面这段是exec()方法的实现，可以看到是调用了execFile();</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200224002411.png" alt="execFile"></p>
+<p>官网中对shell参数有如上图描述，在上述代码中我们可以看到exec()传进来的默认为true，所以会启动shell，也就是可以执行一些shell命令和脚本，而execFile()默认为false，则不会启动shell，可以执行一些可运行的程序，效率会高过exec()。</p>
+<h3 id="cluster"><a href="#cluster" class="headerlink" title="cluster"></a>cluster</h3><p>cluster意为集群，表示多个Node进程构成的服务。cluster封装了child_process.fork方法创建node子进程.。利用cluster模块，我们可以创建多进程的Web服务器，充分利用多核处理器的计算资源。下面给出一个具体示例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> cluster = <span class="built_in">require</span>(<span class="string">'cluster'</span>);</span><br><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">const</span> numCPUs = <span class="built_in">require</span>(<span class="string">'os'</span>).cpus().length;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (cluster.isMaster) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`主进程 <span class="subst">$&#123;process.pid&#125;</span> 正在运行`</span>);</span><br><span class="line">  <span class="comment">// 衍生工作进程。</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; numCPUs; i++) &#123;</span><br><span class="line">    cluster.fork();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  cluster.on(<span class="string">'exit'</span>, (worker, code, signal) =&gt; &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`工作进程 <span class="subst">$&#123;worker.process.pid&#125;</span> 已退出`</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  <span class="comment">// 工作进程可以共享任何 TCP 连接。</span></span><br><span class="line">  <span class="comment">// 在本例子中，共享的是一个 HTTP 服务器。</span></span><br><span class="line">  http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">    res.writeHead(<span class="number">200</span>);</span><br><span class="line">    res.end(<span class="string">'你好世界\n'</span>);</span><br><span class="line">  &#125;).listen(<span class="number">8000</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`工作进程 <span class="subst">$&#123;process.pid&#125;</span> 已启动`</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我们将master称为主进程，worker进程称为工作进程，利用cluster模块，使用Node的cluster模块封装好的API、IPC通道和调度机制可以非常简单的创建包括一个master进程下HTTP代理服务器 + 多个worker进程多个HTTP应用服务器的架构。</p>
+<p>我们可以看到多个子进程共同监听了同一端口，这是违背规则的，那么Node是如何实现的呢？<br>这是因为，子进程并没有创建ServerSocket作监听，而是交由父进程创建ServerSocket监听指定端口，接收到连接后创建Socket，而得到的请求会根据<strong>“指定的分发规则”</strong>通过IPC发送给子进程，子进程处理后的结果再通过IPC由父进程转发给请求方。</p>
+<p>最后，cluster的请求分发策略有两种：</p>
+<ul>
+<li>Round-Robin法：即轮询，依次循环将请求分配给子线程。</li>
+<li>共享服务端socket方式：由操作系统进行调度。</li>
+</ul>
+<p>cluster的底层对master和child有着不同的实现：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200224003147.png" alt="cluster"></p>
+<p>上图为cluster实现的源码，具体原理还需要对其进行源码解读。</p>
+<h1 id="异步编程"><a href="#异步编程" class="headerlink" title="异步编程"></a>异步编程</h1><p>先来说异步是什么，我的理解是：</p>
+<blockquote>
+<p>异步就是有事件发生找个人去处理，自己继续忙自己的任务，等那个人处理完了通知到你，你再验收。</p>
+</blockquote>
+<p>我们都知道，Node是单线程的，可是如果是单线程，又如何完成异步机制和事件机制呢？</p>
+<p>实际上，NodeJS的单线程是指的只有一个主线程，其他线程包括而不限于如下几种：</p>
+<ul>
+<li>js引擎执行线程</li>
+<li>定时器线程</li>
+<li>异步IO线程</li>
+</ul>
+<p>这些线程可以称之为工作线程，这种机制避免了node因为线程切换造成的损耗，使得Node非常适合IO密集型应用。而本章的异步编程主要是创建工作线程与主线程并发执行，但需要等主线程空闲时才能执行回调函数。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223232927.png" alt="异步编程"></p>
+<h3 id="回调"><a href="#回调" class="headerlink" title="回调"></a>回调</h3><p>在代码中，异步编程的直接体现就是回调。异步编程依托于回调来实现，但不能说使用了回调后程序就异步化了，比如如下程序：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">heavyCompute</span>(<span class="params">n, callback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> count = <span class="number">0</span>,</span><br><span class="line">    <span class="keyword">var</span> i, j;</span><br><span class="line">    <span class="keyword">for</span> (i = n; i &gt; <span class="number">0</span>; --i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (j = n; j &gt; <span class="number">0</span>; --j) &#123;</span><br><span class="line">            count += <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    callback(count);</span><br><span class="line">&#125;</span><br><span class="line">heavyCompute(<span class="number">10000</span>, <span class="function"><span class="keyword">function</span> (<span class="params">count</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(count);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'hello'</span>);</span><br><span class="line"></span><br><span class="line">-- Console ------------------------------</span><br><span class="line"><span class="number">100000000</span></span><br><span class="line">hello</span><br></pre></td></tr></table></figure>
+
+<p>显然，并没有异步执行，那如果想写一个异步的程序需要怎么写呢，学到的一个很简单的实例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">setTimeout(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'world'</span>);</span><br><span class="line">&#125;, <span class="number">1000</span>);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'hello'</span>);</span><br><span class="line"></span><br><span class="line">-- Console ------------------------------</span><br><span class="line">hello</span><br><span class="line">world</span><br></pre></td></tr></table></figure>
+
+<p>通过调用setTimeout()这个原生的异步函数来实现异步。</p>
+<p>你说这耍赖，不是你自己实现的，那再来个异步遍历数组的例子：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span> (<span class="params">i, len, count, callback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (; i &lt; len; ++i) &#123;</span><br><span class="line">        (<span class="function"><span class="keyword">function</span> (<span class="params">i</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">async</span>(arr[i], <span class="function"><span class="keyword">function</span> (<span class="params">value</span>) </span>&#123;</span><br><span class="line">                arr[i] = value;</span><br><span class="line">                <span class="keyword">if</span> (++count === len) &#123;</span><br><span class="line">                    callback();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;(i));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;(<span class="number">0</span>, arr.length, <span class="number">0</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// All array items have processed.</span></span><br><span class="line">&#125;));</span><br></pre></td></tr></table></figure>
+
+<p>看到这里就结束了，有人可能好奇，不是七天么，这不是才六章吗？</p>
+<p>第七天是个综合示例，自己照着敲学习吧🤪。</p>
+<h1 id="引用文献"><a href="#引用文献" class="headerlink" title="引用文献"></a>引用文献</h1><p><a href="http://nqdeng.github.io/7-days-nodejs/" target="_blank" rel="noopener">七天学会NodeJS</a></p>
+<p><a href="http://nodejs.cn/api/" target="_blank" rel="noopener">官方文档（中文版）</a></p>
+<p><a href="https://www.jianshu.com/p/d51979a090b5" target="_blank" rel="noopener">node.js模块简明详解</a></p>
+<p><a href="https://javascript.ruanyifeng.com/nodejs/packagejson.html" target="_blank" rel="noopener">JavaScript标准参考教程</a></p>
+<p><a href="https://segmentfault.com/a/1190000011968267" target="_blank" rel="noopener">认识node核心模块–从Buffer、Stream到fs</a></p>
+<p><a href="https://www.zcfy.cc/article/node-js-streams-everything-you-need-to-know-freecodecamp-3913.html" target="_blank" rel="noopener">Node.js中的流（Streams）：你需要知道的一切 </a></p>
+<p><a href="https://www.jianshu.com/p/ab2741f78858" target="_blank" rel="noopener">浅析nodejs的http模块</a></p>
+<p><a href="https://www.jianshu.com/p/74991d15133c" target="_blank" rel="noopener">Node的进程详解</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    <div>
+        
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/language/" rel="tag"><i class="fa fa-tag"></i> language</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/12/本地镜像io问题/" rel="next" title>
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80NTkzMi8yMjQ0Mw=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Ramon</p>
+              <p class="site-description motion-element" itemprop="description">当你觉得晚的时候，恰恰是最早的时候</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NodeJS基础"><span class="nav-number">2.</span> <span class="nav-text">NodeJS基础</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码的组织和部署"><span class="nav-number">3.</span> <span class="nav-text">代码的组织和部署</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模块解析规则"><span class="nav-number">3.1.</span> <span class="nav-text">模块解析规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包"><span class="nav-number">3.2.</span> <span class="nav-text">包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令行程序"><span class="nav-number">3.3.</span> <span class="nav-text">命令行程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工程目录"><span class="nav-number">3.4.</span> <span class="nav-text">工程目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NPM"><span class="nav-number">3.5.</span> <span class="nav-text">NPM</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#文件操作"><span class="nav-number">4.</span> <span class="nav-text">文件操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#API"><span class="nav-number">4.1.</span> <span class="nav-text">API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Buffer"><span class="nav-number">4.1.1.</span> <span class="nav-text">Buffer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stream"><span class="nav-number">4.1.2.</span> <span class="nav-text">Stream</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#File-System"><span class="nav-number">4.1.3.</span> <span class="nav-text">File System</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#网络操作"><span class="nav-number">5.</span> <span class="nav-text">网络操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#API-1"><span class="nav-number">5.1.</span> <span class="nav-text">API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP"><span class="nav-number">5.1.1.</span> <span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#服务端"><span class="nav-number">5.1.1.1.</span> <span class="nav-text">服务端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端"><span class="nav-number">5.1.1.2.</span> <span class="nav-text">客户端</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTPS"><span class="nav-number">5.1.2.</span> <span class="nav-text">HTTPS</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#进程管理"><span class="nav-number">6.</span> <span class="nav-text">进程管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#API-2"><span class="nav-number">6.1.</span> <span class="nav-text">API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#process"><span class="nav-number">6.1.1.</span> <span class="nav-text">process</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#child-process"><span class="nav-number">6.1.2.</span> <span class="nav-text">child_process</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cluster"><span class="nav-number">6.1.3.</span> <span class="nav-text">cluster</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#异步编程"><span class="nav-number">7.</span> <span class="nav-text">异步编程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#回调"><span class="nav-number">7.0.1.</span> <span class="nav-text">回调</span></a></li></ol></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#引用文献"><span class="nav-number">8.</span> <span class="nav-text">引用文献</span></a></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ramon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
