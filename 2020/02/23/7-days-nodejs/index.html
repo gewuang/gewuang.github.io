@@ -89,7 +89,7 @@
 <meta property="og:site_name" content="Ramon&#39;s Blog">
 <meta property="og:description" content="介绍工作原因接触了NodeJS，开始学习它，不过以前对这门语言不了解，学习了基本语法可以工作后就没有加深学习了。时间长了后发现这门语言比我想象中强大了很多，于是开始准备全面了解，深入学习，本文是学习了七天学会NodeJS之后的一个整理总结，入门向的一篇文章，旨在让我们可以全面了解这门语言，有兴趣的可以参考。 NodeJS基础学习NodeJS，首先了解它是什么。 JS我们都知道–JavaScript">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/Nodejs%E5%9F%BA%E7%A1%801.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/Nodejs基础1.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223163617.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223165040.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223171800.png">
@@ -99,11 +99,11 @@
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200224002411.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200224003147.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223232927.png">
-<meta property="og:updated_time" content="2020-02-23T16:55:07.562Z">
+<meta property="og:updated_time" content="2020-02-23T16:58:27.663Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="七天学会nodejs整理">
 <meta name="twitter:description" content="介绍工作原因接触了NodeJS，开始学习它，不过以前对这门语言不了解，学习了基本语法可以工作后就没有加深学习了。时间长了后发现这门语言比我想象中强大了很多，于是开始准备全面了解，深入学习，本文是学习了七天学会NodeJS之后的一个整理总结，入门向的一篇文章，旨在让我们可以全面了解这门语言，有兴趣的可以参考。 NodeJS基础学习NodeJS，首先了解它是什么。 JS我们都知道–JavaScript">
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/Nodejs%E5%9F%BA%E7%A1%801.png">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/Nodejs基础1.png">
 
 
 
@@ -321,7 +321,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-02-24T00:55:07+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-02-24T00:58:27+08:00">
                 2020-02-24
               </time>
             
@@ -425,7 +425,8 @@
 </ol>
 <p>在这么多的优势的加护下，NodeJS也如作者期望的那样发展的欣欣向荣。</p>
 <p>入门向的文章，安装运行少不了，不过原文已经很详细了，这里就不赘述了。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/Nodejs%E5%9F%BA%E7%A1%801.png" alt></p>
+<img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/Nodejs基础1.png" alt="nodejs基础" style="zoom:50%;">
+
 <p>（为什么思维导图放在中间了，因为以下就开始将知识点了=-=）</p>
 <p><strong>模块</strong>是nodejs中很重要的一个概念，简单来说<strong>一个文件就是一个模块</strong>，文件名就是模块名。</p>
 <p>模块中有三个预先定义好的变量：</p>
@@ -437,7 +438,8 @@
 <p>关于模块的内容后面会专门写一篇文章详细介绍，此处略过。</p>
 <p>最后注意一下，Node有个<strong>缓存机制</strong>，会将require的模块中编译执行后的对象进行缓存，二次加载时使用缓存的对象。</p>
 <h1 id="代码的组织和部署"><a href="#代码的组织和部署" class="headerlink" title="代码的组织和部署"></a>代码的组织和部署</h1><p>搭建房子首先要规划好房子结构，而稍微大一点的项目免不了要准备好代码的目录结构和部署方式，这一章主要是组织结构的介绍。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223163617.png" alt="代码的组织和部署"></p>
+<img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223163617.png" alt="代码的组织和部署" style="zoom:50%;">
+
 <h2 id="模块解析规则"><a href="#模块解析规则" class="headerlink" title="模块解析规则"></a>模块解析规则</h2><p><strong>模块解析规则</strong>也就是模块导入的规则，主要分为三种</p>
 <ul>
 <li>内置模块</li>
@@ -481,7 +483,8 @@
 <p>这里有一点注意的，我们可以在之前的<code>package.json</code>文件中描述依赖的第三方包，直接通过<code>npm install</code>进行安装，避免了环境搭建的烦恼（很棒的功能）。</p>
 <p><code>npm -l</code>可以看到都有哪些命令，想看命令的详细介绍也可以使用<code>npm help &lt;command&gt;</code>，文档非常全，这里就不赘述了。</p>
 <h1 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h1><p>一个后端程序怎么能少得了文件操作。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223173140.png" alt="文件操作"></p>
+<img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223173140.png" alt="文件操作" style="zoom:50%;">
+
 <p>文章有个copy文件的小程序很不错，可以引出一个知识点，程序如下：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">copy</span>(<span class="params">src, dst</span>) </span>&#123;</span><br><span class="line">    fs.createReadStream(src).pipe(fs.createWriteStream(dst));</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">main</span>(<span class="params">argv</span>) </span>&#123;</span><br><span class="line">    copy(argv[<span class="number">0</span>], argv[<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br><span class="line">main(process.argv.slice(<span class="number">2</span>));</span><br></pre></td></tr></table></figure>
 
@@ -534,7 +537,8 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"></span><br><span class="line">http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">request, response</span>) </span>&#123;</span><br><span class="line">    response.writeHead(<span class="number">200</span>, &#123; <span class="string">'Content-Type'</span>: <span class="string">'text-plain'</span> &#125;);</span><br><span class="line">    response.end(<span class="string">'Hello World\n'</span>);</span><br><span class="line">&#125;).listen(<span class="number">8124</span>);</span><br></pre></td></tr></table></figure>
 
 <p>这个是一个简单的HTTP服务器，打开浏览器访问该端口<code>http://127.0.0.1:8124/</code>就能够看到效果。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223193715.png" alt="网络操作"></p>
+<img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223193715.png" alt="网络操作" style="zoom:50%;">
+
 <h2 id="API-1"><a href="#API-1" class="headerlink" title="API"></a>API</h2><p>与网络操作相关的API主要有如下几个：</p>
 <ul>
 <li>HTTP：网络服务核心模块</li>
@@ -592,7 +596,8 @@
 <p>可以看到，与创建HTTP服务器相比，多了一个<code>options</code>对象，通过<code>key</code>和<code>cert</code>字段指定了HTTPS服务器使用的私钥和公钥。</p>
 <p>HTTPS与HTTP的区别这里就不介绍了，后面会专门出一篇文章，感兴趣的小伙伴也可以自己去查，网上有很多相关文章。</p>
 <h1 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h1><p>NodeJS可以感知和控制自身进程的运行环境和状态，也可以创建子进程并与其协同工作，这使得NodeJS可以把多个程序组合在一起共同完成某项工作，并在其中充当胶水和调度器的作用。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223232838.png" alt="进程管理"></p>
+<img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223232838.png" alt="进程管理" style="zoom:50%;">
+
 <h2 id="API-2"><a href="#API-2" class="headerlink" title="API"></a>API</h2><p>进程管理有关的API如下：</p>
 <ul>
 <li>process: 当前进程管理</li>
@@ -639,7 +644,8 @@
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">normalizeExecArgs</span>(<span class="params">command, options, callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">typeof</span> options === <span class="string">'function'</span>) &#123;</span><br><span class="line">    callback = options;</span><br><span class="line">    options = <span class="literal">undefined</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Make a shallow copy so we don't clobber the user's options object.</span></span><br><span class="line">  options = &#123; ...options &#125;;</span><br><span class="line">  options.shell = <span class="keyword">typeof</span> options.shell === <span class="string">'string'</span> ? options.shell : <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    file: command,</span><br><span class="line">    options: options,</span><br><span class="line">    callback: callback</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">exec</span>(<span class="params">command, options, callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> opts = normalizeExecArgs(command, options, callback);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">module</span>.exports.execFile(opts.file,</span><br><span class="line">                                 opts.options,</span><br><span class="line">                                 opts.callback);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>上面这段是exec()方法的实现，可以看到是调用了execFile();</p>
-<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200224002411.png" alt="execFile"></p>
+<img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200224002411.png" alt="execFile" style="zoom:67%;">
+
 <p>官网中对shell参数有如上图描述，在上述代码中我们可以看到exec()传进来的默认为true，所以会启动shell，也就是可以执行一些shell命令和脚本，而execFile()默认为false，则不会启动shell，可以执行一些可运行的程序，效率会高过exec()。</p>
 <h3 id="cluster"><a href="#cluster" class="headerlink" title="cluster"></a>cluster</h3><p>cluster意为集群，表示多个Node进程构成的服务。cluster封装了child_process.fork方法创建node子进程.。利用cluster模块，我们可以创建多进程的Web服务器，充分利用多核处理器的计算资源。下面给出一个具体示例：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> cluster = <span class="built_in">require</span>(<span class="string">'cluster'</span>);</span><br><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">const</span> numCPUs = <span class="built_in">require</span>(<span class="string">'os'</span>).cpus().length;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (cluster.isMaster) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`主进程 <span class="subst">$&#123;process.pid&#125;</span> 正在运行`</span>);</span><br><span class="line">  <span class="comment">// 衍生工作进程。</span></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; numCPUs; i++) &#123;</span><br><span class="line">    cluster.fork();</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  cluster.on(<span class="string">'exit'</span>, (worker, code, signal) =&gt; &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`工作进程 <span class="subst">$&#123;worker.process.pid&#125;</span> 已退出`</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  <span class="comment">// 工作进程可以共享任何 TCP 连接。</span></span><br><span class="line">  <span class="comment">// 在本例子中，共享的是一个 HTTP 服务器。</span></span><br><span class="line">  http.createServer(<span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">    res.writeHead(<span class="number">200</span>);</span><br><span class="line">    res.end(<span class="string">'你好世界\n'</span>);</span><br><span class="line">  &#125;).listen(<span class="number">8000</span>);</span><br><span class="line"></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">`工作进程 <span class="subst">$&#123;process.pid&#125;</span> 已启动`</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -652,7 +658,8 @@
 <li>共享服务端socket方式：由操作系统进行调度。</li>
 </ul>
 <p>cluster的底层对master和child有着不同的实现：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200224003147.png" alt="cluster"></p>
+<img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200224003147.png" alt="cluster" style="zoom:70%;">
+
 <p>上图为cluster实现的源码，具体原理还需要对其进行源码解读。</p>
 <h1 id="异步编程"><a href="#异步编程" class="headerlink" title="异步编程"></a>异步编程</h1><p>先来说异步是什么，我的理解是：</p>
 <blockquote>
@@ -666,7 +673,8 @@
 <li>异步IO线程</li>
 </ul>
 <p>这些线程可以称之为工作线程，这种机制避免了node因为线程切换造成的损耗，使得Node非常适合IO密集型应用。而本章的异步编程主要是创建工作线程与主线程并发执行，但需要等主线程空闲时才能执行回调函数。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223232927.png" alt="异步编程"></p>
+<img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200223232927.png" alt="异步编程" style="zoom:50%;">
+
 <h3 id="回调"><a href="#回调" class="headerlink" title="回调"></a>回调</h3><p>在代码中，异步编程的直接体现就是回调。异步编程依托于回调来实现，但不能说使用了回调后程序就异步化了，比如如下程序：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">heavyCompute</span>(<span class="params">n, callback</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> count = <span class="number">0</span>,</span><br><span class="line">    <span class="keyword">var</span> i, j;</span><br><span class="line">    <span class="keyword">for</span> (i = n; i &gt; <span class="number">0</span>; --i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (j = n; j &gt; <span class="number">0</span>; --j) &#123;</span><br><span class="line">            count += <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    callback(count);</span><br><span class="line">&#125;</span><br><span class="line">heavyCompute(<span class="number">10000</span>, <span class="function"><span class="keyword">function</span> (<span class="params">count</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(count);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'hello'</span>);</span><br><span class="line"></span><br><span class="line">-- Console ------------------------------</span><br><span class="line"><span class="number">100000000</span></span><br><span class="line">hello</span><br></pre></td></tr></table></figure>
 
