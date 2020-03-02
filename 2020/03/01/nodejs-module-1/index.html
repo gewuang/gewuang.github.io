@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+  
+
+<link href="https://cdnjs.cat.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="language,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Node模块详解（一）介绍本文是阅读《深入浅出Node.js》后对自己所学和理解的内容进行整理后完成的，结合Node源码为读者解读模块这一基础而又非常重要的一个机制是怎么实现和运转的。 此文为Node模块详解系列第一篇，主要介绍模块以及实现。 ##CommonJS规范 说到模块就先介绍下CommonJS规范，因为模块是它提出的，而Node也对规范有了很好的实现（尽管Node的npm管理器作者在13">
+<meta name="keywords" content="language">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Node模块详解（一）">
+<meta property="og:url" content="http://yoursite.com/2020/03/01/nodejs-module-1/index.html">
+<meta property="og:site_name" content="Ramon&#39;s Blog">
+<meta property="og:description" content="Node模块详解（一）介绍本文是阅读《深入浅出Node.js》后对自己所学和理解的内容进行整理后完成的，结合Node源码为读者解读模块这一基础而又非常重要的一个机制是怎么实现和运转的。 此文为Node模块详解系列第一篇，主要介绍模块以及实现。 ##CommonJS规范 说到模块就先介绍下CommonJS规范，因为模块是它提出的，而Node也对规范有了很好的实现（尽管Node的npm管理器作者在13">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200302004835.png">
+<meta property="og:updated_time" content="2020-03-02T16:25:30.147Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Node模块详解（一）">
+<meta name="twitter:description" content="Node模块详解（一）介绍本文是阅读《深入浅出Node.js》后对自己所学和理解的内容进行整理后完成的，结合Node源码为读者解读模块这一基础而又非常重要的一个机制是怎么实现和运转的。 此文为Node模块详解系列第一篇，主要介绍模块以及实现。 ##CommonJS规范 说到模块就先介绍下CommonJS规范，因为模块是它提出的，而Node也对规范有了很好的实现（尽管Node的npm管理器作者在13">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200302004835.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/01/nodejs-module-1/">
+
+
+
+
+
+  <title>Node模块详解（一） | Ramon's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Ramon's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">记录平时工作学习中的知识</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/01/nodejs-module-1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ramon">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ramon's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Node模块详解（一）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-01T21:52:59+08:00">
+                2020-03-01
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2020-03-03T00:25:30+08:00">
+                2020-03-03
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Node-js/" itemprop="url" rel="index">
+                    <span itemprop="name">Node.js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i> 浏览
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>次
+            </span>
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.5k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Node模块详解（一）"><a href="#Node模块详解（一）" class="headerlink" title="Node模块详解（一）"></a>Node模块详解（一）</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>本文是阅读《深入浅出Node.js》后对自己所学和理解的内容进行整理后完成的，结合Node源码为读者解读模块这一基础而又非常重要的一个机制是怎么实现和运转的。</p>
+<p>此文为Node模块详解系列第一篇，主要介绍模块以及实现。</p>
+<p>##CommonJS规范</p>
+<p>说到模块就先介绍下CommonJS规范，因为模块是它提出的，而Node也对规范有了很好的实现（尽管Node的npm管理器作者在13年宣称废弃它）。</p>
+<p>引用维基百科的介绍：</p>
+<blockquote>
+<p><strong>CommonJS</strong>是一个项目，其目标是为<a href="https://zh.wikipedia.org/wiki/JavaScript" target="_blank" rel="noopener">JavaScript</a>在<a href="https://zh.wikipedia.org/wiki/网页浏览器" target="_blank" rel="noopener">网页浏览器</a>之外创建<a href="https://zh.wikipedia.org/wiki/子程序" target="_blank" rel="noopener">模块</a>约定。</p>
+</blockquote>
+<p>说白话，就是希望JS摆脱前端束缚，能够在任何地方使用，比如：</p>
+<ul>
+<li>服务端</li>
+<li>命令行工具</li>
+<li>桌面应用程序</li>
+<li>混合应用（Titanium和Adobe AIR等形式的应用（我也没懂zzz~））</li>
+</ul>
+<p>详细了解去看<a href="http://www.commonjs.org/" target="_blank" rel="noopener">CommonJS官网</a>，这里不做详细介绍，我们重点关注模板。</p>
+<h3 id="CommonJS的模板规范"><a href="#CommonJS的模板规范" class="headerlink" title="CommonJS的模板规范"></a>CommonJS的模板规范</h3><p>CommonJS对模块的定义为模块引用、模块定义和模块标识3个部分。</p>
+<ol>
+<li><p>模板引用</p>
+<p>通过require()方法导入一个模板的API到当前上下文中。</p>
+<p>示例代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">"http"</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>模块定义</p>
+<p>对应引入的功能，上下文提供了exports对象。在模块中，存在一个module对象，它代表模块自身，exports是module的属性，用于导出当前模块的方法或者变量，并且它是唯一导出的出口，module信息如下图：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200302004835.png" alt="module信息"></p>
+<p>在Node中，一个文件就是一个模块，将值传给exports对象即可导出。</p>
+</li>
+<li><p>模块标识</p>
+<p>模块标识其实就是传递给<code>require()</code>方法的参数，即导入模块的name。</p>
+</li>
+</ol>
+<p>模块的定义十分简单，接口也十分简洁。它的意义在于将类聚的方法和变量等限定在私有的作用域中，同时支持引入和导出功能以顺畅地连接上下游依赖。</p>
+<p>##Node模块实现</p>
+<p>Node参考CommonJS规范进行模块设计，同时也增加了一些自身的特性，本文我们主要研究Node内部如何实现模块机制。</p>
+<p>在Node中，模板主要分为两类</p>
+<ul>
+<li>核心模块：Node提供的模块（Node启动时直接加载）</li>
+<li>文件模块：用户编写的模块（运行时动态加载）</li>
+</ul>
+<p>本文主要主要研究的是文件模块的加载编译流程，主要分为三个步骤：</p>
+<ol>
+<li>路径分析</li>
+<li>文件定位</li>
+<li>编译执行</li>
+</ol>
+<p><strong>路径分析和文件定位</strong>，顾名思义：找到要导入的模块。因为模板标识符情况比较多，所以在这里讲一下。标识符主要分为以下几类：</p>
+<ul>
+<li>核心模板：如http、fs等直接写</li>
+<li>相对路径文件模板：<code>.</code>或者<code>..</code>开头的</li>
+<li>绝对路径模板：以<code>/</code>开头的</li>
+<li>自定义模板：在node_modules目录中的模板</li>
+</ul>
+<p>核心模块直接编译在node内部，导入最快，带路径的则要进行解析，解析流程如下：</p>
+<blockquote>
+<p>在分析标识符的过程中，<code>require()</code>通过分析文件扩展名之后，可能没有查找到对应文件，但却得到一个目录，这在引入自定义模块和逐个模块路径进行查找时经常会出现，此时Node会将目录当做一个包来处理。</p>
+<p>在这个过程中，Node对CommonJS包规范进行了一定程度的支持。首先，Node在当前目录下查找package.json（CommonJS包规范定义的包描述文件），通过<code>JSON.parse()</code>解析出包描述对象，从中取出<code>main</code>属性指定的文件名进行定位。如果文件名缺少扩展名，将会进入扩展名分析的步骤。</p>
+<p>而如果<code>main</code>属性指定的文件名错误，或者压根没有package.json文件，Node会将<code>index</code>当做默认文件名，然后依次查找index.js、index.node、index.json。</p>
+<p>如果在目录分析的过程中没有定位成功任何文件，则自定义模块进入下一个模块路径进行查找。如果模块路径数组都被遍历完毕，依然没有查找到目标文件，则会抛出查找失败的异常。</p>
+</blockquote>
+<p>内容引用书里的，本来想画个流程图，结果发现还不如直接看原文明白，毕竟这里不是我们的重点关注，也就不细讲了。</p>
+<p>前面讲了这么多，终于讲到我们今天的重点：模板编译。</p>
+<h3 id="模板导入"><a href="#模板导入" class="headerlink" title="模板导入"></a>模板导入</h3><p>上述步骤后，我们已经定位到文件，进入后续编译和执行环节。</p>
+<p><em>注：本章主要结合源码进行分析，有兴趣可以下载<a href="https://github.com/nodejs/node" target="_blank" rel="noopener">源码</a>学习（版本：v0.10.13-release）。</em></p>
+<p>之前讲到过，一个文件就是一个模板，而一个（文件）模板也是一个对象，定义如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Module</span>(<span class="params">id, parent</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.id = id;</span><br><span class="line">  <span class="keyword">this</span>.exports = &#123;&#125;;</span><br><span class="line">  <span class="keyword">this</span>.parent = parent;</span><br><span class="line">  <span class="keyword">if</span> (parent &amp;&amp; parent.children) &#123;</span><br><span class="line">    parent.children.push(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">this</span>.filename = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">this</span>.loaded = <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">this</span>.children = [];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>模板的载入以文件类型进行区分，不同的扩展名，载入方式也不同，分为以下四种情况：</p>
+<ul>
+<li>js文件：通过<code>fs</code>模块同步读取文件后编译执行</li>
+<li>node文件：用c/c++编写的扩展文件，通过dlopen()加载编译生成的文件</li>
+<li>json文件：通过fs模块读取，使用JSON.parse()解析返回</li>
+<li>其他扩展名文件：当做.js文件载入</li>
+</ul>
+<p>解析扩展名的代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Module.prototype.load = <span class="function"><span class="keyword">function</span>(<span class="params">filename</span>) </span>&#123;</span><br><span class="line">  debug(<span class="string">'load '</span> + <span class="built_in">JSON</span>.stringify(filename) +</span><br><span class="line">        <span class="string">' for module '</span> + <span class="built_in">JSON</span>.stringify(<span class="keyword">this</span>.id));</span><br><span class="line"></span><br><span class="line">  assert(!<span class="keyword">this</span>.loaded);</span><br><span class="line">  <span class="keyword">this</span>.filename = filename;</span><br><span class="line">  <span class="keyword">this</span>.paths = Module._nodeModulePaths(path.dirname(filename));</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> extension = path.extname(filename) || <span class="string">'.js'</span>;</span><br><span class="line">  <span class="keyword">if</span> (!Module._extensions[extension]) extension = <span class="string">'.js'</span>; <span class="comment">// 这里对其他扩展名以js文件对待</span></span><br><span class="line">  Module._extensions[extension](<span class="keyword">this</span>, filename);</span><br><span class="line">  <span class="keyword">this</span>.loaded = <span class="literal">true</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>接下来对这三种文件的载入以及编译进行详细讲解</p>
+<h4 id="js文件"><a href="#js文件" class="headerlink" title=".js文件"></a>.js文件</h4><p>.js文件是我们主要关注的重点，它要比其他两种情况多一个<strong>包装</strong>的步骤。</p>
+<p>使用过node的朋友都知道，每个模块都有<code>__filename</code>、<code>__dirname</code>这两个变量的存在，而模块也有自己单独的作用域，不同模块之间参数不会被相互污染，这个其实就是Node在编译前对模板文件进行了封装，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">NativeModule.wrap = <span class="function"><span class="keyword">function</span>(<span class="params">script</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> NativeModule.wrapper[<span class="number">0</span>] + script + NativeModule.wrapper[<span class="number">1</span>];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">NativeModule.wrapper = [</span><br><span class="line">  <span class="string">'(function (exports, require, module, __filename, __dirname) &#123; '</span>,</span><br><span class="line">  <span class="string">'\n&#125;);'</span></span><br><span class="line">];</span><br></pre></td></tr></table></figure>
+
+<p>非常简单的代码，却实现了每个模块文件之间作用域的隔离，为模板注入了灵魂。</p>
+<p>包装之后的代码会通过<code>vm</code>原生模块的<code>runInThisContext()</code>方法执行，返回一个具体的<code>function</code>对象。最后，将当前模块对象的<code>exports</code>属性、<code>require()</code>方法、<code>module</code>（模块对象自身），以及在文件定位中得到的完整文件路径和文件目录作为参数传递给这个<code>function()</code>执行，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Native extension for .js</span></span><br><span class="line">Module._extensions[<span class="string">'.js'</span>] = <span class="function"><span class="keyword">function</span>(<span class="params">module, filename</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> content = NativeModule.require(<span class="string">'fs'</span>).readFileSync(filename, <span class="string">'utf8'</span>);</span><br><span class="line">  <span class="built_in">module</span>._compile(stripBOM(content), filename);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Returns exception if any</span></span><br><span class="line">Module.prototype._compile = <span class="function"><span class="keyword">function</span>(<span class="params">content, filename</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> self = <span class="keyword">this</span>;</span><br><span class="line">  <span class="comment">// remove shebang</span></span><br><span class="line">  content = content.replace(<span class="regexp">/^\#\!.*/</span>, <span class="string">''</span>);</span><br><span class="line">	...</span><br><span class="line">  <span class="keyword">if</span> (Module._contextLoad) &#123;</span><br><span class="line">    <span class="comment">// create wrapper function</span></span><br><span class="line">  <span class="keyword">var</span> wrapper = Module.wrap(content);	<span class="comment">//这里进行的包装</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> compiledWrapper = runInThisContext(wrapper, filename, <span class="literal">true</span>);</span><br><span class="line">  <span class="keyword">if</span> (global.v8debug) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!resolvedArgv) &#123;</span><br><span class="line">      <span class="comment">// we enter the repl if we're not given a filename argument.</span></span><br><span class="line">      <span class="keyword">if</span> (process.argv[<span class="number">1</span>]) &#123;</span><br><span class="line">        resolvedArgv = Module._resolveFilename(process.argv[<span class="number">1</span>], <span class="literal">null</span>);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        resolvedArgv = <span class="string">'repl'</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Set breakpoint on module start</span></span><br><span class="line">    <span class="keyword">if</span> (filename === resolvedArgv) &#123;</span><br><span class="line">      global.v8debug.Debug.setBreakPoint(compiledWrapper, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">var</span> args = [self.exports, <span class="built_in">require</span>, self, filename, dirname];  <span class="comment">//注意这里</span></span><br><span class="line">  <span class="keyword">return</span> compiledWrapper.apply(self.exports, args);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这样一个js文件就被导入执行了，这里有一点要注意的是（上面注释有标明），exports原来是module的exports参数，为什么这么做，不只传一个module对象或者将exports单独拿出来呢？原因主要有如下两点：</p>
+<ul>
+<li>达到require只引入一个类的效果</li>
+<li>exports是形参引用，修改无效</li>
+</ul>
+<h4 id="node文件"><a href="#node文件" class="headerlink" title=".node文件"></a>.node文件</h4><p>.node的模板文件实际上是编写C/C++模块之后编译生成的，所以并不需要编译操作，加载和运行通过调用<code>process.dlopen()</code>方法来实现，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Native extension for .node</span></span><br><span class="line">Module._extensions[<span class="string">'.node'</span>] = <span class="function"><span class="keyword">function</span>(<span class="params">module, filename</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (manifest) &#123;</span><br><span class="line">    <span class="keyword">const</span> content = fs.readFileSync(filename);</span><br><span class="line">    <span class="keyword">const</span> moduleURL = pathToFileURL(filename);</span><br><span class="line">    manifest.assertIntegrity(moduleURL, content);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// Be aware this doesn't use `content`</span></span><br><span class="line">  <span class="keyword">return</span> process.dlopen(<span class="built_in">module</span>, path.toNamespacedPath(filename));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>dlopen()在文件<code>src/node.cc</code>中有着相关实现，主要是依托于libuv库进行的封装，执行后.node中的对象传给exports返回给调用者。</p>
+<p>.node文件模块因为是C/C++编译生成的，所以执行效率远高于.js文件模块，不过因为学习门槛高，流程复杂，大都更倾向于.js文件模块。</p>
+<h4 id="json文件"><a href="#json文件" class="headerlink" title=".json文件"></a>.json文件</h4><p>最后说的是最简单的.json文件模块，调用<code>fs</code>模块同步读取文件内容后，通过调用内部方法<code>JSON.parse()</code>解析得到对象，代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Native extension for .json</span></span><br><span class="line">Module._extensions[<span class="string">'.json'</span>] = <span class="function"><span class="keyword">function</span>(<span class="params">module, filename</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> content = fs.readFileSync(filename, <span class="string">'utf8'</span>);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (manifest) &#123;</span><br><span class="line">    <span class="keyword">const</span> moduleURL = pathToFileURL(filename);</span><br><span class="line">    manifest.assertIntegrity(moduleURL, content);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="built_in">module</span>.exports = <span class="built_in">JSON</span>.parse(stripBOM(content));</span><br><span class="line">  &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">    err.message = filename + <span class="string">': '</span> + err.message;</span><br><span class="line">    <span class="keyword">throw</span> err;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>因为导入的模块会进行缓存，二次导入的时候直接读取缓存中的对象，所以这种文件模板导入的方式要优于在代码中进行导入的实现。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文主要是我在学习《深入浅出Node.js》一书中的学习笔记，是模板系列的第一篇，这一部分代码与最新的没什么区别，后续的源码也会继续沿用书中的老版本，毕竟没有人带路去读最新的node源码实在头疼，理解了书中的思想后续在对升级后的代码进行理解相比会舒服很多（自以为🌚）。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    <div>
+        
+        <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束，感谢您的阅读-------------</div>
+    
+</div>
+
+        
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/language/" rel="tag"><i class="fa fa-tag"></i> language</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/23/7-days-nodejs/" rel="next" title="七天学会nodejs整理">
+                <i class="fa fa-chevron-left"></i> 七天学会nodejs整理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="lv-container" data-id="city" data-uid="MTAyMC80NTkzMi8yMjQ0Mw=="></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Ramon</p>
+              <p class="site-description motion-element" itemprop="description">当你觉得晚的时候，恰恰是最早的时候</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Node模块详解（一）"><span class="nav-number">1.</span> <span class="nav-text">Node模块详解（一）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CommonJS的模板规范"><span class="nav-number">1.1.1.</span> <span class="nav-text">CommonJS的模板规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模板导入"><span class="nav-number">1.1.2.</span> <span class="nav-text">模板导入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#js文件"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">.js文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#node文件"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">.node文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#json文件"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">.json文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.2.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Ramon</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
