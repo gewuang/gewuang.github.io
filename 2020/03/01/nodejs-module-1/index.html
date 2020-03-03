@@ -81,19 +81,19 @@
 
 
 
-<meta name="description" content="Node模块详解（一）介绍本文是阅读《深入浅出Node.js》后对自己所学和理解的内容进行整理后完成的，结合Node源码为读者解读模块这一基础而又非常重要的一个机制是怎么实现和运转的。 此文为Node模块详解系列第一篇，主要介绍模块以及实现。 ##CommonJS规范 说到模块就先介绍下CommonJS规范，因为模块是它提出的，而Node也对规范有了很好的实现（尽管Node的npm管理器作者在13">
+<meta name="description" content="Node模块详解（一）介绍本文是阅读《深入浅出Node.js》后对自己所学和理解的内容进行整理后完成的，结合Node源码为读者解读模块这一基础而又非常重要的一个机制是怎么实现和运转的。 此文为Node模块详解系列第一篇，主要介绍模块以及实现。 CommonJS规范说到模块就先介绍下CommonJS规范，因为模块是它提出的，而Node也对规范有了很好的实现（尽管Node的npm管理器作者在13年宣称">
 <meta name="keywords" content="language">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Node模块详解（一）">
 <meta property="og:url" content="http://yoursite.com/2020/03/01/nodejs-module-1/index.html">
 <meta property="og:site_name" content="Ramon&#39;s Blog">
-<meta property="og:description" content="Node模块详解（一）介绍本文是阅读《深入浅出Node.js》后对自己所学和理解的内容进行整理后完成的，结合Node源码为读者解读模块这一基础而又非常重要的一个机制是怎么实现和运转的。 此文为Node模块详解系列第一篇，主要介绍模块以及实现。 ##CommonJS规范 说到模块就先介绍下CommonJS规范，因为模块是它提出的，而Node也对规范有了很好的实现（尽管Node的npm管理器作者在13">
+<meta property="og:description" content="Node模块详解（一）介绍本文是阅读《深入浅出Node.js》后对自己所学和理解的内容进行整理后完成的，结合Node源码为读者解读模块这一基础而又非常重要的一个机制是怎么实现和运转的。 此文为Node模块详解系列第一篇，主要介绍模块以及实现。 CommonJS规范说到模块就先介绍下CommonJS规范，因为模块是它提出的，而Node也对规范有了很好的实现（尽管Node的npm管理器作者在13年宣称">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200302004835.png">
-<meta property="og:updated_time" content="2020-03-02T16:25:30.147Z">
+<meta property="og:updated_time" content="2020-03-03T02:31:28.753Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Node模块详解（一）">
-<meta name="twitter:description" content="Node模块详解（一）介绍本文是阅读《深入浅出Node.js》后对自己所学和理解的内容进行整理后完成的，结合Node源码为读者解读模块这一基础而又非常重要的一个机制是怎么实现和运转的。 此文为Node模块详解系列第一篇，主要介绍模块以及实现。 ##CommonJS规范 说到模块就先介绍下CommonJS规范，因为模块是它提出的，而Node也对规范有了很好的实现（尽管Node的npm管理器作者在13">
+<meta name="twitter:description" content="Node模块详解（一）介绍本文是阅读《深入浅出Node.js》后对自己所学和理解的内容进行整理后完成的，结合Node源码为读者解读模块这一基础而又非常重要的一个机制是怎么实现和运转的。 此文为Node模块详解系列第一篇，主要介绍模块以及实现。 CommonJS规范说到模块就先介绍下CommonJS规范，因为模块是它提出的，而Node也对规范有了很好的实现（尽管Node的npm管理器作者在13年宣称">
 <meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200302004835.png">
 
 
@@ -312,7 +312,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-03-03T00:25:30+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-03-03T10:31:28+08:00">
                 2020-03-03
               </time>
             
@@ -406,8 +406,7 @@
       
         <h1 id="Node模块详解（一）"><a href="#Node模块详解（一）" class="headerlink" title="Node模块详解（一）"></a>Node模块详解（一）</h1><h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>本文是阅读《深入浅出Node.js》后对自己所学和理解的内容进行整理后完成的，结合Node源码为读者解读模块这一基础而又非常重要的一个机制是怎么实现和运转的。</p>
 <p>此文为Node模块详解系列第一篇，主要介绍模块以及实现。</p>
-<p>##CommonJS规范</p>
-<p>说到模块就先介绍下CommonJS规范，因为模块是它提出的，而Node也对规范有了很好的实现（尽管Node的npm管理器作者在13年宣称废弃它）。</p>
+<h2 id="CommonJS规范"><a href="#CommonJS规范" class="headerlink" title="CommonJS规范"></a>CommonJS规范</h2><p>说到模块就先介绍下CommonJS规范，因为模块是它提出的，而Node也对规范有了很好的实现（尽管Node的npm管理器作者在13年宣称废弃它）。</p>
 <p>引用维基百科的介绍：</p>
 <blockquote>
 <p><strong>CommonJS</strong>是一个项目，其目标是为<a href="https://zh.wikipedia.org/wiki/JavaScript" target="_blank" rel="noopener">JavaScript</a>在<a href="https://zh.wikipedia.org/wiki/网页浏览器" target="_blank" rel="noopener">网页浏览器</a>之外创建<a href="https://zh.wikipedia.org/wiki/子程序" target="_blank" rel="noopener">模块</a>约定。</p>
@@ -437,8 +436,7 @@
 </li>
 </ol>
 <p>模块的定义十分简单，接口也十分简洁。它的意义在于将类聚的方法和变量等限定在私有的作用域中，同时支持引入和导出功能以顺畅地连接上下游依赖。</p>
-<p>##Node模块实现</p>
-<p>Node参考CommonJS规范进行模块设计，同时也增加了一些自身的特性，本文我们主要研究Node内部如何实现模块机制。</p>
+<h2 id="Node模块实现"><a href="#Node模块实现" class="headerlink" title="Node模块实现"></a>Node模块实现</h2><p>Node参考CommonJS规范进行模块设计，同时也增加了一些自身的特性，本文我们主要研究Node内部如何实现模块机制。</p>
 <p>在Node中，模板主要分为两类</p>
 <ul>
 <li>核心模块：Node提供的模块（Node启动时直接加载）</li>
@@ -466,7 +464,7 @@
 </blockquote>
 <p>内容引用书里的，本来想画个流程图，结果发现还不如直接看原文明白，毕竟这里不是我们的重点关注，也就不细讲了。</p>
 <p>前面讲了这么多，终于讲到我们今天的重点：模板编译。</p>
-<h3 id="模板导入"><a href="#模板导入" class="headerlink" title="模板导入"></a>模板导入</h3><p>上述步骤后，我们已经定位到文件，进入后续编译和执行环节。</p>
+<h3 id="模板编译"><a href="#模板编译" class="headerlink" title="模板编译"></a>模板编译</h3><p>上述步骤后，我们已经定位到文件，进入后续编译和执行环节。</p>
 <p><em>注：本章主要结合源码进行分析，有兴趣可以下载<a href="https://github.com/nodejs/node" target="_blank" rel="noopener">源码</a>学习（版本：v0.10.13-release）。</em></p>
 <p>之前讲到过，一个文件就是一个模板，而一个（文件）模板也是一个对象，定义如下：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Module</span>(<span class="params">id, parent</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.id = id;</span><br><span class="line">  <span class="keyword">this</span>.exports = &#123;&#125;;</span><br><span class="line">  <span class="keyword">this</span>.parent = parent;</span><br><span class="line">  <span class="keyword">if</span> (parent &amp;&amp; parent.children) &#123;</span><br><span class="line">    parent.children.push(<span class="keyword">this</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">this</span>.filename = <span class="literal">null</span>;</span><br><span class="line">  <span class="keyword">this</span>.loaded = <span class="literal">false</span>;</span><br><span class="line">  <span class="keyword">this</span>.children = [];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -483,14 +481,14 @@
 
 <p>接下来对这三种文件的载入以及编译进行详细讲解</p>
 <h4 id="js文件"><a href="#js文件" class="headerlink" title=".js文件"></a>.js文件</h4><p>.js文件是我们主要关注的重点，它要比其他两种情况多一个<strong>包装</strong>的步骤。</p>
-<p>使用过node的朋友都知道，每个模块都有<code>__filename</code>、<code>__dirname</code>这两个变量的存在，而模块也有自己单独的作用域，不同模块之间参数不会被相互污染，这个其实就是Node在编译前对模板文件进行了封装，代码如下：</p>
+<p>使用过node的朋友都知道，每个模块都有<code>__filename</code>、<code>__dirname</code>这两个变量的存在，并且模块也有自己单独的作用域，不同模块之间参数不会被相互污染，这个其实就是Node在编译前对模板文件进行了封装，代码如下：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">NativeModule.wrap = <span class="function"><span class="keyword">function</span>(<span class="params">script</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> NativeModule.wrapper[<span class="number">0</span>] + script + NativeModule.wrapper[<span class="number">1</span>];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">NativeModule.wrapper = [</span><br><span class="line">  <span class="string">'(function (exports, require, module, __filename, __dirname) &#123; '</span>,</span><br><span class="line">  <span class="string">'\n&#125;);'</span></span><br><span class="line">];</span><br></pre></td></tr></table></figure>
 
 <p>非常简单的代码，却实现了每个模块文件之间作用域的隔离，为模板注入了灵魂。</p>
 <p>包装之后的代码会通过<code>vm</code>原生模块的<code>runInThisContext()</code>方法执行，返回一个具体的<code>function</code>对象。最后，将当前模块对象的<code>exports</code>属性、<code>require()</code>方法、<code>module</code>（模块对象自身），以及在文件定位中得到的完整文件路径和文件目录作为参数传递给这个<code>function()</code>执行，代码如下：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Native extension for .js</span></span><br><span class="line">Module._extensions[<span class="string">'.js'</span>] = <span class="function"><span class="keyword">function</span>(<span class="params">module, filename</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> content = NativeModule.require(<span class="string">'fs'</span>).readFileSync(filename, <span class="string">'utf8'</span>);</span><br><span class="line">  <span class="built_in">module</span>._compile(stripBOM(content), filename);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Returns exception if any</span></span><br><span class="line">Module.prototype._compile = <span class="function"><span class="keyword">function</span>(<span class="params">content, filename</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> self = <span class="keyword">this</span>;</span><br><span class="line">  <span class="comment">// remove shebang</span></span><br><span class="line">  content = content.replace(<span class="regexp">/^\#\!.*/</span>, <span class="string">''</span>);</span><br><span class="line">	...</span><br><span class="line">  <span class="keyword">if</span> (Module._contextLoad) &#123;</span><br><span class="line">    <span class="comment">// create wrapper function</span></span><br><span class="line">  <span class="keyword">var</span> wrapper = Module.wrap(content);	<span class="comment">//这里进行的包装</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> compiledWrapper = runInThisContext(wrapper, filename, <span class="literal">true</span>);</span><br><span class="line">  <span class="keyword">if</span> (global.v8debug) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!resolvedArgv) &#123;</span><br><span class="line">      <span class="comment">// we enter the repl if we're not given a filename argument.</span></span><br><span class="line">      <span class="keyword">if</span> (process.argv[<span class="number">1</span>]) &#123;</span><br><span class="line">        resolvedArgv = Module._resolveFilename(process.argv[<span class="number">1</span>], <span class="literal">null</span>);</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        resolvedArgv = <span class="string">'repl'</span>;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// Set breakpoint on module start</span></span><br><span class="line">    <span class="keyword">if</span> (filename === resolvedArgv) &#123;</span><br><span class="line">      global.v8debug.Debug.setBreakPoint(compiledWrapper, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">var</span> args = [self.exports, <span class="built_in">require</span>, self, filename, dirname];  <span class="comment">//注意这里</span></span><br><span class="line">  <span class="keyword">return</span> compiledWrapper.apply(self.exports, args);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
-<p>这样一个js文件就被导入执行了，这里有一点要注意的是（上面注释有标明），exports原来是module的exports参数，为什么这么做，不只传一个module对象或者将exports单独拿出来呢？原因主要有如下两点：</p>
+<p>这样一个js文件就被导入执行了，这里有一点要注意的是（上面注释有标明），exports原来是module的exports参数，为什么这么做，不直接传一个module对象或者将exports单独拿出来呢？原因主要有如下两点：</p>
 <ul>
 <li>达到require只引入一个类的效果</li>
 <li>exports是形参引用，修改无效</li>
@@ -690,7 +688,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Node模块详解（一）"><span class="nav-number">1.</span> <span class="nav-text">Node模块详解（一）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CommonJS的模板规范"><span class="nav-number">1.1.1.</span> <span class="nav-text">CommonJS的模板规范</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模板导入"><span class="nav-number">1.1.2.</span> <span class="nav-text">模板导入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#js文件"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">.js文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#node文件"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">.node文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#json文件"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">.json文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.2.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Node模块详解（一）"><span class="nav-number">1.</span> <span class="nav-text">Node模块详解（一）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CommonJS规范"><span class="nav-number">1.2.</span> <span class="nav-text">CommonJS规范</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CommonJS的模板规范"><span class="nav-number">1.2.1.</span> <span class="nav-text">CommonJS的模板规范</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Node模块实现"><span class="nav-number">1.3.</span> <span class="nav-text">Node模块实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模板编译"><span class="nav-number">1.3.1.</span> <span class="nav-text">模板编译</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#js文件"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">.js文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#node文件"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">.node文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#json文件"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">.json文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
             
 
           </div>
