@@ -90,7 +90,7 @@
 <meta property="og:description" content="介绍本文是阅读《深入浅出Node.js》后对自己所学和理解的内容进行整理后完成的，结合Node源码为读者解读模块这一基础而又非常重要的一个机制是怎么实现和运转的。 此文为Node模块详解系列第一篇，主要介绍模块以及实现。 CommonJS规范说到模块就先介绍下CommonJS规范，因为模块是它提出的，而Node也对规范有了很好的实现（尽管Node的npm管理器作者在13年宣称废弃它）。 引用维基百">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200302004835.png">
-<meta property="og:updated_time" content="2020-03-03T02:34:01.249Z">
+<meta property="og:updated_time" content="2020-03-03T02:36:52.441Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Node模块详解（一）">
 <meta name="twitter:description" content="介绍本文是阅读《深入浅出Node.js》后对自己所学和理解的内容进行整理后完成的，结合Node源码为读者解读模块这一基础而又非常重要的一个机制是怎么实现和运转的。 此文为Node模块详解系列第一篇，主要介绍模块以及实现。 CommonJS规范说到模块就先介绍下CommonJS规范，因为模块是它提出的，而Node也对规范有了很好的实现（尽管Node的npm管理器作者在13年宣称废弃它）。 引用维基百">
@@ -312,7 +312,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-03-03T10:34:01+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-03-03T10:36:52+08:00">
                 2020-03-03
               </time>
             
@@ -448,7 +448,7 @@
 <li>文件定位</li>
 <li>编译执行</li>
 </ol>
-<p><strong>路径分析和文件定位</strong>，顾名思义：找到要导入的模块。因为模板标识符情况比较多，所以在这里讲一下。标识符主要分为以下几类：</p>
+<h2 id="路径分析和文件定位"><a href="#路径分析和文件定位" class="headerlink" title="路径分析和文件定位"></a>路径分析和文件定位</h2><p>顾名思义：找到要导入的模块。因为模板标识符情况比较多，所以在这里讲一下。标识符主要分为以下几类：</p>
 <ul>
 <li>核心模板：如http、fs等直接写</li>
 <li>相对路径文件模板：<code>.</code>或者<code>..</code>开头的</li>
@@ -688,7 +688,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CommonJS规范"><span class="nav-number">2.</span> <span class="nav-text">CommonJS规范</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CommonJS的模板规范"><span class="nav-number">2.1.</span> <span class="nav-text">CommonJS的模板规范</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Node模块实现"><span class="nav-number">3.</span> <span class="nav-text">Node模块实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#模板编译"><span class="nav-number">3.1.</span> <span class="nav-text">模板编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#js文件"><span class="nav-number">3.1.1.</span> <span class="nav-text">.js文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#node文件"><span class="nav-number">3.1.2.</span> <span class="nav-text">.node文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#json文件"><span class="nav-number">3.1.3.</span> <span class="nav-text">.json文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#CommonJS规范"><span class="nav-number">2.</span> <span class="nav-text">CommonJS规范</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CommonJS的模板规范"><span class="nav-number">2.1.</span> <span class="nav-text">CommonJS的模板规范</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Node模块实现"><span class="nav-number">3.</span> <span class="nav-text">Node模块实现</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#路径分析和文件定位"><span class="nav-number">3.1.</span> <span class="nav-text">路径分析和文件定位</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模板编译"><span class="nav-number">3.2.</span> <span class="nav-text">模板编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#js文件"><span class="nav-number">3.2.1.</span> <span class="nav-text">.js文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#node文件"><span class="nav-number">3.2.2.</span> <span class="nav-text">.node文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#json文件"><span class="nav-number">3.2.3.</span> <span class="nav-text">.json文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
