@@ -91,7 +91,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200315204045.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200315224621.png">
-<meta property="og:updated_time" content="2020-03-15T15:46:36.553Z">
+<meta property="og:updated_time" content="2020-03-15T15:55:32.797Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Node模块详解（二）">
 <meta name="twitter:description" content="介绍上篇文章介绍了模块机制中的文件模块（直通链接），本篇文章继续接着介绍node模块机制中剩余的模块类型：  核心模块 扩展模块  注：本文是学习《深入浅出Node.js》一书的学习笔记，所以参考源码与书上版本一致。（版本：v0.10.13-release） 核心模块什么是核心模块区别于文件模块等第三方导入模块，核心模块就是直接包含在node源码中，为用户提供服务的模块。 当然这些模块也需要导入的">
@@ -313,7 +313,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-03-15T23:46:36+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-03-15T23:55:32+08:00">
                 2020-03-15
               </time>
             
@@ -368,7 +368,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2k 字
+                  2.1k 字
                 </span>
               
 
@@ -384,7 +384,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  7 分钟
+                  8 分钟
                 </span>
               
             </div>
@@ -428,6 +428,7 @@
 <li>JavaScript编写的封装模块</li>
 </ul>
 <p>其中C++部分的代码存放在<code>src/</code>目录下，而JavaScript的代码存放在<code>lib/</code>下。</p>
+<p>一般我们调用的都是JS编写的封装模块，在对Node源码不是特别了解的情况下，不建议直接调用C++编写的内建模块（调用方法也就不告诉你了）。 </p>
 <h3 id="导入流程"><a href="#导入流程" class="headerlink" title="导入流程"></a>导入流程</h3><p>导入流程主要分为如下几个步骤:</p>
 <ol>
 <li>js代码转存</li>
