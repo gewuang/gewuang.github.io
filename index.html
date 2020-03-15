@@ -264,6 +264,256 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/07/nodejs-module-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ramon">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ramon's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/07/nodejs-module-2/" itemprop="url">Node模块详解（二）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-07T14:22:06+08:00">
+                2020-03-07
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2020-03-15T23:03:28+08:00">
+                2020-03-15
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Node-js/" itemprop="url" rel="index">
+                    <span itemprop="name">Node.js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  7 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>[toc]</p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>上篇文章介绍了模块机制中的文件模块（<a href="https://gewuang.cn/2020/03/01/nodejs-module-1/" target="_blank" rel="noopener">直通链接</a>），本篇文章继续接着介绍node模块机制中剩余的模块类型：</p>
+<ul>
+<li>核心模块</li>
+<li>扩展模块</li>
+</ul>
+<p><em>注：本文是学习《深入浅出Node.js》一书的学习笔记，所以参考源码与书上版本一致。（版本：v0.10.13-release）</em></p>
+<h1 id="核心模块"><a href="#核心模块" class="headerlink" title="核心模块"></a>核心模块</h1><h2 id="什么是核心模块"><a href="#什么是核心模块" class="headerlink" title="什么是核心模块"></a>什么是核心模块</h2><p>区别于文件模块等第三方导入模块，核心模块就是<strong>直接包含在node源码中，为用户提供服务的模块</strong>。</p>
+<p>当然这些模块也需要导入的，想了解都有哪些模块，直接进入官网，找到Docs文档，里面介绍的模块都是核心模块（链接：<a href="https://nodejs.org/dist/latest-v12.x/docs/api/" target="_blank" rel="noopener">核心模块介绍</a>）。</p>
+<p>简单列举几个比较常用的核心模块：</p>
+<ul>
+<li>fs：提供对文件的读写等操作</li>
+<li>http：提供了搭建本地服务器的API</li>
+<li>path：提供文件路径操作的API</li>
+<li>os：操作系统相关信息的API</li>
+<li>url：提供了操作URL信息的API</li>
+</ul>
+<h2 id="核心模块导入流程"><a href="#核心模块导入流程" class="headerlink" title="核心模块导入流程"></a>核心模块导入流程</h2><p>核心模块的使用官网已经非常详细了，我也没什么好介绍的，今天的重点是核心模块在Node源码中是以什么形式存在的，以及核心模块的导入流程。</p>
+<h3 id="Node源码中的核心模块"><a href="#Node源码中的核心模块" class="headerlink" title="Node源码中的核心模块"></a>Node源码中的核心模块</h3><p>核心模块一般分为两部分：</p>
+<ul>
+<li>C++编写的内建模块（核心实现）</li>
+<li>JavaScript编写的封装模块</li>
+</ul>
+<p>其中C++部分的代码存放在<code>src/</code>目录下，而JavaScript的代码存放在<code>lib/</code>下，</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200315202927.png" alt="代码目录"></p>
+<h3 id="导入流程"><a href="#导入流程" class="headerlink" title="导入流程"></a>导入流程</h3><p>导入流程主要分为如下几个步骤:</p>
+<ol>
+<li>js代码转存</li>
+<li>运行时从内存中取出内容</li>
+</ol>
+<p>看不懂没关系，下面详细介绍。</p>
+<h3 id="js代码转存"><a href="#js代码转存" class="headerlink" title="js代码转存"></a>js代码转存</h3><p>node编译过程中，并不会对js部分的代码进行编译操作，而是调用<code>tools/js2c.py</code>工具将js代码转换成C++中的字符串数组，存放在<code>node_natives.h</code>文件中，手动执行后的情况如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200315204045.png" alt="js2c"></p>
+<p>看代码就知道，这一步其实做了个很简单的事情，把js文件内容<code>console.log(&quot;hello&quot;);</code>变成ASCII码放在<code>$filename_native</code>数组中，这样node源码编译时，js文件的内容也就以字符串的形式编译进了可执行文件中。</p>
+<h3 id="取出内容"><a href="#取出内容" class="headerlink" title="取出内容"></a>取出内容</h3><p>知道内容被存到<code>node_natives.h</code>文件中，那么取出的代码就很好找了，首先找到调用文件的地方，运气很好，只有一个文件<code>node_javascript.cc</code>，而且确实是获取js文件的代码，函数很简单，直接贴源码了</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">DefineJavaScript</span><span class="params">(v8::Handle&lt;v8::Object&gt; target)</span> </span>&#123;</span><br><span class="line">  HandleScope scope;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; natives[i].name; i++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (natives[i].source != node_native) &#123;</span><br><span class="line">      Local&lt;String&gt; name = String::New(natives[i].name);</span><br><span class="line">      Handle&lt;String&gt; source = BUILTIN_ASCII_ARRAY(natives[i].source, natives[i].source_len);</span><br><span class="line">      target-&gt;Set(name, source);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>一共几行代码，功能就是把想要的js文件内容取出，这里有个条件，是除了<code>node_native</code>模块，这里其实就是<code>node.js</code>文件，这个文件在<code>src/</code>下，这个文件很重要，这里先不说明，我们继续往下走。</p>
+<p>以前版本的代码就是简单，这里我们查使用函数<code>DefineJavaScript()</code>的地方，发现也只有一个地方，就是我们的<code>node.cc</code>文件（题外话，这个文件就是定义着我们的全局变量<code>process</code>的地方），而使用的函数为<code>Binding()</code>，以下为源码内容：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> Handle&lt;Value&gt; Binding(<span class="keyword">const</span> Arguments&amp; args) &#123;</span><br><span class="line">  Local&lt;String&gt; <span class="keyword">module</span> = args[<span class="number">0</span>]-&gt;ToString();</span><br><span class="line">  String::<span class="function">Utf8Value <span class="title">module_v</span><span class="params">(<span class="keyword">module</span>)</span></span>;</span><br><span class="line">	...</span><br><span class="line">  <span class="keyword">if</span> ((modp = get_builtin_module(*module_v)) != <span class="literal">NULL</span>) &#123;</span><br><span class="line">    ...</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(*module_v, <span class="string">"constants"</span>)) &#123;</span><br><span class="line">		...</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (!<span class="built_in">strcmp</span>(*module_v, <span class="string">"natives"</span>)) &#123;</span><br><span class="line">    <span class="comment">// 重点关注内容</span></span><br><span class="line">    exports = Object::New();</span><br><span class="line">    DefineJavaScript(exports);</span><br><span class="line">    binding_cache-&gt;Set(<span class="keyword">module</span>, exports);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> ThrowException(Exception::Error(String::New(<span class="string">"No such module"</span>)));</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> scope.Close(exports);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>去掉无关的代码，留下我们的重要关注内容，从这部分代码可以得出，调用<code>process.Binding(&#39;natives&#39;)</code>就可以取出内存中的js代码，而这个引用就在我们刚刚谈到的<code>node.js</code>中，</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NativeModule._source = process.binding('natives');</span><br></pre></td></tr></table></figure>
+
+<p>重点出来了，之前我们讲过，文件模块操作的对象为<code>Module</code>，那么我们核心模块的对象就是<code>NativeModule</code>，当我们对一个核心模块引用时，实际上就是运行了下列代码：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">NativeModule.require = <span class="function"><span class="keyword">function</span>(<span class="params">id</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (id == <span class="string">'native_module'</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> NativeModule;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> cached = NativeModule.getCached(id);</span><br><span class="line">    <span class="keyword">if</span> (cached) &#123;</span><br><span class="line">        <span class="keyword">return</span> cached.exports;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!NativeModule.exists(id)) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'No such native module '</span> + id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    process.moduleLoadList.push(<span class="string">'NativeModule '</span> + id);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> nativeModule = <span class="keyword">new</span> NativeModule(id);</span><br><span class="line"></span><br><span class="line">    nativeModule.cache();</span><br><span class="line">    nativeModule.compile();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> nativeModule.exports;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 从缓存中取出</span></span><br><span class="line">NativeModule.getCached = <span class="function"><span class="keyword">function</span>(<span class="params">id</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> NativeModule._cache[id];</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 判断是否存在</span></span><br><span class="line">NativeModule.exists = <span class="function"><span class="keyword">function</span>(<span class="params">id</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> NativeModule._source.hasOwnProperty(id);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 从内存中得到js代码</span></span><br><span class="line">NativeModule.getSource = <span class="function"><span class="keyword">function</span>(<span class="params">id</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> NativeModule._source[id];</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 封装</span></span><br><span class="line">NativeModule.wrap = <span class="function"><span class="keyword">function</span>(<span class="params">script</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> NativeModule.wrapper[<span class="number">0</span>] + script + NativeModule.wrapper[<span class="number">1</span>];</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">NativeModule.wrapper = [</span><br><span class="line">    <span class="string">'(function (exports, require, module, __filename, __dirname) &#123; '</span>,</span><br><span class="line">            <span class="string">'\n&#125;);'</span></span><br><span class="line">];</span><br><span class="line"><span class="comment">// 编译</span></span><br><span class="line">NativeModule.prototype.compile = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> source = NativeModule.getSource(<span class="keyword">this</span>.id);</span><br><span class="line">    source = NativeModule.wrap(source);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> fn = runInThisContext(source, <span class="keyword">this</span>.filename, <span class="literal">true</span>);</span><br><span class="line">    fn(<span class="keyword">this</span>.exports, NativeModule.require, <span class="keyword">this</span>, <span class="keyword">this</span>.filename);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.loaded = <span class="literal">true</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">// 保存到缓存中</span></span><br><span class="line">NativeModule.prototype.cache = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    NativeModule._cache[<span class="keyword">this</span>.id] = <span class="keyword">this</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>一下子放这么多代码实在是不应该，但是这部分代码简单而道出了核心模块导入的本质，实在不忍心割掉一点点，每个函数都对功能添加了注释，请务必仔细研读，得起深意。</p>
+<p>另外谈一点，核心模块的js代码因为是从内存中取出的，相比于从磁盘取出的文件模块加载速度肯定要快上很多。</p>
+<p>核心模块至此就结束了，流程简单来说就是：编译node时将核心js代码变成c++中的字符串数组，引用的时候从内存中取出并进行编译，然后缓存放到<code>NativeModule._cache</code>中并返回编译后的对象，如果你看过文件模块的介绍，相比并不难掌握。</p>
+<h1 id="扩展模块"><a href="#扩展模块" class="headerlink" title="扩展模块"></a>扩展模块</h1><p>终于讲完了核心模块，希望你已经掌握，下面来讲一种特殊的文件模块，扩展模块。</p>
+<h2 id="什么是扩展模块"><a href="#什么是扩展模块" class="headerlink" title="什么是扩展模块"></a>什么是扩展模块</h2><p>亘古不变，我们先来说下是什么。</p>
+<p><strong>扩展模块</strong>是用C/C++代码预编译后得到的<code>.node</code>文件，代码中调用<code>process.dlopen()</code>进行加载执行，显然这种方式性能要高于js编写的文件模块，而且在需要大量的位运算操作的场景中，C/C++的性能要优于JS。</p>
+<blockquote>
+<p>JavaScript的位运算参照Java的位运算实现，但是Java位运算是在<code>int</code>型数字的基础上进行的，而JavaScript中只有<code>double</code>型的数据类型，在进行位运算的过程中，需要将<code>double</code>型转换为<code>int</code>型，然后再进行。所以，在JavaScript层面上做位运算的效率不高。（节选自书中）</p>
+</blockquote>
+<p>这里你可能要说，那大家都去些扩展模块算了。世界上没有完美的东西，扩展模块也有他的缺点，当然，C/C++语言的学习和开发难度肯定是第一点，不然脚本语言也不会盛行于世，其次就是不再支持跨平台，对于*nix和windows平台的差异如下：</p>
+<img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200315224621.png" alt="区别" style="zoom:30%;">
+
+<p>这里也为我们展现了扩展模块的编译和导入流程。</p>
+<p>所以在需要跨平台的应用上，应该对扩展模块的使用要小心，</p>
+<h2 id="实现一个自己的扩展模块"><a href="#实现一个自己的扩展模块" class="headerlink" title="实现一个自己的扩展模块"></a>实现一个自己的扩展模块</h2><p>是的，这里应该有一个实现，不过这部分我并没有掌握清楚，书中的例子因为版本古老，编译失败了，所以这里也就不展示了，给自己留个坑，也希望感兴趣的小伙伴可以研究实现一个自己的扩展模块，加油，你们是最胖的！！！</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>模块深入学习打开了我对node源码解读的开端，尽管代码是老的版本，但依旧能从中学到很多，这一系列文章是我读《深入浅出Node.js》一书的学习笔记，也希望自己能够成功读完，并将学习后的知识分享给大家。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    <div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/01/nodejs-module-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2840,213 +3090,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/25/palindrome/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ramon">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ramon's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/08/25/palindrome/" itemprop="url">最长回文子序列</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-25T18:46:19+08:00">
-                2019-08-25
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">更新于&#58;</span>
-              
-              <time title="更新于" itemprop="dateModified" datetime="2019-08-25T18:46:19+08:00">
-                2019-08-25
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/leetcode/" itemprop="url" rel="index">
-                    <span itemprop="name">leetcode</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  595 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><p>给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。</p>
-<p>示例1:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: &quot;babad&quot;</span><br><span class="line">输出: &quot;bab&quot;</span><br><span class="line">注意: &quot;aba&quot; 也是一个有效答案。</span><br></pre></td></tr></table></figure>
-
-<p>示例2:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: &quot;cbbd&quot;</span><br><span class="line">输出: &quot;bb&quot;</span><br></pre></td></tr></table></figure>
-
-<h3 id="anwser"><a href="#anwser" class="headerlink" title="anwser"></a>anwser</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isPalindromic</span><span class="params">(<span class="built_in">string</span> sub)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">bool</span> ret = <span class="literal">true</span>;</span><br><span class="line">        <span class="built_in">stack</span>&lt;<span class="keyword">char</span>&gt; c;</span><br><span class="line">        <span class="keyword">int</span> len = sub.length();</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">char</span> a;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> (; i&lt;len; i++) &#123;</span><br><span class="line">            c.push(sub[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;len; i++) &#123;</span><br><span class="line">            a = c.top();</span><br><span class="line">            c.pop();</span><br><span class="line">            <span class="keyword">if</span>(sub[i] != a) &#123;</span><br><span class="line">                ret = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="built_in">string</span> <span class="title">longestPalindrome</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">string</span> ret = s.substr(<span class="number">0</span>,<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">int</span> len = s.length();</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> max = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(; i&lt;len<span class="number">-1</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (j=len<span class="number">-1</span>; j&gt;<span class="number">0</span>; j--) &#123;</span><br><span class="line">                <span class="keyword">if</span>(isPalindromic(s.substr(i, j-i+<span class="number">1</span>))) &#123;</span><br><span class="line">                    <span class="keyword">if</span>(max &lt; (j-i)) &#123;</span><br><span class="line">                        ret = s.substr(i, j-i+<span class="number">1</span>);</span><br><span class="line">                        max = j-i;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(max!=<span class="number">0</span> &amp;&amp; max&gt;(j-i)) &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span>(max!=<span class="number">0</span> &amp;&amp; max&gt;(len<span class="number">-1</span>-i)) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ret;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>谨记大神的说法，想不出高级解法就先用暴力法，上面就是暴力法，不过超时了？题目没有说时间啊、、、不懂了，但是毕竟也是自己写的，所以还是贴出来吧，优秀解法如下：<br>动态规划法（Time:O(n^2)）</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">longestPalindrome</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s.length();</span><br><span class="line">        <span class="keyword">boolean</span>[][] dp = <span class="keyword">new</span> <span class="keyword">boolean</span>[n][n];</span><br><span class="line">        <span class="keyword">int</span> start = <span class="number">0</span>, maxLen = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;n;i++)&#123;</span><br><span class="line">            dp[i][i] = <span class="keyword">true</span>;</span><br><span class="line">            <span class="keyword">if</span>(maxLen &lt; <span class="number">1</span>) &#123; start = i; maxLen = <span class="number">1</span>;&#125;</span><br><span class="line">            <span class="keyword">if</span>(i&lt;n-<span class="number">1</span> &amp;&amp; s.charAt(i) == s.charAt(i+<span class="number">1</span>)) &#123;</span><br><span class="line">                dp[i][i+<span class="number">1</span>] = <span class="keyword">true</span>;</span><br><span class="line">                start = i;</span><br><span class="line">                maxLen = <span class="number">2</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> numChars=<span class="number">3</span>; numChars&lt;=n;numChars++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>; j&lt;n-numChars+<span class="number">1</span>; j++)&#123;</span><br><span class="line">                <span class="keyword">int</span> pos = j+numChars-<span class="number">1</span>;</span><br><span class="line">                <span class="keyword">if</span>(dp[j+<span class="number">1</span>][pos-<span class="number">1</span>] &amp;&amp; s.charAt(j) == s.charAt(pos)) &#123;</span><br><span class="line">                    dp[j][pos] = <span class="keyword">true</span>;</span><br><span class="line">                    start = j;</span><br><span class="line">                    maxLen = numChars;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> s.substring(start, start+maxLen);</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-<p>Best solution:</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">     <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">LongestPalindromeNode</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        String longestPalindrome;</span><br><span class="line">        <span class="keyword">int</span> length;</span><br><span class="line"></span><br><span class="line">        LongestPalindromeNode() &#123;</span><br><span class="line">            <span class="keyword">this</span>.longestPalindrome = <span class="string">""</span>;</span><br><span class="line">            <span class="keyword">this</span>.length = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> LongestPalindromeNode <span class="title">helper</span><span class="params">(String word, <span class="keyword">int</span> left, <span class="keyword">int</span> right, LongestPalindromeNode longestPalindromeNode)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> curr_max_length = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(left &gt;= <span class="number">0</span> &amp;&amp; right &lt; word.length() &amp;&amp; word.charAt(left) == word.charAt(right)) &#123;</span><br><span class="line">            left--;</span><br><span class="line">            right++;</span><br><span class="line">        &#125;</span><br><span class="line">        curr_max_length = right - left -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(longestPalindromeNode.length &lt; curr_max_length) &#123;</span><br><span class="line">            longestPalindromeNode.length = curr_max_length;</span><br><span class="line">            longestPalindromeNode.longestPalindrome = word.substring(left+<span class="number">1</span>, right);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> longestPalindromeNode;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">longestPalindrome</span><span class="params">(String word)</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> length = word.length();</span><br><span class="line">        <span class="keyword">if</span>(length == <span class="number">0</span> || length == <span class="number">1</span>)</span><br><span class="line">            <span class="keyword">return</span> word;</span><br><span class="line"></span><br><span class="line">        LongestPalindromeNode longestPalindromeNode = <span class="keyword">new</span> LongestPalindromeNode();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> idx = <span class="number">0</span>; idx &lt; word.length(); idx++) &#123;</span><br><span class="line">            <span class="keyword">int</span> remaining_length = length - idx;</span><br><span class="line">            <span class="keyword">int</span> max_palindrome_length_can_be_formed = (remaining_length) + (remaining_length-<span class="number">1</span>);</span><br><span class="line">            <span class="keyword">if</span>(max_palindrome_length_can_be_formed &lt; longestPalindromeNode.length)</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            </span><br><span class="line">            longestPalindromeNode = helper(word, idx, idx, longestPalindromeNode);</span><br><span class="line">            longestPalindromeNode = helper(word, idx, idx+<span class="number">1</span>, longestPalindromeNode);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> longestPalindromeNode.longestPalindrome;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    <div>
-        
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -3092,7 +3140,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
