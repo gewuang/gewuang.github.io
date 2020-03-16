@@ -91,7 +91,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200315204045.png">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200315224621.png">
-<meta property="og:updated_time" content="2020-03-15T15:55:32.797Z">
+<meta property="og:updated_time" content="2020-03-16T11:29:42.988Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Node模块详解（二）">
 <meta name="twitter:description" content="介绍上篇文章介绍了模块机制中的文件模块（直通链接），本篇文章继续接着介绍node模块机制中剩余的模块类型：  核心模块 扩展模块  注：本文是学习《深入浅出Node.js》一书的学习笔记，所以参考源码与书上版本一致。（版本：v0.10.13-release） 核心模块什么是核心模块区别于文件模块等第三方导入模块，核心模块就是直接包含在node源码中，为用户提供服务的模块。 当然这些模块也需要导入的">
@@ -313,8 +313,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-03-15T23:55:32+08:00">
-                2020-03-15
+              <time title="更新于" itemprop="dateModified" datetime="2020-03-16T19:29:42+08:00">
+                2020-03-16
               </time>
             
           </span>
@@ -456,7 +456,7 @@
 
 <p>一下子放这么多代码实在是不应该，但是这部分代码简单而道出了核心模块导入的本质，实在不忍心割掉一点点，每个函数都对功能添加了注释，请务必仔细研读。</p>
 <p>另外谈一点，核心模块的js代码因为是从内存中取出的，相比于从磁盘取出的文件模块加载速度肯定要快上很多。</p>
-<p>核心模块至此就结束了，流程简单来说就是：编译node时将核心js代码变成c++中的字符串数组，引用的时候从内存中取出并进行编译，然后缓存放到<code>NativeModule._cache</code>中并返回编译后的对象，如果你看过文件模块的介绍，相比并不难掌握。</p>
+<p>核心模块至此就结束了，流程简单来说就是：编译node时将核心js代码变成c++中的字符串数组，引用的时候从内存中取出并进行编译，然后缓存放到<code>NativeModule._cache</code>中并返回编译后的对象，如果你看过文件模块的介绍，想比并不难掌握。</p>
 <h1 id="扩展模块"><a href="#扩展模块" class="headerlink" title="扩展模块"></a>扩展模块</h1><p>终于讲完了核心模块，希望你已经掌握，下面来讲一种特殊的文件模块，扩展模块。</p>
 <h2 id="什么是扩展模块"><a href="#什么是扩展模块" class="headerlink" title="什么是扩展模块"></a>什么是扩展模块</h2><p>亘古不变，我们先来说下是什么。</p>
 <p><strong>扩展模块</strong>是用C/C++代码预编译后得到的<code>.node</code>文件，代码中调用<code>process.dlopen()</code>进行加载执行。显然这种方式性能要高于js编写的文件模块，而且在需要大量的位运算操作的场景中，C/C++的性能要优于JS。</p>
