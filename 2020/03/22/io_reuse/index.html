@@ -81,21 +81,21 @@
 
 
 
-<meta name="description" content="[toc] 介绍大学时候写在csdn上的一篇博客，最近在看异步IO，就准备先介绍下IO方面内容，给后续的Node异步IO介绍奠定一个基础，同时也把当时的文章改进下搬过来。 基础介绍首先最基础的，我们先来理解什么是IO。 什么是IO？我们都知道unix世界里，一切皆文件（不知道的现在也知道了），而文件是什么呢？文件就是一串二进制流，不管socket，还是FIFO、管道、终端，对我们来说，一切都是文件">
+<meta name="description" content="介绍大学时候写在csdn上的一篇博客，最近在看异步IO，就准备先介绍下IO方面内容，给后续的Node异步IO介绍奠定一个基础，同时也把当时的文章改进下搬过来。 基础介绍首先最基础的，我们先来理解什么是IO。 什么是IO？我们都知道unix世界里，一切皆文件（不知道的现在也知道了），而文件是什么呢？文件就是一串二进制流，不管socket，还是FIFO、管道、终端，对我们来说，一切都是文件，一切都是流">
 <meta name="keywords" content="linux">
 <meta property="og:type" content="article">
 <meta property="og:title" content="IO多路复用整理">
 <meta property="og:url" content="http://yoursite.com/2020/03/22/io_reuse/index.html">
 <meta property="og:site_name" content="Ramon&#39;s Blog">
-<meta property="og:description" content="[toc] 介绍大学时候写在csdn上的一篇博客，最近在看异步IO，就准备先介绍下IO方面内容，给后续的Node异步IO介绍奠定一个基础，同时也把当时的文章改进下搬过来。 基础介绍首先最基础的，我们先来理解什么是IO。 什么是IO？我们都知道unix世界里，一切皆文件（不知道的现在也知道了），而文件是什么呢？文件就是一串二进制流，不管socket，还是FIFO、管道、终端，对我们来说，一切都是文件">
+<meta property="og:description" content="介绍大学时候写在csdn上的一篇博客，最近在看异步IO，就准备先介绍下IO方面内容，给后续的Node异步IO介绍奠定一个基础，同时也把当时的文章改进下搬过来。 基础介绍首先最基础的，我们先来理解什么是IO。 什么是IO？我们都知道unix世界里，一切皆文件（不知道的现在也知道了），而文件是什么呢？文件就是一串二进制流，不管socket，还是FIFO、管道、终端，对我们来说，一切都是文件，一切都是流">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://img-blog.csdn.net/20171003135833118?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVuZ3hpYW8xOTkz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 <meta property="og:image" content="https://img-blog.csdn.net/20160903110016328">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200409083401.png">
-<meta property="og:updated_time" content="2020-04-09T00:49:07.919Z">
+<meta property="og:updated_time" content="2020-04-09T00:51:24.617Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="IO多路复用整理">
-<meta name="twitter:description" content="[toc] 介绍大学时候写在csdn上的一篇博客，最近在看异步IO，就准备先介绍下IO方面内容，给后续的Node异步IO介绍奠定一个基础，同时也把当时的文章改进下搬过来。 基础介绍首先最基础的，我们先来理解什么是IO。 什么是IO？我们都知道unix世界里，一切皆文件（不知道的现在也知道了），而文件是什么呢？文件就是一串二进制流，不管socket，还是FIFO、管道、终端，对我们来说，一切都是文件">
+<meta name="twitter:description" content="介绍大学时候写在csdn上的一篇博客，最近在看异步IO，就准备先介绍下IO方面内容，给后续的Node异步IO介绍奠定一个基础，同时也把当时的文章改进下搬过来。 基础介绍首先最基础的，我们先来理解什么是IO。 什么是IO？我们都知道unix世界里，一切皆文件（不知道的现在也知道了），而文件是什么呢？文件就是一串二进制流，不管socket，还是FIFO、管道、终端，对我们来说，一切都是文件，一切都是流">
 <meta name="twitter:image" content="https://img-blog.csdn.net/20171003135833118?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVuZ3hpYW8xOTkz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 
 
@@ -314,7 +314,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-04-09T08:49:07+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-04-09T08:51:24+08:00">
                 2020-04-09
               </time>
             
@@ -406,8 +406,7 @@
       
 
       
-        <p>[toc]</p>
-<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>大学时候写在csdn上的一篇博客，最近在看异步IO，就准备先介绍下IO方面内容，给后续的Node异步IO介绍奠定一个基础，同时也把当时的文章改进下搬过来。</p>
+        <h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>大学时候写在csdn上的一篇博客，最近在看异步IO，就准备先介绍下IO方面内容，给后续的Node异步IO介绍奠定一个基础，同时也把当时的文章改进下搬过来。</p>
 <h1 id="基础介绍"><a href="#基础介绍" class="headerlink" title="基础介绍"></a>基础介绍</h1><p>首先最基础的，我们先来理解什么是IO。</p>
 <h2 id="什么是IO？"><a href="#什么是IO？" class="headerlink" title="什么是IO？"></a>什么是IO？</h2><p>我们都知道unix世界里，一切皆文件（不知道的现在也知道了），而文件是什么呢？文件就是一串二进制流，不管socket，还是FIFO、管道、终端，对我们来说，一切都是文件，一切都是流。</p>
 <p>在信息交换的过程中，我们都是对这些流进行数据的收发操作，简称为I/O操作(input and output)，例如读出数据使用系统调用read，写入数据使用系统调用write。</p>
