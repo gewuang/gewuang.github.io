@@ -264,6 +264,272 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/22/io_reuse/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Ramon">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ramon's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/03/22/io_reuse/" itemprop="url">IO多路复用整理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-22T23:44:07+08:00">
+                2020-03-22
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2020-04-09T08:49:07+08:00">
+                2020-04-09
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.4k 字
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8 分钟
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>[toc]</p>
+<h1 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h1><p>大学时候写在csdn上的一篇博客，最近在看异步IO，就准备先介绍下IO方面内容，给后续的Node异步IO介绍奠定一个基础，同时也把当时的文章改进下搬过来。</p>
+<h1 id="基础介绍"><a href="#基础介绍" class="headerlink" title="基础介绍"></a>基础介绍</h1><p>首先最基础的，我们先来理解什么是IO。</p>
+<h2 id="什么是IO？"><a href="#什么是IO？" class="headerlink" title="什么是IO？"></a>什么是IO？</h2><p>我们都知道unix世界里，一切皆文件（不知道的现在也知道了），而文件是什么呢？文件就是一串二进制流，不管socket，还是FIFO、管道、终端，对我们来说，一切都是文件，一切都是流。</p>
+<p>在信息交换的过程中，我们都是对这些流进行数据的收发操作，简称为I/O操作(input and output)，例如读出数据使用系统调用read，写入数据使用系统调用write。</p>
+<h2 id="文件描述符"><a href="#文件描述符" class="headerlink" title="文件描述符"></a>文件描述符</h2><p>计算机中这么多流，我们是如何知道要操作哪个流呢？这时候我们需要有一个能够对文件进行定位的标识符，文件描述符应运而生。</p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p><strong>文件描述符</strong>是内核为了高效管理已经被打开的文件所创建的索引，它是一个从0开始的整数（对每个进程而言），程序所有执行的I/O操作都是通过文件描述符进行的。</p>
+<h3 id="分配规则"><a href="#分配规则" class="headerlink" title="分配规则"></a>分配规则</h3><p>在程序刚刚启动时，0,1,2三个文件描述符已经被占用了:</p>
+<ul>
+<li>0代表标准输入设备stdin</li>
+<li>1代表标准输出设备stdout</li>
+<li>2代表标准错误stderr</li>
+</ul>
+<p>POSIX标准要求每次打开文件时（含socket）必须使用当前进程中最小可用的文件描述符号码,因此再打开一个文件，它的文件描述符会是3。</p>
+<p>文件描述符作为文件的索引，也有它的<strong>最大限制</strong>。作为系统的一个重要的资源，实际中最大打开的文件数是系统内存的10%，这个是系统级限制，有系统就会有用户，用户级限制是单个进程最大打开的文件数，一般是1024，可以使用<code>ulimit -n</code>命令查看（我这里是256🌚）。</p>
+<p>系统是通过文件描述符定位到文件的流程如下：</p>
+<p>系统为每一个进程维护了一个文件描述符表，这是一个进程级的文件描述符表，它通过文件描述符所对应的文件指针指向系统级的打开文件描述符表中的一个打开文件句柄，句柄中存储了打开文件相应的全部信息，包括文件偏移量、状态标示、访问模式文件类型以及文件属性等等，其中有一个inode指针，它指向了inode表中该文件的表项，具体想要了解inode可以看我之前的<a href="https://gewuang.cn/2019/12/21/inode/" target="_blank" rel="noopener">文章</a>。</p>
+<h2 id="阻塞与非阻塞"><a href="#阻塞与非阻塞" class="headerlink" title="阻塞与非阻塞"></a>阻塞与非阻塞</h2><p><strong>阻塞</strong>：进程调用了不能立即完成的任务而进行等待</p>
+<p><strong>非阻塞</strong>：进程调用了立即返回的任务，无需长时间等待</p>
+<p>说的很简单，但从进程角度看可以这么理解：</p>
+<p>首先看下进程状态转换图：</p>
+<p><img src="https://img-blog.csdn.net/20171003135833118?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbGVuZ3hpYW8xOTkz/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="进程状态转换图"></p>
+<p>（偷了个懒，从网上找的，<a href="https://blog.csdn.net/lengxiao1993/article/details/78154467" target="_blank" rel="noopener">原文地址</a>）</p>
+<p>进程阻塞可以看做执行了系统调用后，因为有长时间的任务，从而转换成<code>waittinig</code>状态，（因为cpu资源是宝贵的，同一时间一个CPU核只能处理一个<code>running</code>的任务）。</p>
+<p>非阻塞就是相反的，一直是<code>running</code>状态（进程是并发的，所以并不会一直是running，不过因为切片很小，我们从宏观认为他是没变的）。</p>
+<p>这里聊一下非阻塞与异步IO的区别，有文章说是维度上的不同（不是一类概念），也有人说是一回事。我参考一些文章后得出如下结论：</p>
+<ul>
+<li>非阻塞是直接得到结果，这个结果可以是空值、完整的结果或者不完整的</li>
+<li>异步IO是必定会返回一个完整的结果，只是可能会需要等待一段时间后返回</li>
+</ul>
+<h1 id="IO多路复用"><a href="#IO多路复用" class="headerlink" title="IO多路复用"></a>IO多路复用</h1><p>好了，我们讲了这么多，那么，到底什么是I/O多路复用呢？</p>
+<h2 id="概念-1"><a href="#概念-1" class="headerlink" title="概念"></a>概念</h2><p><strong>IO复用</strong>就是一种机制，可以同时监控多个阻塞的IO，一旦发现进程指定的一个或者多个IO准备读取，它就通知该进程。</p>
+<p>多进程多线程当然也可以处理，但是开销增加的太大了，不只是空间的浪费，同时进程线程间的切换开销也很大（时间成本）。IO复用则是执行系统调用对IO端口进行监控，返回执行情况，显然要比我们在用户空间的操作要快得多。</p>
+<h2 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h2><p>select, poll, epoll 都是I/O多路复用的具体的实现，下面我们按顺序介绍。</p>
+<h3 id="select"><a href="#select" class="headerlink" title="select"></a>select</h3><h4 id="函数介绍"><a href="#函数介绍" class="headerlink" title="函数介绍"></a>函数介绍</h4><p>I/O多路复用这个概念被提出来以后， select是第一个实现 (1983 左右在BSD里面实现的)。</p>
+<p>select的做法是将监听端口加到集合fs_set中，轮训监听端口状态，一旦发现了有IO事件，则返回通知进程，过程如下图：</p>
+<p><img src="https://img-blog.csdn.net/20160903110016328" alt="select流程"></p>
+<h4 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h4><p>select 被实现以后，很快就暴露出了很多问题。</p>
+<ol>
+<li><p>对socket进行扫描时是线性扫描，即采用轮询的方法，效率较低。</p>
+</li>
+<li><p>select 如果任何一个sock(I/O stream)出现了数据，select 仅仅会返回，但是并不会告诉你是那个sock上有数据，于是你只能自己一个一个的找。</p>
+</li>
+<li><p>select 只能监视1024个链接， linux 定义在头文件中的，参见FD_SETSIZE。</p>
+</li>
+<li><p>select执行时会将fs_set整个从用户空间copy到内核空间，如果很大时复制操作消耗资源会比较多。</p>
+</li>
+<li><p>select 不是线程安全的。如果你把一个sock加入到select，然后突然另外一个线程发现，这个sock不用，要收回。这个在这个select 不支持的，如果你强行关掉这个sock，select的描述是不可预测的，以下为官网介绍：</p>
+<blockquote>
+<p>“If a file descriptor being monitored by select() is closed in another thread, the result is unspecified”</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="poll"><a href="#poll" class="headerlink" title="poll"></a>poll</h3><p>针对select的问题，14年以后(1997年）poll被实现出来。</p>
+<p>poll与select最大的不同为存储监听端口的不再是数组，而是链表（具体实现看平台），于是也就没有了1024的限制，但是一些问题依然没有解决，比如线程安全、拷贝到内核空间以及轮训检查等等。</p>
+<h3 id="epoll"><a href="#epoll" class="headerlink" title="epoll"></a>epoll</h3><p>针对以上问题，在5年后的2002，大神 Davide Libenzi 实现了epoll。</p>
+<h4 id="实现-1"><a href="#实现-1" class="headerlink" title="实现"></a>实现</h4><p>epoll的内部实现分为两部分：</p>
+<ul>
+<li>用于存储监听端口的红黑树</li>
+<li>用于存储有IO事件端口的双端队列</li>
+</ul>
+<p>参考图如下（图片来源：《深入理解 Nginx：模块开发与架构解析(第二版)》，陶辉）：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/gewuang/cloudimg/data/20200409083401.png" alt="epoll"></p>
+<p>我们添加的监听端口存放在红黑树中，当端口有IO事件时，epoll会调用回调函数将事件放到队列中，进程只需要监听队列即可。</p>
+<p>至于监听的端口存放在红黑树中，显然是为了支持快速的插入、删除以及取出操作（红黑树建议了解一下）。</p>
+<h4 id="优点"><a href="#优点" class="headerlink" title="优点"></a>优点</h4><p>epoll 可以说是I/O 多路复用最新的一个实现，epoll 修复了poll 和select绝大部分问题，比如：</p>
+<ol>
+<li>没有最大并发连接的限制，能打开的FD的上限远大于1024（1G的内存上能监听约10万个端口）。</li>
+<li>效率提升，不是轮询的方式，不会随着FD数目的增加效率下降。只有活跃可用的FD才会调用callback函数；即Epoll最大的优点就在于它只管你“活跃”的连接，而跟连接总数无关，因此在实际的网络环境中，Epoll的效率就会远远高于select和poll。</li>
+<li>内存拷贝，利用mmap()文件映射内存加速与内核空间的消息传递；即epoll使用mmap减少复制开销。（共享内存的方式实现）</li>
+</ol>
+<p>epoll使用一个文件描述符管理多个描述符，将用户关系的文件描述符的事件存放到内核的一个事件表中，这样在用户空间和内核空间的copy只需一次。</p>
+<h4 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h4><p>epoll支持<strong>水平触发</strong>和<strong>边缘触发</strong>，边缘触发即它只告诉进程哪些fd刚刚变为就绪态，并且只会通知一次，这种效率要比水平触发一直占着队列的坑位每次都要处理要好一些，不过边缘触发既然发生后不会在提示，记得一次读完。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文是一个偏科普的，比较基础，也是自己大学时候写的（貌似很多参考别人的=-=），做了一点改进，不过很多内容都没有细说，epoll后面会专门出一篇文章介绍，毕竟实在是太重要了，红黑树不了解的同学也希望去深入了解下，基本逢考必问。</p>
+<h1 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h1><p><a href="https://blog.csdn.net/gewuang/article/details/52422076" target="_blank" rel="noopener">原文链接</a></p>
+<p><a href="https://blog.csdn.net/lengxiao1993/article/details/78154467" target="_blank" rel="noopener">同步/异步，阻塞/非阻塞概念深度解析</a></p>
+<p><a href="https://juejin.im/post/59f9c6d66fb9a0450e75713f" target="_blank" rel="noopener">IO复用原理剖析</a></p>
+<p><a href="https://blog.csdn.net/armlinuxww/article/details/92803381?depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1&utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromBaidu-1" target="_blank" rel="noopener">Epoll原理解析</a></p>
+<p><em>注：此文章改自以前的文章，加了些改动，之前没写明引用文章出处，现在也很难找，如果有引用您的原创内容，请及时联系，在此处添加您的文章信息。</em></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+    <div>
+        
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/07/nodejs-module-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2088,339 +2354,6 @@
 <p>看到这里的都是好孩子，给你个奖励，我自己的一套git别名，用起来会方便很多，如下：</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[alias]</span><br><span class="line">    glf  = log -n 10 --name-only  --format=\"%Cgreen%h %Cred[%ci] %Creset&lt;%an&gt; %Creset %Cgreen%s %Creset</span><br><span class="line">    gl  = log -n 30 --date-order  --format=\"%Cgreen%h %Cred[%ci] %Creset &lt;%an&gt;%C(yellow)%d%Creset %Creseset \"</span><br><span class="line">    gll  = log -n 30  --format=\"%Cgreen%H %Cred[%ci] %Creset&lt;%an&gt; %Creset %Cgreen%s %Creset \"</span><br><span class="line">    gl3 = log -n 20  --format=\"%Cgreen%h %Cred[%ci] %Creset&lt;%an&gt; %Creset %Cgreen%s %Creset \" --graph</span><br><span class="line">    gl2 = log --format=\"%Cgreen%h %Cred[%ci] %Creset&lt;%an&gt; %Creset %Cgreen%s %Creset \"</span><br><span class="line">    glc = log --format=\"%Cgreen%h %Cred[%cd] %Creset&lt;committer:%cn&gt; : %Cred[%ad] %Creset&lt;author:%cn&gt; %C</span><br><span class="line">    glc2 = log --format=\"%Cgreen%h %Cred[%ci] %Creset&lt;committer:%cn&gt; : %Cred[%ai] %Creset&lt;author:%cn&gt; %</span><br><span class="line">    glc3 = log --format=\"%Cgreen%h %Cred[%ci] %Creset&lt;committer:%cn&gt; : %Cred[%ai] %Creset&lt;author:%cn&gt; %</span><br><span class="line">            glw = log  -n 20  --format=\"%Cgreen%h %Cred[%ci] %Creset&lt;%an&gt; %Creset %n%Cgreen%s%Creset%n%b  \"</span><br><span class="line">    #| grep \"+0800]\"</span><br><span class="line">    gldetail = log --format=\"%h `[%cd] `&lt;committer:%cn&gt; `[%ad] `&lt;author:%an&gt; ` %s \"</span><br><span class="line">    hist = log --pretty=format:\"%C(yellow)%h %C(red)%d %C(reset)%s %C(green)[%an] %C(blue)%ad\" --topo-order --graph latest = for-each-ref --sort=-committerdate --format=\"%(committername)@%(refname:short) [%(committerdate:short)] %(contents)\"</span><br><span class="line">        #gldetail = log --format=\"%h [%cd] &lt;committer:%cn&gt; :[%ad] &lt;author:%an&gt;  %s \"</span><br><span class="line"></span><br><span class="line">    st = status -uno -s</span><br><span class="line">    st2 = status -s</span><br><span class="line">    co = checkout</span><br><span class="line">    bl = blame --date=short</span><br><span class="line">    #gll = log --format=\"%Cgreen%h %Cred[%ad] %Creset&lt;%an&gt; %Creset %Cgreen%s %Creset \"</span><br><span class="line">    ci = commit</span><br><span class="line">    dt = difftool</span><br><span class="line">    dif = diff --word-diff</span><br><span class="line">        #di = diff --color-words</span><br><span class="line">    di = diff --no-ext-diff</span><br></pre></td></tr></table></figure>
 
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-    <div>
-        
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/22/Java_technology_stack/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Ramon">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Ramon's Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/22/Java_technology_stack/" itemprop="url">JAVA学习路线整理(持续更新)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-22T11:14:07+08:00">
-                2019-12-22
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">更新于&#58;</span>
-              
-              <time title="更新于" itemprop="dateModified" datetime="2019-12-25T14:43:48+08:00">
-                2019-12-25
-              </time>
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  579 字
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  2 分钟
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="学习路线"><a href="#学习路线" class="headerlink" title="学习路线"></a>学习路线</h1><p><img src="https://raw.githubusercontent.com/gewuang/cloudimg/master/data/JAVA%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF.png" alt="java学习路线"></p>
-<h1 id="学习知识点"><a href="#学习知识点" class="headerlink" title="学习知识点"></a>学习知识点</h1><ul>
-<li><input disabled type="checkbox"> 基础知识篇<ul>
-<li><input disabled type="checkbox"> JAVA语言本身语法</li>
-<li><input disabled type="checkbox"> 数据结构和算法</li>
-<li><input disabled type="checkbox"> TCP/IP协议栈</li>
-<li><input disabled type="checkbox"> 设计模式</li>
-<li><input disabled type="checkbox"> 数据库和sql</li>
-</ul>
-</li>
-<li><input disabled type="checkbox"> 项目工具篇<ul>
-<li><input disabled type="checkbox"> linux操作系统</li>
-<li><input disabled type="checkbox"> 代码工具<ul>
-<li><input disabled type="checkbox"> Git</li>
-</ul>
-</li>
-<li><input disabled type="checkbox"> 项目管理工具</li>
-</ul>
-</li>
-<li><input disabled type="checkbox"> 应用框架篇<ul>
-<li><input disabled type="checkbox"> Spring全家桶<ul>
-<li><input disabled type="checkbox"> Spring</li>
-<li><input disabled type="checkbox"> Spring Boot</li>
-</ul>
-</li>
-<li><input disabled type="checkbox"> 中间件技术<ul>
-<li><input disabled type="checkbox"> 消息队列<ul>
-<li><input disabled type="checkbox"> kafka</li>
-<li><input disabled type="checkbox"> RabbitMq</li>
-</ul>
-</li>
-<li><input disabled type="checkbox"> RPC通信<ul>
-<li><input disabled type="checkbox"> gRpc</li>
-</ul>
-</li>
-<li><input disabled type="checkbox"> NoSQL<ul>
-<li><input disabled type="checkbox"> mongoDb</li>
-<li><input disabled type="checkbox"> redis</li>
-</ul>
-</li>
-<li><input disabled type="checkbox"> NIO</li>
-</ul>
-</li>
-<li><input disabled type="checkbox"> 分布式微服务</li>
-<li><input disabled type="checkbox"> 虚拟化/容器化<ul>
-<li><input disabled type="checkbox"> Docker</li>
-<li><input disabled type="checkbox"> K8s</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><input disabled type="checkbox"> 源码<ul>
-<li><input disabled type="checkbox"> JDK源码</li>
-<li><input disabled type="checkbox"> JAVA并发编程</li>
-<li><input disabled type="checkbox"> 应用框架设计思想和源码</li>
-<li><input disabled type="checkbox"> 数据库深度优化<ul>
-<li><input disabled type="checkbox"> MySQL调优</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h1 id="一、基础知识篇"><a href="#一、基础知识篇" class="headerlink" title="一、基础知识篇"></a>一、基础知识篇</h1><h2 id="JAVA基础语法"><a href="#JAVA基础语法" class="headerlink" title="JAVA基础语法"></a>JAVA基础语法</h2><ul>
-<li>语法基础<br>  <a href="/2019/12/25/Java_basic/">java基础知识</a></li>
-<li>编程思想：类、对象、封装、继承、多态、接口</li>
-<li>容器</li>
-<li>异常</li>
-<li>泛型</li>
-<li>I/O</li>
-<li>注解</li>
-<li>反射</li>
-<li>图形化界面</li>
-</ul>
-<h2 id="数据结构与算法"><a href="#数据结构与算法" class="headerlink" title="数据结构与算法"></a>数据结构与算法</h2><blockquote>
-<p>几大基础数据结构类型得烂熟于心，比如：<strong>字符串</strong>、<strong>链表</strong>、<strong>二叉树</strong>、<strong>栈</strong>、<strong>队列</strong>等等；基本的几大算法要了如指掌，比如<strong>查找</strong>、<strong>排序</strong>、<strong>动态规划</strong>等等。</p>
-</blockquote>
-<h2 id="TCP-IP协议栈"><a href="#TCP-IP协议栈" class="headerlink" title="TCP/IP协议栈"></a>TCP/IP协议栈</h2><ul>
-<li>ARP协议</li>
-<li>IP协议</li>
-<li>ICMP协议</li>
-<li>TCP协议</li>
-<li>UDP协议</li>
-<li>HTTP协议</li>
-<li>HTTPS协议</li>
-</ul>
-<h2 id="设计模式"><a href="#设计模式" class="headerlink" title="设计模式"></a>设计模式</h2><ul>
-<li><input disabled type="checkbox"> 创建型模式<ul>
-<li><input disabled type="checkbox"> <strong>单例模式</strong></li>
-<li><input disabled type="checkbox"> <strong>工厂模式</strong></li>
-<li><input disabled type="checkbox"> 建造者模式</li>
-<li><input disabled type="checkbox"> 原型模式</li>
-</ul>
-</li>
-<li><input disabled type="checkbox"> 结构型模式<ul>
-<li><input disabled type="checkbox"> 适配器模式</li>
-<li><input disabled type="checkbox"> 桥接模式</li>
-<li><input disabled type="checkbox"> 组合模式</li>
-<li><input disabled type="checkbox"> 装饰模式</li>
-<li><input disabled type="checkbox"> 外观模式</li>
-<li><input disabled type="checkbox"> 享元模式</li>
-<li><input disabled type="checkbox"> <strong>代理模式</strong></li>
-</ul>
-</li>
-<li><input disabled type="checkbox"> 行为型模式<ul>
-<li><input disabled type="checkbox"> 职责链模式</li>
-<li><input disabled type="checkbox"> 命令模式</li>
-<li><input disabled type="checkbox"> 迭代器模式</li>
-<li><input disabled type="checkbox"> 中介者模式</li>
-<li><input disabled type="checkbox"> 备忘录模式</li>
-<li><input disabled type="checkbox"> 观察者模式</li>
-<li><input disabled type="checkbox"> 状态模式</li>
-<li><input disabled type="checkbox"> <strong>策略模式</strong></li>
-<li><input disabled type="checkbox"> <strong>模板方法模式</strong></li>
-<li><input disabled type="checkbox"> 访问者模式</li>
-</ul>
-</li>
-</ul>
-<h2 id="数据库和SQL"><a href="#数据库和SQL" class="headerlink" title="数据库和SQL"></a>数据库和SQL</h2><blockquote>
-<p>数据库基本原理了解、sql语句熟练书写</p>
-</blockquote>
-<h1 id="二、项目工具"><a href="#二、项目工具" class="headerlink" title="二、项目工具"></a>二、项目工具</h1><h2 id="linux系统"><a href="#linux系统" class="headerlink" title="linux系统"></a>linux系统</h2><blockquote>
-<p>基本命令使用、shell脚本，服务部署等</p>
-</blockquote>
-<h2 id="代码管理"><a href="#代码管理" class="headerlink" title="代码管理"></a>代码管理</h2><ul>
-<li>Git</li>
-</ul>
-<h2 id="项目管理"><a href="#项目管理" class="headerlink" title="项目管理"></a>项目管理</h2><blockquote>
-<p>maven或Grandle</p>
-</blockquote>
-<ul>
-<li>Maven</li>
-</ul>
-<h1 id="三、应用框架"><a href="#三、应用框架" class="headerlink" title="三、应用框架"></a>三、应用框架</h1><h2 id="Spring全家桶"><a href="#Spring全家桶" class="headerlink" title="Spring全家桶"></a>Spring全家桶</h2><h3 id="Sping"><a href="#Sping" class="headerlink" title="Sping"></a>Sping</h3><blockquote>
-<p>了解Spring、Mybatis等框架的基本原理 </p>
-</blockquote>
-<h3 id="Sping-Boot"><a href="#Sping-Boot" class="headerlink" title="Sping Boot"></a>Sping Boot</h3><blockquote>
-<p>Spring Boot框架会熟练使用、开发业务、掌握基本原理 </p>
-</blockquote>
-<h3 id="SSM"><a href="#SSM" class="headerlink" title="SSM"></a>SSM</h3><blockquote>
-<p>SSM组合框架会上手搭建项目、开发业务、掌握基本原理</p>
-</blockquote>
-<h2 id="中间件技术"><a href="#中间件技术" class="headerlink" title="中间件技术"></a>中间件技术</h2><h3 id="消息队列"><a href="#消息队列" class="headerlink" title="消息队列"></a>消息队列</h3><h4 id="1-Rabbit"><a href="#1-Rabbit" class="headerlink" title="1. Rabbit"></a>1. Rabbit</h4><h4 id="2-Kafka"><a href="#2-Kafka" class="headerlink" title="2. Kafka"></a>2. Kafka</h4><h3 id="RPC通信框架"><a href="#RPC通信框架" class="headerlink" title="RPC通信框架"></a>RPC通信框架</h3><h4 id="1-gRPC"><a href="#1-gRPC" class="headerlink" title="1. gRPC"></a>1. gRPC</h4><h4 id="2-Thrift"><a href="#2-Thrift" class="headerlink" title="2. Thrift"></a>2. Thrift</h4><h4 id="3-Dubbo"><a href="#3-Dubbo" class="headerlink" title="3. Dubbo"></a>3. Dubbo</h4><h3 id="NoSQL数据库"><a href="#NoSQL数据库" class="headerlink" title="NoSQL数据库"></a>NoSQL数据库</h3><h4 id="1-Redis"><a href="#1-Redis" class="headerlink" title="1. Redis"></a>1. Redis</h4><h4 id="2-memcached"><a href="#2-memcached" class="headerlink" title="2. memcached"></a>2. memcached</h4><h4 id="3-ElasticSearch"><a href="#3-ElasticSearch" class="headerlink" title="3. ElasticSearch"></a>3. ElasticSearch</h4><h3 id="NIO网络通信框架"><a href="#NIO网络通信框架" class="headerlink" title="NIO网络通信框架"></a>NIO网络通信框架</h3><h4 id="1-Netty"><a href="#1-Netty" class="headerlink" title="1. Netty"></a>1. Netty</h4><h3 id="分布式微服务"><a href="#分布式微服务" class="headerlink" title="分布式微服务"></a>分布式微服务</h3><h4 id="1-Spring-Cloud"><a href="#1-Spring-Cloud" class="headerlink" title="1. Spring Cloud"></a>1. Spring Cloud</h4><h3 id="虚拟化-容器化"><a href="#虚拟化-容器化" class="headerlink" title="虚拟化/容器化"></a>虚拟化/容器化</h3><h4 id="1-Docker"><a href="#1-Docker" class="headerlink" title="1. Docker"></a>1. Docker</h4><h4 id="2-K8s"><a href="#2-K8s" class="headerlink" title="2. K8s"></a>2. K8s</h4><h1 id="四、源码"><a href="#四、源码" class="headerlink" title="四、源码"></a>四、源码</h1><ul>
-<li>JDK源码分析</li>
-<li>Java并发编程</li>
-<li>JVM原理及调优</li>
-</ul>
 
           
         
